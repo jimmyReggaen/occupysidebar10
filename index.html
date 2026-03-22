@@ -91,6 +91,26 @@ body{
   0%,100%{transform:scaleY(0.3)}50%{transform:scaleY(1)}
 }
 
+/* ── Live clock overlay (status bar pill) ── */
+.live-clock{
+  position:absolute;z-index:6;
+  font-family:'Montserrat',sans-serif;
+  font-size:20px;font-weight:600;color:#FFFFFFCC;
+  background:rgba(255,255,255,0.27);
+  padding:0 6px;border-radius:4px;
+  line-height:24px;
+}
+
+/* ── Countdown overlay (occupied card) ── */
+.live-countdown{
+  position:absolute;z-index:6;
+  font-family:'Montserrat',sans-serif;
+  font-size:38px;font-weight:700;color:#fff;
+  text-align:right;line-height:1;
+  background:linear-gradient(135deg,#d42020,#c41e1e);
+  padding:2px 8px;border-radius:4px;
+}
+
 /* ── Toast ── */
 .toast{
   position:fixed;bottom:40px;left:50%;
@@ -113,6 +133,8 @@ body{
   <div class="section draggable" draggable="true" data-name="statusbar">
     <div class="drag-handle"></div>
     <img src="occupy-assets/r9Fnl.png" alt="">
+    <!-- Live clock over the "14:53" text in the glass pill -->
+    <div class="live-clock" id="liveClock" style="left:74px;top:29px;">14:53</div>
   </div>
 
   <!-- ═══ ROOM NAME ═══ -->
@@ -125,6 +147,8 @@ body{
   <div class="section draggable" draggable="true" data-name="occupied">
     <div class="drag-handle"></div>
     <img src="occupy-assets/sfsC5.png" alt="">
+    <!-- Live countdown over "60min." text -->
+    <div class="live-countdown" id="liveCountdown" style="right:55px;top:30px;">59:59</div>
     <div class="hotspot" data-action="book" data-min="15" style="left:231px;top:396px;width:138px;height:47px;border-radius:65px;"></div>
     <div class="hotspot" data-action="book" data-min="30" style="left:381px;top:396px;width:137px;height:47px;border-radius:65px;"></div>
     <div class="hotspot" data-action="book" data-min="60" style="left:530px;top:396px;width:138px;height:47px;border-radius:65px;"></div>
@@ -198,6 +222,28 @@ body{
 <div class="toast" id="toast"></div>
 
 <script>
+// ── Live Clock ──
+function updateClock(){
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0');
+  const m=String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('liveClock').textContent=h+':'+m;
+}
+updateClock();
+setInterval(updateClock,1000);
+
+// ── Countdown (60 min, MM:SS, animated) ──
+let countdownTotal=60*60;
+function updateCountdown(){
+  if(countdownTotal<=0) return;
+  countdownTotal--;
+  const min=Math.floor(countdownTotal/60);
+  const sec=countdownTotal%60;
+  document.getElementById('liveCountdown').textContent=
+    String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+setInterval(updateCountdown,1000);
+
 // ── Toast ──
 let toastTimer=null;
 function showToast(msg){
