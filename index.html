@@ -20,6 +20,23 @@ body{
 .section{position:relative;width:720px;flex-shrink:0;}
 .section img{display:block;width:720px;height:auto;}
 
+/* ── Drag & Drop ── */
+.section.draggable{cursor:grab;user-select:none;}
+.section.draggable:active{cursor:grabbing;}
+.section.dragging{opacity:0.4;}
+.section.drag-over{border-top:3px solid #4590FF;}
+.drag-handle{
+  position:absolute;top:4px;right:4px;z-index:10;
+  width:28px;height:28px;border-radius:6px;
+  background:rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:center;
+  cursor:grab;opacity:0;transition:opacity 0.2s;
+}
+.section:hover .drag-handle{opacity:1;}
+.drag-handle::before{
+  content:'⋮⋮';font-size:14px;color:rgba(255,255,255,0.4);letter-spacing:2px;
+}
+
 /* ── Hotspot ── */
 .hotspot{
   position:absolute;cursor:pointer;z-index:5;border-radius:16px;
@@ -38,7 +55,7 @@ body{
   box-shadow:0 0 20px rgba(27,0,226,0.3);
 }
 
-/* ── Recording overlays (appear on click) ── */
+/* ── Recording overlays ── */
 .rec-dot{
   position:absolute;z-index:6;width:34px;height:34px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;cursor:pointer;
@@ -90,26 +107,32 @@ body{
 </style>
 </head>
 <body>
-<div class="panel">
+<div class="panel" id="panel">
 
   <!-- ═══ STATUS BAR ═══ -->
-  <div class="section" style="height:62px;">
-    <img src="occupy-assets/r9Fnl.png" alt="" style="height:62px;">
+  <div class="section draggable" draggable="true" data-name="statusbar">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/r9Fnl.png" alt="">
   </div>
 
   <!-- ═══ ROOM NAME ═══ -->
-  <div class="section"><img src="occupy-assets/xEPzK.png" alt=""></div>
+  <div class="section draggable" draggable="true" data-name="roomname">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/xEPzK.png" alt="">
+  </div>
 
   <!-- ═══ OCCUPIED CARD ═══ -->
-  <div class="section" style="height:505px;">
-    <img src="occupy-assets/sfsC5.png" alt="" style="height:505px;">
+  <div class="section draggable" draggable="true" data-name="occupied">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/sfsC5.png" alt="">
     <div class="hotspot" data-action="book" data-min="15" style="left:231px;top:396px;width:138px;height:47px;border-radius:65px;"></div>
     <div class="hotspot" data-action="book" data-min="30" style="left:381px;top:396px;width:137px;height:47px;border-radius:65px;"></div>
     <div class="hotspot" data-action="book" data-min="60" style="left:530px;top:396px;width:138px;height:47px;border-radius:65px;"></div>
   </div>
 
   <!-- ═══ LIGHTS ═══ -->
-  <div class="section" style="height:173px;">
+  <div class="section draggable" draggable="true" data-name="lights">
+    <div class="drag-handle"></div>
     <img src="occupy-assets/W56aF.png" alt="">
     <div class="tile-flash" data-group="lights" data-idx="0" style="left:24px;top:32px;width:126px;height:117px;"></div>
     <div class="tile-flash" data-group="lights" data-idx="1" style="left:160px;top:32px;width:126px;height:117px;"></div>
@@ -119,7 +142,8 @@ body{
   </div>
 
   <!-- ═══ BLINDS ═══ -->
-  <div class="section" style="height:208px;">
+  <div class="section draggable" draggable="true" data-name="blinds">
+    <div class="drag-handle"></div>
     <img src="occupy-assets/UCkPe.png" alt="">
     <div class="tile-flash" data-group="blinds" data-idx="0" style="left:24px;top:36px;width:159px;height:146px;"></div>
     <div class="tile-flash" data-group="blinds" data-idx="1" style="left:195px;top:36px;width:159px;height:146px;"></div>
@@ -128,26 +152,26 @@ body{
   </div>
 
   <!-- ═══ HEY TRICSY ═══ -->
-  <div class="section" style="height:200px;">
+  <div class="section draggable" draggable="true" data-name="tricsy">
+    <div class="drag-handle"></div>
     <img src="occupy-assets/yZm7M.png" alt="">
     <div class="hotspot" data-action="tricsy" style="left:48px;top:75px;width:56px;height:56px;border-radius:28px;"></div>
   </div>
 
   <!-- ═══ RECORDING ═══ -->
-  <div class="section" style="height:94px;">
+  <div class="section draggable" draggable="true" data-name="recording">
+    <div class="drag-handle"></div>
     <img src="occupy-assets/4qBsr.png" alt="">
-    <!-- Dot: transparent by default, red pulsing when active -->
     <div class="rec-dot" id="recDot" style="left:56px;top:47px;">
       <div class="rec-dot-inner"></div>
     </div>
-    <!-- Timer: hidden by default, appears red on top of image "19:34" -->
     <div class="rec-timer" id="recTime" style="left:239px;top:54px;">00:00</div>
-    <!-- Waveform: hidden by default, blue animated on top of image gray bars -->
     <div class="rec-waveform" id="recWaveform" style="left:307px;top:50px;width:267px;height:28px;"></div>
   </div>
 
   <!-- ═══ SERVICES ═══ -->
-  <div class="section" style="height:203px;">
+  <div class="section draggable" draggable="true" data-name="services">
+    <div class="drag-handle"></div>
     <img src="occupy-assets/PIqES.png" alt="">
     <div class="tile-flash" data-group="services" data-idx="0" style="left:24px;top:35px;width:159px;height:146px;"></div>
     <div class="tile-flash" data-group="services" data-idx="1" style="left:195px;top:35px;width:159px;height:146px;"></div>
@@ -156,10 +180,16 @@ body{
   </div>
 
   <!-- ═══ ENVIRONMENT ═══ -->
-  <div class="section"><img src="occupy-assets/r9Zk9.png" alt=""></div>
+  <div class="section draggable" draggable="true" data-name="environment">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/r9Zk9.png" alt="">
+  </div>
 
   <!-- ═══ WEATHER ═══ -->
-  <div class="section"><img src="occupy-assets/ETRs6.png" alt=""></div>
+  <div class="section draggable" draggable="true" data-name="weather">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/ETRs6.png" alt="">
+  </div>
 
   <!-- Footer -->
   <div class="panel-footer"><img src="bh-logo-white.svg" alt="Biometrics House"></div>
@@ -182,7 +212,7 @@ document.querySelectorAll('[data-action="book"]').forEach(el=>{
   el.addEventListener('click',()=>showToast('Booked for '+el.dataset.min+' minutes from 17:30'));
 });
 
-// ── Tile Flash (Lights/Blinds/Services) ──
+// ── Tile Flash ──
 document.querySelectorAll('.tile-flash').forEach(el=>{
   el.addEventListener('click',()=>{
     const group=el.dataset.group;
@@ -243,6 +273,53 @@ document.getElementById('recDot').addEventListener('click',()=>{
     wf.classList.remove('active');
     showToast('Recording paused');
   }
+});
+
+// ── Drag & Drop reordering ──
+let draggedEl=null;
+
+document.querySelectorAll('.draggable').forEach(section=>{
+  section.addEventListener('dragstart',(e)=>{
+    draggedEl=section;
+    section.classList.add('dragging');
+    e.dataTransfer.effectAllowed='move';
+    e.dataTransfer.setData('text/plain','');
+  });
+
+  section.addEventListener('dragend',()=>{
+    section.classList.remove('dragging');
+    document.querySelectorAll('.drag-over').forEach(el=>el.classList.remove('drag-over'));
+    draggedEl=null;
+  });
+
+  section.addEventListener('dragover',(e)=>{
+    e.preventDefault();
+    e.dataTransfer.dropEffect='move';
+    if(section!==draggedEl){
+      section.classList.add('drag-over');
+    }
+  });
+
+  section.addEventListener('dragleave',()=>{
+    section.classList.remove('drag-over');
+  });
+
+  section.addEventListener('drop',(e)=>{
+    e.preventDefault();
+    section.classList.remove('drag-over');
+    if(draggedEl&&draggedEl!==section){
+      const panel=document.getElementById('panel');
+      const children=[...panel.querySelectorAll('.draggable')];
+      const fromIdx=children.indexOf(draggedEl);
+      const toIdx=children.indexOf(section);
+      if(fromIdx<toIdx){
+        section.after(draggedEl);
+      }else{
+        section.before(draggedEl);
+      }
+      showToast('Section moved');
+    }
+  });
 });
 </script>
 </body>
