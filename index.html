@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=720">
+<title>Biometrics House — OCCUPY Room Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Montserrat',sans-serif;
+  background:#111;
+  display:flex;justify-content:center;align-items:flex-start;
+  min-height:100vh;padding:20px 0;
+}
+.panel{
+  width:720px;background:#000;
+  display:flex;flex-direction:column;gap:16px;overflow:hidden;
+}
+.section{position:relative;width:720px;flex-shrink:0;}
+.section img{display:block;width:720px;height:auto;}
+
+/* Cover rectangles - hide original image content */
+.cover{position:absolute;z-index:3;background:#000;}
+.cover-card{position:absolute;z-index:3;} /* colored covers */
+.cover-tile{position:absolute;z-index:3;background:#131826;border:1px solid rgba(255,255,255,0.07);border-radius:16px;}
+.cover-rec{position:absolute;z-index:3;background:#0d0f1a;}
+
+/* ── Status bar ── */
+.status-bar{position:relative;width:720px;height:62px;}
+.status-bar img{position:absolute;top:0;left:0;width:720px;height:62px;object-fit:cover;}
+.overlay-time{
+  position:absolute;left:25px;top:18px;
+  font-size:26px;font-weight:700;color:#edf0f7;
+  letter-spacing:1px;line-height:1;z-index:4;
+}
+.overlay-date{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  background:#1B00E2;border-radius:20px;padding:6px 18px;
+  font-size:10px;font-weight:700;letter-spacing:2px;color:#fff;
+  z-index:4;white-space:nowrap;
+}
+.overlay-indoor-temp{
+  position:absolute;right:29px;top:23px;
+  font-size:26px;font-weight:700;color:#fff;
+  text-align:center;line-height:0.85;z-index:4;
+}
+
+/* ── Tile flash ── */
+.tile-flash{
+  position:absolute;z-index:5;cursor:pointer;border-radius:16px;
+  background:transparent;transition:background 0.15s,box-shadow 0.15s;
+}
+.tile-flash.flash{
+  background:linear-gradient(160deg,rgba(27,0,226,0.65) 0%,rgba(14,0,113,0.65) 100%);
+  box-shadow:0 0 20px rgba(27,0,226,0.3);
+}
+
+/* ── Hotspot (booking, thermostat) ── */
+.hotspot{
+  position:absolute;cursor:pointer;z-index:5;border-radius:16px;
+  transition:background 0.15s;
+}
+.hotspot:hover{background:rgba(255,255,255,0.04)}
+.hotspot:active{background:rgba(255,255,255,0.08)}
+
+/* ── Countdown ── */
+.countdown{
+  position:absolute;z-index:4;
+  font-size:38px;font-weight:700;color:#fff;
+  text-align:right;line-height:1;
+}
+
+/* ── Section slash divider (reusable SVG bracket) ── */
+.slash-overlay{
+  position:absolute;top:0;left:0;width:720px;height:20px;z-index:4;
+  display:flex;align-items:center;justify-content:center;
+}
+.slash-overlay::before{
+  content:'';position:absolute;left:0;right:0;top:50%;
+  height:1px;background:#4590FF;
+}
+.slash-overlay .slash-tab{
+  position:relative;background:#000;padding:0 0;
+}
+
+/* ── Recording ── */
+.rec-dot{
+  position:absolute;z-index:6;width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+}
+.rec-dot-inner{
+  width:14px;height:14px;border-radius:50%;background:#555;transition:background 0.3s;
+}
+.rec-dot.active .rec-dot-inner{
+  background:#DC2626;animation:pulse-rec 1.5s ease-in-out infinite;
+}
+@keyframes pulse-rec{
+  0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.5)}
+  50%{box-shadow:0 0 8px 4px rgba(220,38,38,0.3)}
+}
+.rec-label{
+  position:absolute;z-index:6;
+  font-size:16px;font-weight:600;color:#ffffff88;letter-spacing:1.5px;
+}
+.rec-label.active{color:#FFFFFFDD;}
+.rec-timer{
+  position:absolute;z-index:6;
+  font-size:16px;font-weight:600;color:#555;letter-spacing:0.52px;
+}
+.rec-timer.active{color:#de3232;}
+.rec-waveform{
+  position:absolute;z-index:5;
+  display:flex;align-items:center;gap:2.5px;overflow:hidden;
+}
+.rec-waveform span{
+  width:3px;border-radius:2px;background:#333;
+  transition:background 0.3s;
+}
+.rec-waveform.active span{
+  background:#4590FFCC;animation:wave 1.2s ease-in-out infinite;
+}
+@keyframes wave{
+  0%,100%{transform:scaleY(0.3)}50%{transform:scaleY(1)}
+}
+.rec-stop{
+  position:absolute;z-index:6;width:34px;height:34px;border-radius:10px;
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+}
+.rec-stop::after{
+  content:'';width:11px;height:11px;border-radius:2px;background:rgba(255,255,255,0.7);
+}
+.rec-stop:hover{background:rgba(255,255,255,0.14);}
+
+/* ── Thermostat ── */
+.overlay-thermo{
+  position:absolute;font-size:28px;font-weight:700;color:#fff;z-index:4;
+}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:40px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:#1B00E2;color:#fff;padding:12px 24px;border-radius:12px;
+  font-size:14px;font-weight:600;letter-spacing:0.5px;
+  opacity:0;transition:all 0.3s;z-index:100;pointer-events:none;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── Footer ── */
+.panel-footer{padding:16px 24px;text-align:center;}
+.panel-footer img{height:20px;opacity:0.4;}
+</style>
+</head>
+<body>
+<div class="panel">
+
+  <!-- ═══ STATUS BAR ═══ -->
+  <div class="status-bar">
+    <img src="occupy-assets/r9Fnl.png" alt="">
+    <!-- Cover original "9:53" and "22°C" text in the image -->
+    <div class="cover" style="left:20px;top:16px;width:90px;height:34px;"></div>
+    <div class="cover" style="right:20px;top:16px;width:80px;height:34px;"></div>
+    <!-- Live overlays -->
+    <div class="overlay-time" id="clock">9 : 53</div>
+    <div class="overlay-date" id="dateDisplay">Friday, March 06, 2026</div>
+    <div class="overlay-indoor-temp" id="indoorTemp">22°C</div>
+  </div>
+
+  <!-- ═══ ROOM NAME ═══ -->
+  <div class="section"><img src="occupy-assets/xEPzK.png" alt=""></div>
+
+  <!-- ═══ OCCUPIED CARD ═══ -->
+  <div class="section" style="height:505px;">
+    <img src="occupy-assets/sfsC5.png" alt="" style="height:505px;">
+    <!-- Cover original "60min." text, show countdown -->
+    <div class="cover-card" style="right:48px;top:24px;width:160px;height:48px;background:linear-gradient(135deg,#d42020,#c41e1e);border-radius:4px;"></div>
+    <div class="countdown" id="countdown" style="right:55px;top:28px;width:145px;">60:00</div>
+    <!-- Booking buttons -->
+    <div class="hotspot" data-action="book" data-min="15" style="left:231px;top:396px;width:138px;height:47px;border-radius:65px;"></div>
+    <div class="hotspot" data-action="book" data-min="30" style="left:381px;top:396px;width:137px;height:47px;border-radius:65px;"></div>
+    <div class="hotspot" data-action="book" data-min="60" style="left:530px;top:396px;width:138px;height:47px;border-radius:65px;"></div>
+  </div>
+
+  <!-- ═══ LIGHTS ═══ -->
+  <div class="section" style="height:173px;">
+    <img src="occupy-assets/W56aF.png" alt="">
+    <!-- Cover the active (blue) tile at index 1 to make it look inactive -->
+    <div class="cover-tile" style="left:160px;top:32px;width:126px;height:117px;"></div>
+    <!-- Flash hotspots on all tiles -->
+    <div class="tile-flash" data-group="lights" data-idx="0" style="left:24px;top:32px;width:126px;height:117px;"></div>
+    <div class="tile-flash" data-group="lights" data-idx="1" style="left:160px;top:32px;width:126px;height:117px;"></div>
+    <div class="tile-flash" data-group="lights" data-idx="2" style="left:297px;top:32px;width:126px;height:117px;"></div>
+    <div class="tile-flash" data-group="lights" data-idx="3" style="left:433px;top:32px;width:126px;height:117px;"></div>
+    <div class="tile-flash" data-group="lights" data-idx="4" style="left:570px;top:32px;width:126px;height:117px;"></div>
+  </div>
+
+  <!-- ═══ BLINDS ═══ -->
+  <div class="section" style="height:209px;">
+    <img src="occupy-assets/UCkPe.png" alt="">
+    <!-- Cover the active (blue) tile at index 0 -->
+    <div class="cover-tile" style="left:24px;top:36px;width:159px;height:146px;"></div>
+    <!-- Flash hotspots -->
+    <div class="tile-flash" data-group="blinds" data-idx="0" style="left:24px;top:36px;width:159px;height:146px;"></div>
+    <div class="tile-flash" data-group="blinds" data-idx="1" style="left:195px;top:36px;width:159px;height:146px;"></div>
+    <div class="tile-flash" data-group="blinds" data-idx="2" style="left:366px;top:36px;width:159px;height:146px;"></div>
+    <div class="tile-flash" data-group="blinds" data-idx="3" style="left:537px;top:36px;width:159px;height:146px;"></div>
+  </div>
+
+  <!-- ═══ HEY TRICSY ═══ -->
+  <div class="section" style="height:200px;">
+    <img src="occupy-assets/yZm7M.png" alt="">
+    <!-- Cover the original slash and replace with proper one matching other sections -->
+    <div class="cover" style="left:0;top:0;width:720px;height:22px;"></div>
+    <div class="slash-overlay">
+      <div class="slash-tab">
+        <svg width="189" height="20" viewBox="0 0 189 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 10 L55 10 L65 1 L124 1 L134 10 L189 10" stroke="#4590FF" stroke-width="1" fill="none"/>
+          <text x="94.5" y="10" text-anchor="middle" fill="#4590FF" font-family="Montserrat,sans-serif" font-size="10" font-weight="700" letter-spacing="2" dominant-baseline="middle">HEY TRICSY</text>
+        </svg>
+      </div>
+    </div>
+    <div class="hotspot" data-action="tricsy" style="left:48px;top:75px;width:56px;height:56px;border-radius:28px;"></div>
+  </div>
+
+  <!-- ═══ RECORDING ═══ -->
+  <div class="section" style="height:94px;">
+    <img src="occupy-assets/4qBsr.png" alt="">
+    <!-- Cover the entire recording bar content (dot, text, timer, waveform, buttons) -->
+    <div class="cover-rec" style="left:25px;top:35px;width:669px;height:58px;border-radius:20px;"></div>
+    <!-- Rebuild recording UI from scratch on top -->
+    <div class="rec-dot" id="recDot" style="left:57px;top:47px;">
+      <div class="rec-dot-inner"></div>
+    </div>
+    <div class="rec-label" id="recLabel" style="left:100px;top:51px;">Recording</div>
+    <div class="rec-timer" id="recTime" style="left:228px;top:51px;">00:00</div>
+    <div class="rec-waveform" id="recWaveform" style="left:300px;top:44px;width:280px;height:28px;"></div>
+    <div class="rec-stop" id="recStop" style="left:650px;top:47px;"></div>
+  </div>
+
+  <!-- ═══ SERVICES ═══ -->
+  <div class="section" style="height:203px;">
+    <img src="occupy-assets/PIqES.png" alt="">
+    <!-- Cover the active (blue) tile at index 2 -->
+    <div class="cover-tile" style="left:365px;top:35px;width:159px;height:146px;"></div>
+    <!-- Flash hotspots -->
+    <div class="tile-flash" data-group="services" data-idx="0" style="left:24px;top:35px;width:159px;height:146px;"></div>
+    <div class="tile-flash" data-group="services" data-idx="1" style="left:195px;top:35px;width:159px;height:146px;"></div>
+    <div class="tile-flash" data-group="services" data-idx="2" style="left:365px;top:35px;width:159px;height:146px;"></div>
+    <div class="tile-flash" data-group="services" data-idx="3" style="left:536px;top:35px;width:159px;height:146px;"></div>
+  </div>
+
+  <!-- ═══ ENVIRONMENT ═══ -->
+  <div class="section" style="height:128px;">
+    <img src="occupy-assets/r9Zk9.png" alt="">
+  </div>
+
+  <!-- ═══ THERMOSTAT ═══ -->
+  <div class="section" style="height:161px;">
+    <img src="occupy-assets/HH0X0.png" alt="">
+    <!-- Cover original temp text -->
+    <div class="cover-rec" style="left:44px;top:55px;width:70px;height:36px;"></div>
+    <div class="overlay-thermo" id="thermoTemp" style="left:44px;top:56px;">22°C</div>
+    <div class="hotspot" data-action="thermo-minus" style="left:596px;top:55px;width:36px;height:36px;border-radius:10px;"></div>
+    <div class="hotspot" data-action="thermo-plus" style="left:640px;top:55px;width:36px;height:36px;border-radius:10px;"></div>
+    <div class="hotspot" data-group="thermo-mode" data-idx="0" style="left:44px;top:105px;width:205px;height:36px;border-radius:10px;"></div>
+    <div class="hotspot" data-group="thermo-mode" data-idx="1" style="left:257px;top:105px;width:205px;height:36px;border-radius:10px;"></div>
+    <div class="hotspot" data-group="thermo-mode" data-idx="2" style="left:471px;top:105px;width:205px;height:36px;border-radius:10px;"></div>
+  </div>
+
+  <!-- ═══ WEATHER ═══ -->
+  <div class="section"><img src="occupy-assets/ETRs6.png" alt=""></div>
+
+  <!-- Footer -->
+  <div class="panel-footer"><img src="bh-logo-white.svg" alt="Biometrics House"></div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Live Clock ──
+function updateClock(){
+  const now=new Date();
+  document.getElementById('clock').textContent=
+    String(now.getHours()).padStart(2,'0')+' : '+String(now.getMinutes()).padStart(2,'0');
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('dateDisplay').textContent=
+    days[now.getDay()]+', '+months[now.getMonth()]+' '+String(now.getDate()).padStart(2,'0')+', '+now.getFullYear();
+}
+updateClock();
+setInterval(updateClock,1000);
+
+// ── Toast ──
+let toastTimer=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// ── Countdown (minutes:seconds) ──
+let countdownTotal=60*60;
+function updateCountdown(){
+  const min=Math.floor(countdownTotal/60);
+  const sec=countdownTotal%60;
+  document.getElementById('countdown').textContent=
+    String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+  if(countdownTotal>0)countdownTotal--;
+}
+updateCountdown();
+setInterval(updateCountdown,1000);
+
+// ── Booking ──
+document.querySelectorAll('[data-action="book"]').forEach(el=>{
+  el.addEventListener('click',()=>showToast('Booked for '+el.dataset.min+' minutes from 17:30'));
+});
+
+// ── Tile Flash (Lights/Blinds/Services) ──
+document.querySelectorAll('.tile-flash').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const group=el.dataset.group;
+    document.querySelectorAll('.tile-flash[data-group="'+group+'"]').forEach(e=>e.classList.remove('flash'));
+    el.classList.add('flash');
+    setTimeout(()=>el.classList.remove('flash'),1000);
+    const names={
+      lights:['Focus','Presentation','Presentation','Auto','Off'],
+      blinds:['Open','Closed','Auto','Partly open'],
+      services:['ITO support','Reception call','Ordering','Cleaning needed']
+    };
+    const idx=parseInt(el.dataset.idx);
+    if(names[group]&&names[group][idx])showToast(names[group][idx]);
+  });
+});
+
+// ── Tricsy ──
+let tricsyActive=false;
+document.querySelector('[data-action="tricsy"]').addEventListener('click',()=>{
+  tricsyActive=!tricsyActive;
+  showToast(tricsyActive?'Tricsy is listening...':'Tricsy stopped');
+});
+
+// ── Recording ──
+let recSeconds=0,recActive=false,recInterval=null;
+
+// Generate static gray waveform bars
+(function(){
+  const wf=document.getElementById('recWaveform');
+  for(let i=0;i<40;i++){
+    const bar=document.createElement('span');
+    bar.style.height=(4+Math.random()*18)+'px';
+    bar.style.animationDelay=(Math.random()*1.2).toFixed(2)+'s';
+    wf.appendChild(bar);
+  }
+})();
+
+function updateRecTime(){
+  const m=String(Math.floor(recSeconds/60)).padStart(2,'0');
+  const s=String(recSeconds%60).padStart(2,'0');
+  document.getElementById('recTime').textContent=m+':'+s;
+}
+
+document.getElementById('recDot').addEventListener('click',()=>{
+  const dot=document.getElementById('recDot');
+  const label=document.getElementById('recLabel');
+  const timer=document.getElementById('recTime');
+  const wf=document.getElementById('recWaveform');
+  if(!recActive){
+    recActive=true;
+    dot.classList.add('active');
+    label.classList.add('active');
+    timer.classList.add('active');
+    wf.classList.add('active');
+    recInterval=setInterval(()=>{recSeconds++;updateRecTime();},1000);
+    showToast('Recording started');
+  }else{
+    clearInterval(recInterval);
+    recActive=false;
+    dot.classList.remove('active');
+    wf.classList.remove('active');
+    showToast('Recording paused');
+  }
+});
+
+document.getElementById('recStop').addEventListener('click',()=>{
+  clearInterval(recInterval);
+  recSeconds=0;recActive=false;updateRecTime();
+  document.getElementById('recDot').classList.remove('active');
+  document.getElementById('recLabel').classList.remove('active');
+  document.getElementById('recTime').classList.remove('active');
+  document.getElementById('recWaveform').classList.remove('active');
+  showToast('Recording stopped');
+});
+
+// ── Thermostat ──
+let thermoValue=22;
+function updateThermo(){
+  document.getElementById('thermoTemp').textContent=thermoValue+'°C';
+  document.getElementById('indoorTemp').textContent=thermoValue+'°C';
+}
+document.querySelector('[data-action="thermo-minus"]').addEventListener('click',()=>{
+  thermoValue=Math.max(16,thermoValue-1);updateThermo();
+});
+document.querySelector('[data-action="thermo-plus"]').addEventListener('click',()=>{
+  thermoValue=Math.min(30,thermoValue+1);updateThermo();
+});
+document.querySelectorAll('[data-group="thermo-mode"]').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const names=['Cool','Heat','Auto'];
+    showToast('Thermostat: '+names[parseInt(el.dataset.idx)]);
+  });
+});
+</script>
+</body>
+</html>
