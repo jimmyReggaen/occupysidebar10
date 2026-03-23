@@ -181,7 +181,7 @@ body{
   font-size:10px;font-weight:700;color:#fff;letter-spacing:2px;
 }
 .occ-meeting-row{
-  display:flex;justify-content:space-between;align-items:center;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
   padding:6px 30px;
 }
 .occ-meeting-info{
@@ -290,7 +290,7 @@ body{
   font-size:10px;font-weight:700;color:#fff;letter-spacing:2px;
 }
 .free-meeting-row{
-  display:flex;justify-content:space-between;align-items:center;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
   padding:6px 30px;
 }
 .free-meeting-info{
@@ -298,6 +298,18 @@ body{
 }
 .free-meeting-time{
   font-size:38px;font-weight:700;color:#fff;letter-spacing:-1px;line-height:1;
+}
+/* Info button (shared) */
+.info-btn{
+  width:28px;height:28px;border-radius:14px;flex-shrink:0;
+  background:rgba(255,255,255,0.27);
+  backdrop-filter:blur(20px);
+  border:1.5px solid rgba(255,255,255,0.4);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Montserrat',sans-serif;font-size:16px;font-style:italic;
+  font-weight:600;color:rgba(255,255,255,0.93);
+  box-shadow:0 2px 6px rgba(0,0,0,0.12),0 1px 3px rgba(255,255,255,0.2);
+  cursor:pointer;
 }
 
 /* ── Card state switching ── */
@@ -404,6 +416,7 @@ body{
         <div class="occ-meeting-row">
           <div class="occ-meeting-info" id="occMeetingInfo">display book now:<br>jakub reken</div>
           <div class="occ-meeting-time" id="occMeetingTime">11:00 - 12:00</div>
+          <div class="info-btn">i</div>
         </div>
         <!-- Timer Bar -->
         <div class="occ-timer-track" id="timerTrack">
@@ -590,6 +603,7 @@ function renderFreeMeetings(){
     html+='<div class="free-meeting-row">';
     html+='<div class="free-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
     html+='<div class="free-meeting-time">'+startStr+' - '+endStr+'</div>';
+    html+='<div class="info-btn">i</div>';
     html+='</div>';
   });
   container.innerHTML=html;
@@ -681,6 +695,7 @@ function renderOccMeetings(){
     html+='<div class="occ-meeting-row">';
     html+='<div class="occ-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
     html+='<div class="occ-meeting-time">'+startStr+' - '+endStr+'</div>';
+    html+='<div class="info-btn">i</div>';
     html+='</div>';
   });
   container.innerHTML=html;
