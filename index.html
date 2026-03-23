@@ -233,6 +233,20 @@ body{
 .occ-ext-btn:not(.disabled):hover{background:rgba(255,255,255,0.45);}
 .occ-ext-btn:not(.disabled):active{background:rgba(255,255,255,0.55);}
 
+/* ── FREE card button overlays ── */
+.free-btn-overlay{
+  position:absolute;z-index:5;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.3s;
+}
+.free-btn-overlay .num,.free-btn-overlay .unit{color:transparent;}
+.free-btn-overlay:hover{background:rgba(255,255,255,0.08);}
+.free-btn-overlay:active{background:rgba(255,255,255,0.15);}
+.free-btn-overlay.disabled{
+  opacity:0.3;cursor:not-allowed;pointer-events:none;
+  background:rgba(0,0,0,0.3);border-radius:65px;
+}
+
 /* ── Card state switching ── */
 .card-state{display:none;position:relative;}
 .card-state.active{display:block;}
@@ -298,9 +312,17 @@ body{
     <!-- FREE STATE (default) -->
     <div id="freeCard" class="card-state active">
       <img src="occupy-assets/ZKEGP.png" alt="FREE">
-      <div class="hotspot" data-action="book-inside" data-min="15" style="left:222px;top:95px;width:147px;height:50px;border-radius:65px;"></div>
-      <div class="hotspot" data-action="book-inside" data-min="30" style="left:381px;top:95px;width:147px;height:50px;border-radius:65px;"></div>
-      <div class="hotspot" data-action="book-inside" data-min="60" style="left:541px;top:95px;width:147px;height:50px;border-radius:65px;"></div>
+      <div class="live-countdown" id="freeCountdown" style="left:360px;top:20px;width:300px;">90min.</div>
+      <!-- Book Now button overlays -->
+      <div class="free-btn-overlay" id="freeBtn15" data-min="15" style="left:222px;top:95px;width:147px;height:50px;border-radius:65px;">
+        <span class="num">15</span><span class="unit">min</span>
+      </div>
+      <div class="free-btn-overlay" id="freeBtn30" data-min="30" style="left:381px;top:95px;width:147px;height:50px;border-radius:65px;">
+        <span class="num">30</span><span class="unit">min</span>
+      </div>
+      <div class="free-btn-overlay" id="freeBtn60" data-min="60" style="left:541px;top:95px;width:147px;height:50px;border-radius:65px;">
+        <span class="num">60</span><span class="unit">min</span>
+      </div>
     </div>
     <!-- OCCUPIED STATE (HTML/CSS) -->
     <div id="occupiedCard" class="card-state">
@@ -440,41 +462,85 @@ function updateClock(){
 updateClock();
 setInterval(updateClock,1000);
 
-// ── Card State Management ──
+// ── Meeting Schedule & State ──
+// Simulated schedule: next meeting is 90 min from now
+const NOW_BOOT=Date.now();
+const SCHEDULE=[
+  {start:NOW_BOOT+90*60*1000, end:NOW_BOOT+150*60*1000, title:'Java Engineering INNOVA..', sub:'julia.sustakova'},
+  {start:NOW_BOOT+180*60*1000, end:NOW_BOOT+210*60*1000, title:'Sharry — status meeting', sub:'Peter Novak'}
+];
+
 let countdownInterval=null;
+let freeInterval=null;
 const freeCard=document.getElementById('freeCard');
 const occupiedCard=document.getElementById('occupiedCard');
 
-// Meeting state
+// Current meeting
 let meetingStartMs=0;
 let meetingEndMs=0;
-let nextMeetingStartMs=0;
 
+function getNextMeetingAfter(timeMs){
+  return SCHEDULE.find(m=>m.start>timeMs)||null;
+}
+
+function getGapMinutes(fromMs){
+  const next=getNextMeetingAfter(fromMs);
+  if(!next) return 999;
+  return Math.floor((next.start-fromMs)/60000);
+}
+
+function formatTime(d){
+  return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
+
+// ── FREE Card Logic ──
 function showFreeCard(){
   freeCard.classList.add('active');
   occupiedCard.classList.remove('active');
   clearInterval(countdownInterval);
+  startFreeUpdater();
 }
 
+function startFreeUpdater(){
+  clearInterval(freeInterval);
+  updateFreeState();
+  freeInterval=setInterval(updateFreeState,10000);
+}
+
+function updateFreeState(){
+  const now=Date.now();
+  const gapMin=getGapMinutes(now);
+  // Update "FOR THE NEXT" display
+  document.getElementById('freeCountdown').textContent=gapMin+'min.';
+  // Enable/disable book buttons
+  [15,30,60].forEach(m=>{
+    const btn=document.getElementById('freeBtn'+m);
+    if(m>gapMin){btn.classList.add('disabled');}
+    else{btn.classList.remove('disabled');}
+  });
+}
+
+// ── OCCUPIED Card Logic ──
 function showOccupiedCard(minutes){
   freeCard.classList.remove('active');
   occupiedCard.classList.add('active');
+  clearInterval(freeInterval);
 
   const now=Date.now();
   meetingStartMs=now;
   meetingEndMs=now+minutes*60*1000;
-  // Next meeting starts 60min after current meeting ends
-  nextMeetingStartMs=meetingEndMs+60*60*1000;
 
-  // Set meeting time display
-  const startStr=formatTime(new Date(meetingStartMs));
-  const endStr=formatTime(new Date(meetingEndMs));
-  document.getElementById('occMeetingTime').textContent=startStr+' - '+endStr;
+  // Set current meeting display
+  document.getElementById('occMeetingInfo').innerHTML='display book now:<br>jakub reken';
+  document.getElementById('occMeetingTime').textContent=
+    formatTime(new Date(meetingStartMs))+' - '+formatTime(new Date(meetingEndMs));
 
-  // Set next meeting time
-  const nextStart=formatTime(new Date(nextMeetingStartMs));
-  const nextEnd=formatTime(new Date(nextMeetingStartMs+60*60*1000));
-  document.getElementById('nextMeeting1Time').textContent=nextStart+' - '+nextEnd;
+  // Set next meetings from schedule
+  const upcoming=SCHEDULE.filter(m=>m.start>meetingEndMs);
+  const nextEl=document.getElementById('nextMeeting1Time');
+  if(upcoming[0]){
+    nextEl.textContent=formatTime(new Date(upcoming[0].start))+' - '+formatTime(new Date(upcoming[0].end));
+  }
 
   updateExtendButtons();
   startCountdown();
@@ -482,16 +548,16 @@ function showOccupiedCard(minutes){
 
 function extendMeeting(minutes){
   meetingEndMs+=minutes*60*1000;
-  const startStr=formatTime(new Date(meetingStartMs));
-  const endStr=formatTime(new Date(meetingEndMs));
-  document.getElementById('occMeetingTime').textContent=startStr+' - '+endStr;
+  // Reset timer bar - new start from now
+  meetingStartMs=Date.now();
+  document.getElementById('occMeetingTime').textContent=
+    formatTime(new Date(Date.now()))+' - '+formatTime(new Date(meetingEndMs));
   updateExtendButtons();
-  showToast('Meeting extended by '+minutes+' minutes');
+  showToast('Meeting extended by '+minutes+' minutes until '+formatTime(new Date(meetingEndMs)));
 }
 
 function updateExtendButtons(){
-  const gapMs=nextMeetingStartMs-meetingEndMs;
-  const gapMin=Math.floor(gapMs/60000);
+  const gapMin=getGapMinutes(meetingEndMs);
   [15,30,60].forEach(m=>{
     const btn=document.getElementById('extBtn'+m);
     if(m>gapMin){btn.classList.add('disabled');}
@@ -501,37 +567,39 @@ function updateExtendButtons(){
 
 function startCountdown(){
   clearInterval(countdownInterval);
-  countdownInterval=setInterval(()=>{
-    const now=Date.now();
-    const remainMs=meetingEndMs-now;
-    const totalMs=meetingEndMs-meetingStartMs;
-
-    if(remainMs<=0){
-      showFreeCard();
-      showToast('Meeting ended — room is FREE');
-      return;
-    }
-
-    // Update countdown text
-    const remainSec=Math.ceil(remainMs/1000);
-    const min=Math.floor(remainSec/60);
-    const sec=remainSec%60;
-    document.getElementById('liveCountdown').textContent=
-      String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0');
-
-    // Update timer bar (progress = elapsed / total)
-    const elapsed=now-meetingStartMs;
-    const progress=Math.min(elapsed/totalMs,1);
-    const trackWidth=document.getElementById('timerTrack').offsetWidth;
-    const fillWidth=progress*trackWidth;
-    document.getElementById('timerFill').style.width=fillWidth+'px';
-    document.getElementById('timerDot').style.left=(fillWidth-11)+'px';
-  },1000);
+  updateOccupiedState();
+  countdownInterval=setInterval(updateOccupiedState,1000);
 }
 
-function formatTime(d){
-  return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+function updateOccupiedState(){
+  const now=Date.now();
+  const remainMs=meetingEndMs-now;
+  const totalMs=meetingEndMs-meetingStartMs;
+
+  if(remainMs<=0){
+    showFreeCard();
+    showToast('Meeting ended — room is FREE');
+    return;
+  }
+
+  // Countdown text
+  const remainSec=Math.ceil(remainMs/1000);
+  const min=Math.floor(remainSec/60);
+  const sec=remainSec%60;
+  document.getElementById('liveCountdown').textContent=
+    String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+
+  // Timer bar progress
+  const elapsed=now-meetingStartMs;
+  const progress=Math.min(elapsed/totalMs,1);
+  const trackWidth=document.getElementById('timerTrack').offsetWidth;
+  const fillWidth=progress*trackWidth;
+  document.getElementById('timerFill').style.width=fillWidth+'px';
+  document.getElementById('timerDot').style.left=Math.max(0,fillWidth-11)+'px';
 }
+
+// Start in FREE mode
+startFreeUpdater();
 
 // ── Toast ──
 let toastTimer=null;
@@ -543,11 +611,12 @@ function showToast(msg){
 }
 
 // ── Inside Booking (FREE → OCCUPIED) ──
-document.querySelectorAll('[data-action="book-inside"]').forEach(el=>{
+document.querySelectorAll('.free-btn-overlay').forEach(el=>{
   el.addEventListener('click',()=>{
+    if(el.classList.contains('disabled'))return;
     const min=parseInt(el.dataset.min);
     showOccupiedCard(min);
-    showToast('Room booked for '+min+' minutes');
+    showToast('Room booked for '+min+' minutes until '+formatTime(new Date(Date.now()+min*60*1000)));
   });
 });
 
