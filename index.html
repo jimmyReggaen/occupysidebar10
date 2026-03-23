@@ -149,6 +149,17 @@ body{
 }
 .rec-ctrl svg{width:11px;height:13px;fill:rgba(255,255,255,0.7)}
 
+/* ── Card state switching ── */
+.card-state{display:none;position:relative;}
+.card-state.active{display:block;}
+.card-state img{display:block;width:720px;height:auto;}
+.card-state .hotspot{
+  position:absolute;cursor:pointer;z-index:5;border-radius:65px;
+  transition:background 0.15s;
+}
+.card-state .hotspot:hover{background:rgba(255,255,255,0.08)}
+.card-state .hotspot:active{background:rgba(255,255,255,0.15)}
+
 /* ── Live clock overlay (status bar pill) ── */
 .live-clock{
   position:absolute;z-index:6;
@@ -197,15 +208,21 @@ body{
     <img src="occupy-assets/xEPzK.png" alt="">
   </div>
 
-  <!-- ═══ OCCUPIED CARD ═══ -->
-  <div class="section draggable" draggable="true" data-name="occupied">
+  <!-- ═══ BOOKING CARD (FREE ↔ OCCUPIED) ═══ -->
+  <div class="section" data-name="booking-card">
     <div class="drag-handle"></div>
-    <img src="occupy-assets/sfsC5.png" alt="">
-    <!-- Live countdown over transparent "60min." area -->
-    <div class="live-countdown" id="liveCountdown" style="left:400px;top:38px;width:268px;">59:59</div>
-    <div class="hotspot" data-action="book" data-min="15" style="left:231px;top:396px;width:138px;height:47px;border-radius:65px;"></div>
-    <div class="hotspot" data-action="book" data-min="30" style="left:381px;top:396px;width:137px;height:47px;border-radius:65px;"></div>
-    <div class="hotspot" data-action="book" data-min="60" style="left:530px;top:396px;width:138px;height:47px;border-radius:65px;"></div>
+    <!-- FREE STATE (default) -->
+    <div id="freeCard" class="card-state active">
+      <img src="occupy-assets/ZKEGP.png" alt="FREE">
+      <div class="hotspot" data-action="book-inside" data-min="15" style="left:175px;top:62px;width:138px;height:47px;border-radius:65px;"></div>
+      <div class="hotspot" data-action="book-inside" data-min="30" style="left:325px;top:62px;width:137px;height:47px;border-radius:65px;"></div>
+      <div class="hotspot" data-action="book-inside" data-min="60" style="left:474px;top:62px;width:138px;height:47px;border-radius:65px;"></div>
+    </div>
+    <!-- OCCUPIED STATE -->
+    <div id="occupiedCard" class="card-state">
+      <img src="occupy-assets/xtOgi.png" alt="OCCUPIED">
+      <div class="live-countdown" id="liveCountdown" style="left:400px;top:26px;width:268px;">60:00</div>
+    </div>
   </div>
 
   <!-- ═══ LIGHTS ═══ -->
@@ -300,17 +317,42 @@ function updateClock(){
 updateClock();
 setInterval(updateClock,1000);
 
-// ── Countdown (60 min, MM:SS, animated) ──
-let countdownTotal=60*60;
+// ── Card State Management ──
+let countdownTotal=0;
+let countdownInterval=null;
+const freeCard=document.getElementById('freeCard');
+const occupiedCard=document.getElementById('occupiedCard');
+
+function showFreeCard(){
+  freeCard.classList.add('active');
+  occupiedCard.classList.remove('active');
+  clearInterval(countdownInterval);
+  countdownTotal=0;
+}
+
+function showOccupiedCard(minutes){
+  freeCard.classList.remove('active');
+  occupiedCard.classList.add('active');
+  countdownTotal=minutes*60;
+  updateCountdown();
+  clearInterval(countdownInterval);
+  countdownInterval=setInterval(()=>{
+    if(countdownTotal<=0){
+      showFreeCard();
+      showToast('Meeting ended — room is FREE');
+      return;
+    }
+    countdownTotal--;
+    updateCountdown();
+  },1000);
+}
+
 function updateCountdown(){
-  if(countdownTotal<=0) return;
-  countdownTotal--;
   const min=Math.floor(countdownTotal/60);
   const sec=countdownTotal%60;
   document.getElementById('liveCountdown').textContent=
     String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0');
 }
-setInterval(updateCountdown,1000);
 
 // ── Toast ──
 let toastTimer=null;
@@ -321,9 +363,13 @@ function showToast(msg){
   toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
 }
 
-// ── Booking ──
-document.querySelectorAll('[data-action="book"]').forEach(el=>{
-  el.addEventListener('click',()=>showToast('Booked for '+el.dataset.min+' minutes from 17:30'));
+// ── Inside Booking (FREE → OCCUPIED) ──
+document.querySelectorAll('[data-action="book-inside"]').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const min=parseInt(el.dataset.min);
+    showOccupiedCard(min);
+    showToast('Room booked for '+min+' minutes');
+  });
 });
 
 // ── Tile Flash ──
