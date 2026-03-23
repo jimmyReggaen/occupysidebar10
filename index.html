@@ -59,21 +59,16 @@ body{
 .rec-dot{
   position:absolute;z-index:6;width:34px;height:34px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;cursor:pointer;
-  transition:box-shadow 0.3s;
-}
-.rec-dot-inner{
-  width:14px;height:14px;border-radius:50%;
-  background:#64748B;transition:background 0.3s,box-shadow 0.3s;
+  background:transparent;transition:background 0.3s,box-shadow 0.3s;
 }
 .rec-dot.active{
-  box-shadow:0 0 16px rgba(220,38,38,0.4);
-}
-.rec-dot.active .rec-dot-inner{
-  background:#DC2626;animation:pulse-rec 1.5s ease-in-out infinite;
+  background:#DC2626;
+  box-shadow:0 0 16px rgba(220,38,38,0.5);
+  animation:pulse-rec 1.5s ease-in-out infinite;
 }
 @keyframes pulse-rec{
-  0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.6)}
-  50%{box-shadow:0 0 10px 6px rgba(220,38,38,0.35)}
+  0%,100%{box-shadow:0 0 8px 0 rgba(220,38,38,0.5)}
+  50%{box-shadow:0 0 16px 6px rgba(220,38,38,0.35)}
 }
 .rec-timer{
   position:absolute;z-index:6;
@@ -84,6 +79,7 @@ body{
 .rec-waveform{
   position:absolute;z-index:5;
   display:flex;align-items:center;gap:2.5px;overflow:hidden;
+  background:#0d0f1a;border-radius:4px;
 }
 .rec-waveform span{
   width:3px;border-radius:2px;background:#64748B80;
@@ -189,9 +185,7 @@ body{
   <div class="section draggable" draggable="true" data-name="recording">
     <div class="drag-handle"></div>
     <img src="occupy-assets/4qBsr.png" alt="">
-    <div class="rec-dot" id="recDot" style="left:50px;top:47px;">
-      <div class="rec-dot-inner"></div>
-    </div>
+    <div class="rec-dot" id="recDot" style="left:50px;top:47px;"></div>
     <div class="rec-timer" id="recTime" style="left:223px;top:54px;">00:00</div>
     <div class="rec-waveform" id="recWaveform" style="left:286px;top:50px;width:287px;height:28px;"></div>
   </div>
