@@ -151,7 +151,7 @@ body{
 
 /* ── OCCUPIED Card (HTML) ── */
 .occ-card{
-  width:720px;border-radius:26px;overflow:hidden;
+  width:720px;height:473px;border-radius:26px;overflow:hidden;
   background:#e82428;position:relative;
   display:flex;flex-direction:column;
   padding:14px 0 18px;
@@ -235,7 +235,7 @@ body{
 
 /* ── FREE Card (HTML) ── */
 .free-card{
-  width:720px;border-radius:26px;overflow:hidden;
+  width:720px;height:473px;border-radius:26px;overflow:hidden;
   background:#1b00e2;position:relative;
   display:flex;flex-direction:column;
   padding:14px 0 18px;
@@ -522,7 +522,8 @@ setInterval(updateClock,1000);
 const NOW_BOOT=Date.now();
 const SCHEDULE=[
   {start:NOW_BOOT+90*60*1000, end:NOW_BOOT+150*60*1000, title:'Java Engineering INNOVA..', sub:'julia.sustakova'},
-  {start:NOW_BOOT+180*60*1000, end:NOW_BOOT+210*60*1000, title:'Sharry — status meeting', sub:'Peter Novak'}
+  {start:NOW_BOOT+180*60*1000, end:NOW_BOOT+210*60*1000, title:'Sharry — status meeting', sub:'Peter Novak'},
+  {start:NOW_BOOT+240*60*1000, end:NOW_BOOT+300*60*1000, title:'TRICSY UX display', sub:'jakub. reken'}
 ];
 
 let countdownInterval=null;
@@ -580,7 +581,7 @@ function updateFreeState(){
 function renderFreeMeetings(){
   const container=document.getElementById('freeMeetings');
   const now=Date.now();
-  const upcoming=SCHEDULE.filter(m=>m.start>now);
+  const upcoming=SCHEDULE.filter(m=>m.start>now).slice(0,3);
   let html='';
   upcoming.forEach(m=>{
     const startStr=formatTime(new Date(m.start));
@@ -671,7 +672,7 @@ function updateOccupiedState(){
 
 function renderOccMeetings(){
   const container=document.getElementById('occMeetings');
-  const upcoming=SCHEDULE.filter(m=>m.start>meetingEndMs);
+  const upcoming=SCHEDULE.filter(m=>m.start>meetingEndMs).slice(0,2);
   let html='';
   upcoming.forEach(m=>{
     const startStr=formatTime(new Date(m.start));
