@@ -149,6 +149,90 @@ body{
 }
 .rec-ctrl svg{width:11px;height:13px;fill:rgba(255,255,255,0.7)}
 
+/* ── OCCUPIED Card (HTML) ── */
+.occ-card{
+  width:720px;border-radius:26px;overflow:hidden;
+  background:#e82428;position:relative;
+  display:flex;flex-direction:column;
+  padding:14px 0 18px;
+  background-image:
+    radial-gradient(ellipse at 25% 15%,rgba(255,85,85,0.5) 0%,transparent 55%),
+    radial-gradient(ellipse at 75% 60%,rgba(221,68,85,0.35) 0%,transparent 55%),
+    radial-gradient(ellipse at 55% 5%,rgba(255,102,102,0.35) 0%,transparent 45%),
+    radial-gradient(ellipse at 15% 65%,rgba(221,51,85,0.35) 0%,transparent 50%);
+}
+.occ-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 30px;height:60px;
+}
+.occ-title{font-size:44px;font-weight:700;color:#fff;line-height:1;}
+.occ-fornext{display:flex;align-items:baseline;gap:12px;}
+.occ-fornext-label{font-size:21px;font-weight:700;color:#fff;}
+.occ-fornext-time{font-size:38px;font-weight:700;color:#fff;}
+.occ-slash{
+  display:flex;align-items:center;justify-content:center;
+  height:20px;position:relative;padding:0;margin:8px 0 0;
+}
+.occ-slash::before{
+  content:'';position:absolute;width:100%;height:1px;background:#fff;
+}
+.occ-slash span{
+  position:relative;z-index:1;background:#e82428;padding:0 10px;
+  font-size:10px;font-weight:700;color:#fff;letter-spacing:2px;
+}
+.occ-meeting-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 30px;
+}
+.occ-meeting-info{
+  font-size:16px;font-weight:700;color:#fff;line-height:1.25;max-width:280px;
+}
+.occ-meeting-time{
+  font-size:38px;font-weight:700;color:#fff;letter-spacing:-1px;line-height:1;
+}
+/* Timer Bar */
+.occ-timer-track{
+  position:relative;height:17px;margin:4px 30px;
+  background:rgba(98,0,0,0.52);border-radius:9px;
+}
+.occ-timer-fill{
+  position:absolute;left:0;top:0;height:17px;border-radius:9px;
+  background:linear-gradient(to right,#FFD700,#FF8C00 40%,#b73202 70%,rgba(204,17,0,0.5));
+  transition:width 1s linear;
+}
+.occ-timer-dot{
+  position:absolute;top:-3px;width:23px;height:23px;border-radius:50%;
+  background:#FFD700;
+  box-shadow:0 0 8px rgba(255,215,0,0.53),0 0 4px rgba(255,215,0,0.67);
+  transition:left 1s linear;
+}
+/* Extend Buttons */
+.occ-extend-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 30px;
+}
+.occ-extend-label{
+  font-size:16px;font-weight:700;color:#fff;letter-spacing:-0.5px;
+}
+.occ-extend-buttons{display:flex;gap:6px;}
+.occ-ext-btn{
+  width:137px;height:47px;border-radius:65px;cursor:pointer;
+  background:rgba(255,255,255,0.33);
+  border:1.5px solid rgba(255,255,255,0.35);
+  backdrop-filter:blur(24px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.3s,background 0.3s;
+  box-shadow:0 0 8px rgba(0,0,0,0.09),0 0 4px rgba(255,255,255,0.27);
+}
+.occ-ext-btn .num{font-size:28px;font-weight:700;color:#fff;line-height:1;letter-spacing:-0.3px;}
+.occ-ext-btn .unit{font-size:10px;font-weight:700;color:#fff;line-height:1;letter-spacing:0.8px;}
+.occ-ext-btn.disabled{
+  opacity:0.3;cursor:not-allowed;pointer-events:none;
+  background:rgba(255,255,255,0.08);
+}
+.occ-ext-btn:not(.disabled):hover{background:rgba(255,255,255,0.45);}
+.occ-ext-btn:not(.disabled):active{background:rgba(255,255,255,0.55);}
+
 /* ── Card state switching ── */
 .card-state{display:none;position:relative;}
 .card-state.active{display:block;}
@@ -218,10 +302,49 @@ body{
       <div class="hotspot" data-action="book-inside" data-min="30" style="left:381px;top:95px;width:147px;height:50px;border-radius:65px;"></div>
       <div class="hotspot" data-action="book-inside" data-min="60" style="left:541px;top:95px;width:147px;height:50px;border-radius:65px;"></div>
     </div>
-    <!-- OCCUPIED STATE -->
+    <!-- OCCUPIED STATE (HTML/CSS) -->
     <div id="occupiedCard" class="card-state">
-      <img src="occupy-assets/xtOgi.png" alt="OCCUPIED">
-      <div class="live-countdown" id="liveCountdown" style="left:360px;top:20px;width:300px;letter-spacing:1px;">60:00</div>
+      <div class="occ-card">
+        <!-- Header -->
+        <div class="occ-header">
+          <span class="occ-title">OCCUPIED</span>
+          <div class="occ-fornext">
+            <span class="occ-fornext-label">FOR THE NEXT</span>
+            <span class="occ-fornext-time" id="liveCountdown">60:00</span>
+          </div>
+        </div>
+        <!-- Actual Meeting -->
+        <div class="occ-slash"><span>ACTUAL MEETING</span></div>
+        <div class="occ-meeting-row">
+          <div class="occ-meeting-info" id="occMeetingInfo">display book now:<br>jakub reken</div>
+          <div class="occ-meeting-time" id="occMeetingTime">11:00 - 12:00</div>
+        </div>
+        <!-- Timer Bar -->
+        <div class="occ-timer-track" id="timerTrack">
+          <div class="occ-timer-fill" id="timerFill"></div>
+          <div class="occ-timer-dot" id="timerDot"></div>
+        </div>
+        <!-- Extend Meeting -->
+        <div class="occ-extend-row">
+          <span class="occ-extend-label">EXTEND MEETING</span>
+          <div class="occ-extend-buttons">
+            <div class="occ-ext-btn" id="extBtn15" data-ext="15"><span class="num">15</span><span class="unit">min</span></div>
+            <div class="occ-ext-btn" id="extBtn30" data-ext="30"><span class="num">30</span><span class="unit">min</span></div>
+            <div class="occ-ext-btn" id="extBtn60" data-ext="60"><span class="num">60</span><span class="unit">min</span></div>
+          </div>
+        </div>
+        <!-- Next Meetings -->
+        <div class="occ-slash"><span>NEXT MEETING</span></div>
+        <div class="occ-meeting-row">
+          <div class="occ-meeting-info">Java Engineering INNOVA..<br>julia.sustakova</div>
+          <div class="occ-meeting-time" id="nextMeeting1Time">13:00 - 14:00</div>
+        </div>
+        <div class="occ-slash"><span>NEXT MEETING</span></div>
+        <div class="occ-meeting-row">
+          <div class="occ-meeting-info">Sharry — status meeting<br>Peter Novak</div>
+          <div class="occ-meeting-time">14:30 - 15:00</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -318,40 +441,96 @@ updateClock();
 setInterval(updateClock,1000);
 
 // ── Card State Management ──
-let countdownTotal=0;
 let countdownInterval=null;
 const freeCard=document.getElementById('freeCard');
 const occupiedCard=document.getElementById('occupiedCard');
+
+// Meeting state
+let meetingStartMs=0;
+let meetingEndMs=0;
+let nextMeetingStartMs=0;
 
 function showFreeCard(){
   freeCard.classList.add('active');
   occupiedCard.classList.remove('active');
   clearInterval(countdownInterval);
-  countdownTotal=0;
 }
 
 function showOccupiedCard(minutes){
   freeCard.classList.remove('active');
   occupiedCard.classList.add('active');
-  countdownTotal=minutes*60;
-  updateCountdown();
+
+  const now=Date.now();
+  meetingStartMs=now;
+  meetingEndMs=now+minutes*60*1000;
+  // Next meeting starts 60min after current meeting ends
+  nextMeetingStartMs=meetingEndMs+60*60*1000;
+
+  // Set meeting time display
+  const startStr=formatTime(new Date(meetingStartMs));
+  const endStr=formatTime(new Date(meetingEndMs));
+  document.getElementById('occMeetingTime').textContent=startStr+' - '+endStr;
+
+  // Set next meeting time
+  const nextStart=formatTime(new Date(nextMeetingStartMs));
+  const nextEnd=formatTime(new Date(nextMeetingStartMs+60*60*1000));
+  document.getElementById('nextMeeting1Time').textContent=nextStart+' - '+nextEnd;
+
+  updateExtendButtons();
+  startCountdown();
+}
+
+function extendMeeting(minutes){
+  meetingEndMs+=minutes*60*1000;
+  const startStr=formatTime(new Date(meetingStartMs));
+  const endStr=formatTime(new Date(meetingEndMs));
+  document.getElementById('occMeetingTime').textContent=startStr+' - '+endStr;
+  updateExtendButtons();
+  showToast('Meeting extended by '+minutes+' minutes');
+}
+
+function updateExtendButtons(){
+  const gapMs=nextMeetingStartMs-meetingEndMs;
+  const gapMin=Math.floor(gapMs/60000);
+  [15,30,60].forEach(m=>{
+    const btn=document.getElementById('extBtn'+m);
+    if(m>gapMin){btn.classList.add('disabled');}
+    else{btn.classList.remove('disabled');}
+  });
+}
+
+function startCountdown(){
   clearInterval(countdownInterval);
   countdownInterval=setInterval(()=>{
-    if(countdownTotal<=0){
+    const now=Date.now();
+    const remainMs=meetingEndMs-now;
+    const totalMs=meetingEndMs-meetingStartMs;
+
+    if(remainMs<=0){
       showFreeCard();
       showToast('Meeting ended — room is FREE');
       return;
     }
-    countdownTotal--;
-    updateCountdown();
+
+    // Update countdown text
+    const remainSec=Math.ceil(remainMs/1000);
+    const min=Math.floor(remainSec/60);
+    const sec=remainSec%60;
+    document.getElementById('liveCountdown').textContent=
+      String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+
+    // Update timer bar (progress = elapsed / total)
+    const elapsed=now-meetingStartMs;
+    const progress=Math.min(elapsed/totalMs,1);
+    const trackWidth=document.getElementById('timerTrack').offsetWidth;
+    const fillWidth=progress*trackWidth;
+    document.getElementById('timerFill').style.width=fillWidth+'px';
+    document.getElementById('timerDot').style.left=(fillWidth-11)+'px';
   },1000);
 }
 
-function updateCountdown(){
-  const min=Math.floor(countdownTotal/60);
-  const sec=countdownTotal%60;
-  document.getElementById('liveCountdown').textContent=
-    String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+function formatTime(d){
+  return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
 }
 
 // ── Toast ──
@@ -369,6 +548,15 @@ document.querySelectorAll('[data-action="book-inside"]').forEach(el=>{
     const min=parseInt(el.dataset.min);
     showOccupiedCard(min);
     showToast('Room booked for '+min+' minutes');
+  });
+});
+
+// ── Extend Meeting ──
+document.querySelectorAll('.occ-ext-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    if(btn.classList.contains('disabled'))return;
+    const min=parseInt(btn.dataset.ext);
+    extendMeeting(min);
   });
 });
 
