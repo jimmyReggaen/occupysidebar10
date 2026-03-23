@@ -233,18 +233,71 @@ body{
 .occ-ext-btn:not(.disabled):hover{background:rgba(255,255,255,0.45);}
 .occ-ext-btn:not(.disabled):active{background:rgba(255,255,255,0.55);}
 
-/* ── FREE card button overlays ── */
-.free-btn-overlay{
-  position:absolute;z-index:5;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  transition:opacity 0.3s;
+/* ── FREE Card (HTML) ── */
+.free-card{
+  width:720px;border-radius:26px;overflow:hidden;
+  background:#1b00e2;position:relative;
+  display:flex;flex-direction:column;
+  padding:14px 0 18px;
+  background-image:
+    radial-gradient(ellipse at 25% 15%,rgba(85,85,255,0.5) 0%,transparent 55%),
+    radial-gradient(ellipse at 75% 60%,rgba(68,85,221,0.35) 0%,transparent 55%),
+    radial-gradient(ellipse at 55% 5%,rgba(102,102,255,0.35) 0%,transparent 45%),
+    radial-gradient(ellipse at 15% 65%,rgba(51,85,221,0.35) 0%,transparent 50%);
 }
-.free-btn-overlay .num,.free-btn-overlay .unit{color:transparent;}
-.free-btn-overlay:hover{background:rgba(255,255,255,0.08);}
-.free-btn-overlay:active{background:rgba(255,255,255,0.15);}
-.free-btn-overlay.disabled{
+.free-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 30px;height:60px;
+}
+.free-title{font-size:44px;font-weight:700;color:#fff;line-height:1;}
+.free-fornext{display:flex;align-items:baseline;gap:12px;}
+.free-fornext-label{font-size:21px;font-weight:700;color:#fff;}
+.free-fornext-time{font-size:38px;font-weight:700;color:#fff;}
+.free-line{height:1px;background:rgba(255,255,255,0.25);margin:8px 30px 0;}
+.free-book-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 30px;
+}
+.free-book-label{font-size:16px;font-weight:700;color:#fff;}
+.free-book-buttons{display:flex;gap:6px;}
+.free-btn{
+  width:137px;height:47px;border-radius:65px;cursor:pointer;
+  background:rgba(255,255,255,0.33);
+  border:1.5px solid rgba(255,255,255,0.35);
+  backdrop-filter:blur(24px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.3s,background 0.3s;
+  box-shadow:0 0 8px rgba(0,0,0,0.09),0 0 4px rgba(255,255,255,0.27);
+}
+.free-btn .num{font-size:28px;font-weight:700;color:#fff;line-height:1;letter-spacing:-0.3px;}
+.free-btn .unit{font-size:10px;font-weight:700;color:#fff;line-height:1;letter-spacing:0.8px;}
+.free-btn.disabled{
   opacity:0.3;cursor:not-allowed;pointer-events:none;
-  background:rgba(0,0,0,0.3);border-radius:65px;
+  background:rgba(255,255,255,0.08);
+}
+.free-btn:not(.disabled):hover{background:rgba(255,255,255,0.45);}
+.free-btn:not(.disabled):active{background:rgba(255,255,255,0.55);}
+/* Free card meeting rows */
+.free-slash{
+  display:flex;align-items:center;justify-content:center;
+  height:20px;position:relative;margin:8px 0 0;
+}
+.free-slash::before{
+  content:'';position:absolute;width:100%;height:1px;background:#fff;
+}
+.free-slash span{
+  position:relative;z-index:1;background:#1b00e2;padding:0 10px;
+  font-size:10px;font-weight:700;color:#fff;letter-spacing:2px;
+}
+.free-meeting-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 30px;
+}
+.free-meeting-info{
+  font-size:16px;font-weight:700;color:#fff;line-height:1.25;max-width:280px;
+}
+.free-meeting-time{
+  font-size:38px;font-weight:700;color:#fff;letter-spacing:-1px;line-height:1;
 }
 
 /* ── Card state switching ── */
@@ -309,19 +362,30 @@ body{
   <!-- ═══ BOOKING CARD (FREE ↔ OCCUPIED) ═══ -->
   <div class="section" data-name="booking-card">
     <div class="drag-handle"></div>
-    <!-- FREE STATE (default) -->
+    <!-- FREE STATE (HTML/CSS) -->
     <div id="freeCard" class="card-state active">
-      <img src="occupy-assets/ZKEGP.png" alt="FREE">
-      <div class="live-countdown" id="freeCountdown" style="left:360px;top:20px;width:300px;">90min.</div>
-      <!-- Book Now button overlays -->
-      <div class="free-btn-overlay" id="freeBtn15" data-min="15" style="left:222px;top:95px;width:147px;height:50px;border-radius:65px;">
-        <span class="num">15</span><span class="unit">min</span>
-      </div>
-      <div class="free-btn-overlay" id="freeBtn30" data-min="30" style="left:381px;top:95px;width:147px;height:50px;border-radius:65px;">
-        <span class="num">30</span><span class="unit">min</span>
-      </div>
-      <div class="free-btn-overlay" id="freeBtn60" data-min="60" style="left:541px;top:95px;width:147px;height:50px;border-radius:65px;">
-        <span class="num">60</span><span class="unit">min</span>
+      <div class="free-card">
+        <!-- Header -->
+        <div class="free-header">
+          <span class="free-title">FREE</span>
+          <div class="free-fornext">
+            <span class="free-fornext-label">FOR THE NEXT</span>
+            <span class="free-fornext-time" id="freeCountdown">90min.</span>
+          </div>
+        </div>
+        <!-- Separator -->
+        <div class="free-line"></div>
+        <!-- Book Now -->
+        <div class="free-book-row">
+          <span class="free-book-label">BOOK NOW:</span>
+          <div class="free-book-buttons">
+            <div class="free-btn" id="freeBtn15" data-min="15"><span class="num">15</span><span class="unit">min</span></div>
+            <div class="free-btn" id="freeBtn30" data-min="30"><span class="num">30</span><span class="unit">min</span></div>
+            <div class="free-btn" id="freeBtn60" data-min="60"><span class="num">60</span><span class="unit">min</span></div>
+          </div>
+        </div>
+        <!-- Next Meetings (dynamic) -->
+        <div id="freeMeetings"></div>
       </div>
     </div>
     <!-- OCCUPIED STATE (HTML/CSS) -->
@@ -355,17 +419,8 @@ body{
             <div class="occ-ext-btn" id="extBtn60" data-ext="60"><span class="num">60</span><span class="unit">min</span></div>
           </div>
         </div>
-        <!-- Next Meetings -->
-        <div class="occ-slash"><span>NEXT MEETING</span></div>
-        <div class="occ-meeting-row">
-          <div class="occ-meeting-info">Java Engineering INNOVA..<br>julia.sustakova</div>
-          <div class="occ-meeting-time" id="nextMeeting1Time">13:00 - 14:00</div>
-        </div>
-        <div class="occ-slash"><span>NEXT MEETING</span></div>
-        <div class="occ-meeting-row">
-          <div class="occ-meeting-info">Sharry — status meeting<br>Peter Novak</div>
-          <div class="occ-meeting-time">14:30 - 15:00</div>
-        </div>
+        <!-- Next Meetings (dynamic) -->
+        <div id="occMeetings"></div>
       </div>
     </div>
   </div>
@@ -518,6 +573,25 @@ function updateFreeState(){
     if(m>gapMin){btn.classList.add('disabled');}
     else{btn.classList.remove('disabled');}
   });
+  // Render next meetings
+  renderFreeMeetings();
+}
+
+function renderFreeMeetings(){
+  const container=document.getElementById('freeMeetings');
+  const now=Date.now();
+  const upcoming=SCHEDULE.filter(m=>m.start>now);
+  let html='';
+  upcoming.forEach(m=>{
+    const startStr=formatTime(new Date(m.start));
+    const endStr=formatTime(new Date(m.end));
+    html+='<div class="free-slash"><span>NEXT MEETING</span></div>';
+    html+='<div class="free-meeting-row">';
+    html+='<div class="free-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
+    html+='<div class="free-meeting-time">'+startStr+' - '+endStr+'</div>';
+    html+='</div>';
+  });
+  container.innerHTML=html;
 }
 
 // ── OCCUPIED Card Logic ──
@@ -535,12 +609,8 @@ function showOccupiedCard(minutes){
   document.getElementById('occMeetingTime').textContent=
     formatTime(new Date(meetingStartMs))+' - '+formatTime(new Date(meetingEndMs));
 
-  // Set next meetings from schedule
-  const upcoming=SCHEDULE.filter(m=>m.start>meetingEndMs);
-  const nextEl=document.getElementById('nextMeeting1Time');
-  if(upcoming[0]){
-    nextEl.textContent=formatTime(new Date(upcoming[0].start))+' - '+formatTime(new Date(upcoming[0].end));
-  }
+  // Render next meetings in occupied card
+  renderOccMeetings();
 
   updateExtendButtons();
   startCountdown();
@@ -553,6 +623,7 @@ function extendMeeting(minutes){
   document.getElementById('occMeetingTime').textContent=
     formatTime(new Date(Date.now()))+' - '+formatTime(new Date(meetingEndMs));
   updateExtendButtons();
+  renderOccMeetings();
   showToast('Meeting extended by '+minutes+' minutes until '+formatTime(new Date(meetingEndMs)));
 }
 
@@ -598,6 +669,22 @@ function updateOccupiedState(){
   document.getElementById('timerDot').style.left=Math.max(0,fillWidth-11)+'px';
 }
 
+function renderOccMeetings(){
+  const container=document.getElementById('occMeetings');
+  const upcoming=SCHEDULE.filter(m=>m.start>meetingEndMs);
+  let html='';
+  upcoming.forEach(m=>{
+    const startStr=formatTime(new Date(m.start));
+    const endStr=formatTime(new Date(m.end));
+    html+='<div class="occ-slash"><span>NEXT MEETING</span></div>';
+    html+='<div class="occ-meeting-row">';
+    html+='<div class="occ-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
+    html+='<div class="occ-meeting-time">'+startStr+' - '+endStr+'</div>';
+    html+='</div>';
+  });
+  container.innerHTML=html;
+}
+
 // Start in FREE mode
 startFreeUpdater();
 
@@ -611,7 +698,7 @@ function showToast(msg){
 }
 
 // ── Inside Booking (FREE → OCCUPIED) ──
-document.querySelectorAll('.free-btn-overlay').forEach(el=>{
+document.querySelectorAll('.free-btn').forEach(el=>{
   el.addEventListener('click',()=>{
     if(el.classList.contains('disabled'))return;
     const min=parseInt(el.dataset.min);
