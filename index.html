@@ -73,7 +73,7 @@ body{
   margin:14px 24px 0;border-radius:20px;background:#0d0f1a;
   border:1.5px solid #4590ff44;
   padding:0 26px;height:80px;
-  display:flex;align-items:center;gap:20px;
+  display:flex;align-items:center;gap:12px;
   position:relative;overflow:hidden;
   transition:background 0.4s,border-color 0.4s;
 }
@@ -136,8 +136,8 @@ body{
 }
 .rec-card.active .rec-time{color:#fff}
 .rec-waveform{
-  flex:1;height:28px;display:flex;align-items:center;gap:2.5px;
-  overflow:hidden;
+  flex:1;height:28px;display:flex;align-items:center;gap:2px;
+  overflow:hidden;margin:0 4px;
 }
 .rec-waveform span{
   width:3px;border-radius:2px;background:#64748B66;
@@ -794,7 +794,7 @@ let recSeconds=0,recActive=false,recInterval=null;
 
 (function(){
   const wf=document.getElementById('recWaveform');
-  for(let i=0;i<38;i++){
+  for(let i=0;i<80;i++){
     const bar=document.createElement('span');
     bar.style.height=(4+Math.random()*18)+'px';
     bar.style.animationDelay=(Math.random()*1.2).toFixed(2)+'s';
