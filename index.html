@@ -198,7 +198,7 @@ body{
 }
 .occ-timer-fill{
   position:absolute;left:0;top:0;height:17px;border-radius:9px;
-  background:linear-gradient(to left,#FFD700,#FF8C00 20%,#b7320266 50%,rgba(204,17,0,0) 100%);
+  background:linear-gradient(to left,#FFD700,#FF8C00 15%,#cc440055 40%,#aa220033 70%,#88110018 100%);
   transition:width 1s linear;
 }
 .occ-timer-dot{
@@ -365,6 +365,8 @@ body{
     <img src="occupy-assets/r9Fnl.png" alt="">
     <!-- Live clock over the transparent text in the glass pill -->
     <div class="live-clock" id="liveClock" style="left:74px;top:23px;line-height:42px;">00:00</div>
+    <!-- Avatar reset button -->
+    <div class="hotspot" id="avatarReset" style="left:654px;top:20px;width:42px;height:42px;border-radius:50%;"></div>
   </div>
 
   <!-- ═══ ROOM NAME ═══ -->
@@ -755,6 +757,12 @@ document.querySelectorAll('.tile-flash').forEach(el=>{
     const idx=parseInt(el.dataset.idx);
     if(names[group]&&names[group][idx])showToast(names[group][idx]);
   });
+});
+
+// ── Avatar Reset (back to FREE) ──
+document.getElementById('avatarReset').addEventListener('click',()=>{
+  showFreeCard();
+  showToast('Room released — FREE');
 });
 
 // ── Tricsy ──
