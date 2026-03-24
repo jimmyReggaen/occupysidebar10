@@ -197,8 +197,8 @@ body{
   background:rgba(98,0,0,0.52);border-radius:9px;
 }
 .occ-timer-fill{
-  position:absolute;right:0;top:0;height:17px;border-radius:9px;
-  background:linear-gradient(to left,#FFD700,#FF8C00 30%,#b7320288 60%,rgba(204,17,0,0) 100%);
+  position:absolute;left:0;top:0;height:17px;border-radius:9px;
+  background:linear-gradient(to left,#FFD700,#FF8C00 20%,#b7320266 50%,rgba(204,17,0,0) 100%);
   transition:width 1s linear;
 }
 .occ-timer-dot{
@@ -683,13 +683,13 @@ function updateOccupiedState(){
   document.getElementById('liveCountdown').textContent=
     String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0');
 
-  // Timer bar progress (remaining time, right to left)
-  const remaining=remainMs/totalMs;
+  // Timer bar progress (elapsed time, left to right, gradient trails behind dot)
+  const elapsed=now-meetingStartMs;
+  const progress=Math.min(elapsed/totalMs,1);
   const trackWidth=document.getElementById('timerTrack').offsetWidth;
-  const fillWidth=remaining*trackWidth;
+  const fillWidth=progress*trackWidth;
   document.getElementById('timerFill').style.width=fillWidth+'px';
-  const dotPos=trackWidth-fillWidth-11;
-  document.getElementById('timerDot').style.left=Math.max(0,dotPos)+'px';
+  document.getElementById('timerDot').style.left=Math.max(0,fillWidth-11)+'px';
 }
 
 function renderOccMeetings(){
