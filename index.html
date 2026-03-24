@@ -197,8 +197,8 @@ body{
   background:rgba(98,0,0,0.52);border-radius:9px;
 }
 .occ-timer-fill{
-  position:absolute;left:0;top:0;height:17px;border-radius:9px;
-  background:linear-gradient(to right,#FFD700,#FF8C00 40%,#b73202 70%,rgba(204,17,0,0.5));
+  position:absolute;right:0;top:0;height:17px;border-radius:9px;
+  background:linear-gradient(to left,#FFD700,#FF8C00 30%,#b7320288 60%,rgba(204,17,0,0) 100%);
   transition:width 1s linear;
 }
 .occ-timer-dot{
@@ -575,14 +575,20 @@ function showFreeCard(){
 function startFreeUpdater(){
   clearInterval(freeInterval);
   updateFreeState();
-  freeInterval=setInterval(updateFreeState,10000);
+  freeInterval=setInterval(updateFreeState,1000);
 }
 
 function updateFreeState(){
   const now=Date.now();
-  const gapMin=getGapMinutes(now);
-  // Update "FOR THE NEXT" display
-  document.getElementById('freeCountdown').textContent=gapMin+'min.';
+  const next=getNextMeetingAfter(now);
+  const gapMs=next?(next.start-now):999*60*1000;
+  const gapMin=Math.floor(gapMs/60000);
+  // Update "FOR THE NEXT" display as MM:SS countdown
+  const gapSec=Math.ceil(gapMs/1000);
+  const mm=Math.floor(gapSec/60);
+  const ss=gapSec%60;
+  document.getElementById('freeCountdown').textContent=
+    String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');
   // Enable/disable book buttons
   [15,30,60].forEach(m=>{
     const btn=document.getElementById('freeBtn'+m);
@@ -677,13 +683,13 @@ function updateOccupiedState(){
   document.getElementById('liveCountdown').textContent=
     String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0');
 
-  // Timer bar progress
-  const elapsed=now-meetingStartMs;
-  const progress=Math.min(elapsed/totalMs,1);
+  // Timer bar progress (remaining time, right to left)
+  const remaining=remainMs/totalMs;
   const trackWidth=document.getElementById('timerTrack').offsetWidth;
-  const fillWidth=progress*trackWidth;
+  const fillWidth=remaining*trackWidth;
   document.getElementById('timerFill').style.width=fillWidth+'px';
-  document.getElementById('timerDot').style.left=Math.max(0,fillWidth-11)+'px';
+  const dotPos=trackWidth-fillWidth-11;
+  document.getElementById('timerDot').style.left=Math.max(0,dotPos)+'px';
 }
 
 function renderOccMeetings(){
