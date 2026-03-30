@@ -57,7 +57,14 @@ body{
 
 /* ── Auto Toggle area (invisible clickable zone) ── */
 .auto-toggle-area{
-  position:absolute;z-index:5;cursor:pointer;
+  position:absolute;z-index:6;cursor:pointer;
+}
+/* When auto is ON, dim only button areas */
+.section.auto-on .tile-flash{
+  pointer-events:none;
+  background:rgba(0,0,0,0.45);
+  border-radius:16px;
+  transition:background 0.3s;
 }
 
 /* ── Recording section (pure HTML/CSS) ── */
@@ -668,28 +675,28 @@ body{
   <div class="section draggable" draggable="true" data-name="lights">
     <div class="drag-handle"></div>
     <img src="occupy-assets/5ZVwo.png" alt="" data-off="occupy-assets/5ZVwo.png" data-on="occupy-assets/5ZVwo-on.png">
-    <div class="tile-flash" data-group="lights" data-idx="0" style="left:20px;top:81px;width:155px;height:116px;border-radius:16px;"></div>
-    <div class="tile-flash" data-group="lights" data-idx="1" style="left:195px;top:81px;width:155px;height:116px;border-radius:16px;"></div>
-    <div class="tile-flash" data-group="lights" data-idx="2" style="left:370px;top:81px;width:155px;height:116px;border-radius:16px;"></div>
-    <div class="auto-toggle-area" data-section="lights" style="left:545px;top:75px;width:155px;height:120px;"></div>
+    <div class="tile-flash" data-group="lights" data-idx="0" style="left:20px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="tile-flash" data-group="lights" data-idx="1" style="left:195px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="tile-flash" data-group="lights" data-idx="2" style="left:370px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="auto-toggle-area" data-section="lights" style="left:552px;top:47px;width:140px;height:117px;"></div>
   </div>
 
   <!-- ═══ BLINDS ═══ -->
   <div class="section draggable" draggable="true" data-name="blinds">
     <div class="drag-handle"></div>
     <img src="occupy-assets/HRZBU.png" alt="" data-off="occupy-assets/HRZBU.png" data-on="occupy-assets/HRZBU-on.png">
-    <div class="tile-flash" data-group="blinds" data-idx="0" style="left:197px;top:79px;width:155px;height:116px;border-radius:16px;"></div>
-    <div class="auto-toggle-area" data-section="blinds" style="left:372px;top:75px;width:155px;height:120px;"></div>
+    <div class="tile-flash" data-group="blinds" data-idx="0" style="left:195px;top:44px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="auto-toggle-area" data-section="blinds" style="left:377px;top:44px;width:140px;height:117px;"></div>
   </div>
 
   <!-- ═══ SHADES ═══ -->
   <div class="section draggable" draggable="true" data-name="shades">
     <div class="drag-handle"></div>
     <img src="occupy-assets/Z4lIp.png" alt="" data-off="occupy-assets/Z4lIp.png" data-on="occupy-assets/Z4lIp-on.png">
-    <div class="tile-flash" data-group="shades" data-idx="0" style="left:20px;top:81px;width:155px;height:116px;border-radius:16px;"></div>
-    <div class="tile-flash" data-group="shades" data-idx="1" style="left:195px;top:81px;width:155px;height:116px;border-radius:16px;"></div>
-    <div class="tile-flash" data-group="shades" data-idx="2" style="left:370px;top:81px;width:155px;height:116px;border-radius:16px;"></div>
-    <div class="auto-toggle-area" data-section="shades" style="left:545px;top:75px;width:155px;height:120px;"></div>
+    <div class="tile-flash" data-group="shades" data-idx="0" style="left:20px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="tile-flash" data-group="shades" data-idx="1" style="left:195px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="tile-flash" data-group="shades" data-idx="2" style="left:370px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="auto-toggle-area" data-section="shades" style="left:552px;top:47px;width:140px;height:117px;"></div>
   </div>
 
   <!-- ═══ HEY TRICSY ═══ -->
@@ -1022,6 +1029,7 @@ document.querySelectorAll('.auto-toggle-area').forEach(el=>{
     const section=el.closest('.section');
     const img=section.querySelector('img[data-off]');
     img.src=isOn?img.dataset.on:img.dataset.off;
+    section.classList.toggle('auto-on',isOn);
     const name=el.dataset.section;
     showToast(name.charAt(0).toUpperCase()+name.slice(1)+' Auto '+(isOn?'ON':'OFF'));
   });
