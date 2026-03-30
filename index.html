@@ -47,12 +47,17 @@ body{
 
 /* ── Tile flash ── */
 .tile-flash{
-  position:absolute;z-index:5;cursor:pointer;border-radius:16px;
+  position:absolute;z-index:5;cursor:pointer;
   background:transparent;transition:background 0.15s,box-shadow 0.15s;
 }
 .tile-flash.flash{
   background:linear-gradient(160deg,rgba(27,0,226,0.65) 0%,rgba(14,0,113,0.65) 100%);
   box-shadow:0 0 20px rgba(27,0,226,0.3);
+}
+
+/* ── Auto Toggle area (invisible clickable zone) ── */
+.auto-toggle-area{
+  position:absolute;z-index:5;cursor:pointer;
 }
 
 /* ── Recording section (pure HTML/CSS) ── */
@@ -662,29 +667,29 @@ body{
   <!-- ═══ LIGHTS ═══ -->
   <div class="section draggable" draggable="true" data-name="lights">
     <div class="drag-handle"></div>
-    <img src="occupy-assets/5ZVwo.png" alt="">
-    <div class="tile-flash" data-group="lights" data-idx="0" style="left:24px;top:35px;width:155px;height:145px;"></div>
-    <div class="tile-flash" data-group="lights" data-idx="1" style="left:199px;top:35px;width:155px;height:145px;"></div>
-    <div class="tile-flash" data-group="lights" data-idx="2" style="left:374px;top:35px;width:155px;height:145px;"></div>
-    <div class="tile-flash" data-group="lights" data-idx="3" style="left:549px;top:35px;width:155px;height:145px;"></div>
+    <img src="occupy-assets/5ZVwo.png" alt="" data-off="occupy-assets/5ZVwo.png" data-on="occupy-assets/5ZVwo-on.png">
+    <div class="tile-flash" data-group="lights" data-idx="0" style="left:20px;top:81px;width:155px;height:116px;border-radius:16px;"></div>
+    <div class="tile-flash" data-group="lights" data-idx="1" style="left:195px;top:81px;width:155px;height:116px;border-radius:16px;"></div>
+    <div class="tile-flash" data-group="lights" data-idx="2" style="left:370px;top:81px;width:155px;height:116px;border-radius:16px;"></div>
+    <div class="auto-toggle-area" data-section="lights" style="left:545px;top:75px;width:155px;height:120px;"></div>
   </div>
 
   <!-- ═══ BLINDS ═══ -->
   <div class="section draggable" draggable="true" data-name="blinds">
     <div class="drag-handle"></div>
-    <img src="occupy-assets/HRZBU.png" alt="">
-    <div class="tile-flash" data-group="blinds" data-idx="0" style="left:24px;top:36px;width:320px;height:165px;"></div>
-    <div class="tile-flash" data-group="blinds" data-idx="1" style="left:370px;top:36px;width:320px;height:165px;"></div>
+    <img src="occupy-assets/HRZBU.png" alt="" data-off="occupy-assets/HRZBU.png" data-on="occupy-assets/HRZBU-on.png">
+    <div class="tile-flash" data-group="blinds" data-idx="0" style="left:197px;top:79px;width:155px;height:116px;border-radius:16px;"></div>
+    <div class="auto-toggle-area" data-section="blinds" style="left:372px;top:75px;width:155px;height:120px;"></div>
   </div>
 
   <!-- ═══ SHADES ═══ -->
   <div class="section draggable" draggable="true" data-name="shades">
     <div class="drag-handle"></div>
-    <img src="occupy-assets/Z4lIp.png" alt="">
-    <div class="tile-flash" data-group="shades" data-idx="0" style="left:24px;top:35px;width:155px;height:145px;"></div>
-    <div class="tile-flash" data-group="shades" data-idx="1" style="left:199px;top:35px;width:155px;height:145px;"></div>
-    <div class="tile-flash" data-group="shades" data-idx="2" style="left:374px;top:35px;width:155px;height:145px;"></div>
-    <div class="tile-flash" data-group="shades" data-idx="3" style="left:549px;top:35px;width:155px;height:145px;"></div>
+    <img src="occupy-assets/Z4lIp.png" alt="" data-off="occupy-assets/Z4lIp.png" data-on="occupy-assets/Z4lIp-on.png">
+    <div class="tile-flash" data-group="shades" data-idx="0" style="left:20px;top:81px;width:155px;height:116px;border-radius:16px;"></div>
+    <div class="tile-flash" data-group="shades" data-idx="1" style="left:195px;top:81px;width:155px;height:116px;border-radius:16px;"></div>
+    <div class="tile-flash" data-group="shades" data-idx="2" style="left:370px;top:81px;width:155px;height:116px;border-radius:16px;"></div>
+    <div class="auto-toggle-area" data-section="shades" style="left:545px;top:75px;width:155px;height:120px;"></div>
   </div>
 
   <!-- ═══ HEY TRICSY ═══ -->
@@ -999,13 +1004,26 @@ document.querySelectorAll('.tile-flash').forEach(el=>{
     el.classList.add('flash');
     setTimeout(()=>el.classList.remove('flash'),1000);
     const names={
-      lights:['Off','Dim Light','Full Light','Auto ON'],
-      blinds:['Blinds closed','Auto ON'],
-      shades:['Closed Shades','Half way','Open Shades','Auto ON'],
+      lights:['Off','Dim Light','Full Light'],
+      blinds:['Blinds closed'],
+      shades:['Closed Shades','Half way','Open Shades'],
       services:['ITO support','Reception call','Ordering','Cleaning needed']
     };
     const idx=parseInt(el.dataset.idx);
     if(names[group]&&names[group][idx])showToast(names[group][idx]);
+  });
+});
+
+// ── Auto Toggle (swap entire section PNG between OFF↔ON) ──
+document.querySelectorAll('.auto-toggle-area').forEach(el=>{
+  let isOn=false;
+  el.addEventListener('click',()=>{
+    isOn=!isOn;
+    const section=el.closest('.section');
+    const img=section.querySelector('img[data-off]');
+    img.src=isOn?img.dataset.on:img.dataset.off;
+    const name=el.dataset.section;
+    showToast(name.charAt(0).toUpperCase()+name.slice(1)+' Auto '+(isOn?'ON':'OFF'));
   });
 });
 
