@@ -296,7 +296,7 @@ body{
 .free-fornext{display:flex;align-items:baseline;gap:12px;}
 .free-fornext-label{font-size:21px;font-weight:700;color:#fff;}
 .free-fornext-time{font-size:38px;font-weight:700;color:#fff;}
-.free-line{display:none;}
+.free-line{height:1px;background:rgba(255,255,255,0.25);margin:8px 30px 0;}
 .free-book-row{
   display:flex;align-items:center;justify-content:space-between;
   padding:10px 30px;
@@ -506,22 +506,6 @@ body{
   letter-spacing:0.5px;
 }
 
-/* ── Section slash (generic, for image sections) ── */
-.section-slash{
-  display:flex;align-items:center;
-  height:20px;padding:0 24px;gap:6px;
-}
-.section-slash::before,.section-slash::after{
-  content:'';flex:1;height:1px;background:#4590ff;
-}
-.section-slash .bracket{font-size:14px;color:#4590ff;font-weight:300;}
-.section-slash span.txt{
-  font-size:12px;font-weight:600;color:#4590ff;letter-spacing:2px;
-  text-transform:uppercase;flex-shrink:0;
-}
-.section-img-clip{
-}
-
 /* ── Footer ── */
 .panel-footer{padding:16px 24px;text-align:center;}
 .panel-footer img{height:20px;opacity:0.4;}
@@ -630,8 +614,7 @@ body{
   <!-- ═══ LIGHTS ═══ -->
   <div class="section draggable" draggable="true" data-name="lights">
     <div class="drag-handle"></div>
-    <div class="section-slash"><span class="bracket">(</span><span class="txt">LIGHTS</span><span class="bracket">)</span></div>
-    <img class="section-img-clip" src="occupy-assets/W56aF.png" alt="">
+    <img src="occupy-assets/W56aF.png" alt="">
     <div class="tile-flash" data-group="lights" data-idx="0" style="left:24px;top:32px;width:126px;height:117px;"></div>
     <div class="tile-flash" data-group="lights" data-idx="1" style="left:160px;top:32px;width:126px;height:117px;"></div>
     <div class="tile-flash" data-group="lights" data-idx="2" style="left:297px;top:32px;width:126px;height:117px;"></div>
@@ -642,8 +625,7 @@ body{
   <!-- ═══ BLINDS ═══ -->
   <div class="section draggable" draggable="true" data-name="blinds">
     <div class="drag-handle"></div>
-    <div class="section-slash"><span class="bracket">(</span><span class="txt">BLINDS</span><span class="bracket">)</span></div>
-    <img class="section-img-clip" src="occupy-assets/UCkPe.png" alt="">
+    <img src="occupy-assets/UCkPe.png" alt="">
     <div class="tile-flash" data-group="blinds" data-idx="0" style="left:24px;top:36px;width:159px;height:146px;"></div>
     <div class="tile-flash" data-group="blinds" data-idx="1" style="left:195px;top:36px;width:159px;height:146px;"></div>
     <div class="tile-flash" data-group="blinds" data-idx="2" style="left:366px;top:36px;width:159px;height:146px;"></div>
@@ -653,8 +635,7 @@ body{
   <!-- ═══ HEY TRICSY ═══ -->
   <div class="section draggable" draggable="true" data-name="tricsy">
     <div class="drag-handle"></div>
-    <div class="section-slash"><span class="bracket">(</span><span class="txt">HEY TRICSY</span><span class="bracket">)</span></div>
-    <img class="section-img-clip" src="occupy-assets/yZm7M.png" alt="">
+    <img src="occupy-assets/yZm7M.png" alt="">
     <div class="hotspot" data-action="tricsy" style="left:48px;top:75px;width:56px;height:56px;border-radius:28px;"></div>
   </div>
 
@@ -686,8 +667,7 @@ body{
   <!-- ═══ SERVICES ═══ -->
   <div class="section draggable" draggable="true" data-name="services">
     <div class="drag-handle"></div>
-    <div class="section-slash"><span class="bracket">(</span><span class="txt">SERVICES</span><span class="bracket">)</span></div>
-    <img class="section-img-clip" src="occupy-assets/PIqES.png" alt="">
+    <img src="occupy-assets/PIqES.png" alt="">
     <div class="tile-flash" data-group="services" data-idx="0" style="left:24px;top:35px;width:159px;height:146px;"></div>
     <div class="tile-flash" data-group="services" data-idx="1" style="left:195px;top:35px;width:159px;height:146px;"></div>
     <div class="tile-flash" data-group="services" data-idx="2" style="left:365px;top:35px;width:159px;height:146px;"></div>
@@ -697,15 +677,13 @@ body{
   <!-- ═══ ENVIRONMENT ═══ -->
   <div class="section draggable" draggable="true" data-name="environment">
     <div class="drag-handle"></div>
-    <div class="section-slash"><span class="bracket">(</span><span class="txt">ENVIRONMENT</span><span class="bracket">)</span></div>
-    <img class="section-img-clip" src="occupy-assets/r9Zk9.png" alt="">
+    <img src="occupy-assets/r9Zk9.png" alt="">
   </div>
 
   <!-- ═══ WEATHER ═══ -->
   <div class="section draggable" draggable="true" data-name="weather">
     <div class="drag-handle"></div>
-    <div class="section-slash"><span class="bracket">(</span><span class="txt">WEATHER</span><span class="bracket">)</span></div>
-    <img class="section-img-clip" src="occupy-assets/ETRs6.png" alt="">
+    <img src="occupy-assets/ETRs6.png" alt="">
   </div>
 
   <!-- Footer -->
