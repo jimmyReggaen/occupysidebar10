@@ -225,6 +225,7 @@ body{
 .occ-meeting-row{
   display:flex;align-items:center;
   padding:6px 30px;
+  min-height:58px;
 }
 .occ-meeting-info{
   font-size:21px;font-weight:700;color:#fff;line-height:1.25;flex:1;
@@ -336,6 +337,7 @@ body{
 .free-meeting-row{
   display:flex;align-items:center;
   padding:6px 30px;
+  min-height:58px;
 }
 .free-meeting-info{
   font-size:21px;font-weight:700;color:#fff;line-height:1.25;flex:1;
@@ -383,6 +385,27 @@ body{
   font-size:32px;font-weight:700;color:#fff;
   text-align:right;line-height:1;
 }
+
+/* ── Next Meeting Warning ── */
+/* OCCUPIED card (red) → warning full blue */
+/* Warning row: overlay, no layout shift */
+.warn-wrap{position:relative;}
+.warn-wrap .warn-overlay{
+  position:absolute;inset:0;
+  display:flex;align-items:center;
+  padding:6px 30px;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.15s;
+}
+.warn-wrap.flash .warn-overlay{opacity:1;pointer-events:auto;}
+.warn-overlay.occ-warn{background:#1b00e2;}
+.warn-overlay .warn-big{
+  font-size:28px;font-weight:700;color:#fff;
+  letter-spacing:1px;flex:1;text-align:center;
+}
+.warn-overlay .info-btn{flex-shrink:0;}
+
+.warn-overlay.free-warn{background:#e82428;}
 
 /* ── Toast ── */
 .toast{
@@ -707,7 +730,7 @@ setInterval(updateClock,1000);
 // Simulated schedule: next meeting is 90 min from now
 const NOW_BOOT=Date.now();
 const SCHEDULE=[
-  {start:NOW_BOOT+90*60*1000, end:NOW_BOOT+150*60*1000, title:'Java Engineering INNOVA..', sub:'julia.sustakova',
+  {start:NOW_BOOT+16*60*1000, end:NOW_BOOT+76*60*1000, title:'Java Engineering INNOVA..', sub:'julia.sustakova',
    description:'Sprint review a plánovanie ďalšieho sprintu. Demo nových API endpointov pre integráciu s mobilnou aplikáciou.',
    attendees:[
      {name:'Júlia Šustáková', mode:'physical'},
@@ -795,15 +818,28 @@ function renderFreeMeetings(){
   const now=Date.now();
   const upcoming=SCHEDULE.filter(m=>m.start>now).slice(0,3);
   let html='';
-  upcoming.forEach(m=>{
+  upcoming.forEach((m,i)=>{
     const startStr=formatTime(new Date(m.start));
     const endStr=formatTime(new Date(m.end));
+    const minsUntil=Math.ceil((m.start-now)/60000);
+    const isWarning=i===0&&minsUntil<=15;
     html+='<div class="free-slash"><span class="bracket">(</span><span class="txt">NEXT MEETING</span><span class="bracket">)</span></div>';
-    html+='<div class="free-meeting-row">';
-    html+='<div class="free-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
-    html+='<div class="free-meeting-time">'+startStr+' - '+endStr+'</div>';
-    html+='<div class="info-btn">i</div>';
-    html+='</div>';
+    if(isWarning){
+      html+='<div class="warn-wrap'+(warningShowText?' flash':'')+'">';
+      html+='<div class="free-meeting-row">';
+      html+='<div class="free-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
+      html+='<div class="free-meeting-time">'+startStr+' - '+endStr+'</div>';
+      html+='<div class="info-btn">i</div>';
+      html+='</div>';
+      html+='<div class="warn-overlay free-warn"><div class="warn-big">⚠ STARTS IN '+minsUntil+' MIN</div><div class="info-btn">i</div></div>';
+      html+='</div>';
+    }else{
+      html+='<div class="free-meeting-row">';
+      html+='<div class="free-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
+      html+='<div class="free-meeting-time">'+startStr+' - '+endStr+'</div>';
+      html+='<div class="info-btn">i</div>';
+      html+='</div>';
+    }
   });
   container.innerHTML=html;
 }
@@ -871,6 +907,7 @@ function updateOccupiedState(){
   const min=Math.ceil(remainMs/60000);
   document.getElementById('liveCountdown').textContent=min+'min.';
 
+
   // Timer bar progress (elapsed time, left to right, gradient trails behind dot)
   const elapsed=now-meetingStartMs;
   const progress=Math.min(elapsed/totalMs,1);
@@ -878,24 +915,43 @@ function updateOccupiedState(){
   const fillWidth=progress*trackWidth;
   document.getElementById('timerFill').style.width=fillWidth+'px';
   document.getElementById('timerDot').style.left=Math.max(0,fillWidth-11)+'px';
+  renderOccMeetings();
 }
 
 function renderOccMeetings(){
   const container=document.getElementById('occMeetings');
+  const now=Date.now();
   const upcoming=SCHEDULE.filter(m=>m.start>meetingEndMs).slice(0,2);
   let html='';
-  upcoming.forEach(m=>{
+  upcoming.forEach((m,i)=>{
     const startStr=formatTime(new Date(m.start));
     const endStr=formatTime(new Date(m.end));
+    const minsUntil=Math.ceil((m.start-now)/60000);
+    const isWarning=i===0&&minsUntil<=15;
     html+='<div class="occ-slash"><span class="bracket">(</span><span class="txt">NEXT MEETING</span><span class="bracket">)</span></div>';
-    html+='<div class="occ-meeting-row">';
-    html+='<div class="occ-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
-    html+='<div class="occ-meeting-time">'+startStr+' - '+endStr+'</div>';
-    html+='<div class="info-btn">i</div>';
-    html+='</div>';
+    if(isWarning){
+      html+='<div class="warn-wrap'+(warningShowText?' flash':'')+'">';
+      html+='<div class="occ-meeting-row">';
+      html+='<div class="occ-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
+      html+='<div class="occ-meeting-time">'+startStr+' - '+endStr+'</div>';
+      html+='<div class="info-btn">i</div>';
+      html+='</div>';
+      html+='<div class="warn-overlay occ-warn"><div class="warn-big">⚠ STARTS IN '+minsUntil+' MIN</div><div class="info-btn">i</div></div>';
+      html+='</div>';
+    }else{
+      html+='<div class="occ-meeting-row">';
+      html+='<div class="occ-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
+      html+='<div class="occ-meeting-time">'+startStr+' - '+endStr+'</div>';
+      html+='<div class="info-btn">i</div>';
+      html+='</div>';
+    }
   });
   container.innerHTML=html;
 }
+
+// Warning flash toggle (alternates every 2s)
+let warningShowText=false;
+setInterval(()=>{warningShowText=!warningShowText;},2000);
 
 // Start in FREE mode
 startFreeUpdater();
