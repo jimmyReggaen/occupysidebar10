@@ -210,14 +210,15 @@ body{
 .occ-fornext-time{font-size:38px;font-weight:700;color:#fff;}
 .occ-slash{
   display:flex;align-items:center;
-  height:20px;padding:0 30px;margin:8px 0 0;gap:10px;
+  height:20px;padding:0 30px;margin:8px 0 0;gap:6px;
 }
 .occ-slash::before,.occ-slash::after{
-  content:'';flex:1;height:1px;background:#fff;
+  content:'';flex:1;height:1px;background:#4590ff;
 }
-.occ-slash span{
-  font-size:10px;font-weight:700;color:#fff;letter-spacing:2px;
-  flex-shrink:0;
+.occ-slash .bracket{font-size:14px;color:#4590ff;font-weight:300;}
+.occ-slash span.txt{
+  font-size:12px;font-weight:600;color:#4590ff;letter-spacing:2px;
+  text-transform:uppercase;flex-shrink:0;
 }
 .occ-meeting-row{
   display:flex;align-items:center;
@@ -320,14 +321,15 @@ body{
 /* Free card meeting rows */
 .free-slash{
   display:flex;align-items:center;
-  height:20px;padding:0 30px;margin:8px 0 0;gap:10px;
+  height:20px;padding:0 30px;margin:8px 0 0;gap:6px;
 }
 .free-slash::before,.free-slash::after{
-  content:'';flex:1;height:1px;background:#fff;
+  content:'';flex:1;height:1px;background:#4590ff;
 }
-.free-slash span{
-  font-size:10px;font-weight:700;color:#fff;letter-spacing:2px;
-  flex-shrink:0;
+.free-slash .bracket{font-size:14px;color:#4590ff;font-weight:300;}
+.free-slash span.txt{
+  font-size:12px;font-weight:600;color:#4590ff;letter-spacing:2px;
+  text-transform:uppercase;flex-shrink:0;
 }
 .free-meeting-row{
   display:flex;align-items:center;
@@ -575,7 +577,7 @@ body{
           </div>
         </div>
         <!-- Actual Meeting -->
-        <div class="occ-slash"><span>ACTUAL MEETING</span></div>
+        <div class="occ-slash"><span class="bracket">(</span><span class="txt">ACTUAL MEETING</span><span class="bracket">)</span></div>
         <div class="occ-meeting-row">
           <div class="occ-meeting-info" id="occMeetingInfo">display book now:<br>jakub reken</div>
           <div class="occ-meeting-time" id="occMeetingTime">11:00 - 12:00</div>
@@ -794,7 +796,7 @@ function renderFreeMeetings(){
   upcoming.forEach(m=>{
     const startStr=formatTime(new Date(m.start));
     const endStr=formatTime(new Date(m.end));
-    html+='<div class="free-slash"><span>NEXT MEETING</span></div>';
+    html+='<div class="free-slash"><span class="bracket">(</span><span class="txt">NEXT MEETING</span><span class="bracket">)</span></div>';
     html+='<div class="free-meeting-row">';
     html+='<div class="free-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
     html+='<div class="free-meeting-time">'+startStr+' - '+endStr+'</div>';
@@ -883,7 +885,7 @@ function renderOccMeetings(){
   upcoming.forEach(m=>{
     const startStr=formatTime(new Date(m.start));
     const endStr=formatTime(new Date(m.end));
-    html+='<div class="occ-slash"><span>NEXT MEETING</span></div>';
+    html+='<div class="occ-slash"><span class="bracket">(</span><span class="txt">NEXT MEETING</span><span class="bracket">)</span></div>';
     html+='<div class="occ-meeting-row">';
     html+='<div class="occ-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
     html+='<div class="occ-meeting-time">'+startStr+' - '+endStr+'</div>';
