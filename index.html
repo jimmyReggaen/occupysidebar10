@@ -209,15 +209,15 @@ body{
 .occ-fornext-label{font-size:21px;font-weight:700;color:#fff;}
 .occ-fornext-time{font-size:38px;font-weight:700;color:#fff;}
 .occ-slash{
-  display:flex;align-items:center;justify-content:center;
-  height:20px;position:relative;padding:0;margin:8px 0 0;
+  display:flex;align-items:center;
+  height:20px;padding:0 30px;margin:8px 0 0;gap:10px;
 }
-.occ-slash::before{
-  content:'';position:absolute;width:100%;height:1px;background:#fff;
+.occ-slash::before,.occ-slash::after{
+  content:'';flex:1;height:1px;background:#fff;
 }
 .occ-slash span{
-  position:relative;z-index:1;background:#e82428;padding:0 10px;
   font-size:10px;font-weight:700;color:#fff;letter-spacing:2px;
+  flex-shrink:0;
 }
 .occ-meeting-row{
   display:flex;align-items:center;
@@ -319,15 +319,15 @@ body{
 .free-btn:not(.disabled):active{background:rgba(255,255,255,0.55);}
 /* Free card meeting rows */
 .free-slash{
-  display:flex;align-items:center;justify-content:center;
-  height:20px;position:relative;margin:8px 0 0;
+  display:flex;align-items:center;
+  height:20px;padding:0 30px;margin:8px 0 0;gap:10px;
 }
-.free-slash::before{
-  content:'';position:absolute;width:100%;height:1px;background:#fff;
+.free-slash::before,.free-slash::after{
+  content:'';flex:1;height:1px;background:#fff;
 }
 .free-slash span{
-  position:relative;z-index:1;background:#1b00e2;padding:0 10px;
   font-size:10px;font-weight:700;color:#fff;letter-spacing:2px;
+  flex-shrink:0;
 }
 .free-meeting-row{
   display:flex;align-items:center;
@@ -390,6 +390,118 @@ body{
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* ── Meeting Detail Overlay ── */
+.card-dimmed{
+  filter:brightness(0.7) saturate(0.75);
+  transition:filter 0.35s ease;
+}
+.meeting-overlay{
+  position:absolute;top:0;left:24px;right:24px;bottom:0;z-index:20;
+  display:flex;flex-direction:column;
+  padding:20px 30px 16px;
+  border-radius:26px;
+  background:rgba(0,0,0,0.25);
+  backdrop-filter:blur(14px);
+  overflow:hidden;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.3s ease;
+}
+.meeting-overlay.visible{
+  opacity:1;pointer-events:auto;
+}
+.mo-close{
+  position:absolute;top:16px;right:20px;
+  width:32px;height:32px;border-radius:16px;
+  background:rgba(255,255,255,0.12);
+  border:1.5px solid rgba(255,255,255,0.25);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:18px;color:rgba(255,255,255,0.8);
+  transition:background 0.2s;
+}
+.mo-close:hover{background:rgba(255,255,255,0.22);}
+.mo-header{
+  display:flex;align-items:baseline;gap:14px;
+  margin-bottom:4px;
+}
+.mo-title{
+  font-size:28px;font-weight:700;color:#fff;
+  line-height:1.2;flex:1;
+}
+.mo-time{
+  font-size:22px;font-weight:600;color:rgba(255,255,255,0.7);
+  white-space:nowrap;
+}
+.mo-organizer{
+  font-size:15px;font-weight:600;color:rgba(255,255,255,0.5);
+  letter-spacing:0.5px;margin-bottom:10px;
+}
+.mo-divider{
+  height:1px;background:rgba(255,255,255,0.15);
+  margin:0 0 10px;
+}
+.mo-section-label{
+  font-size:13px;font-weight:700;color:rgba(255,255,255,0.4);
+  letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.mo-description{
+  font-size:16px;font-weight:500;color:rgba(255,255,255,0.8);
+  line-height:1.4;margin-bottom:12px;
+}
+.mo-attendees-grid{
+  display:flex;flex-direction:column;gap:5px;
+  margin-bottom:12px;
+}
+.mo-attendee{
+  display:flex;align-items:center;gap:10px;
+}
+.mo-avatar{
+  width:28px;height:28px;border-radius:14px;
+  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);
+  flex-shrink:0;
+}
+.mo-attendee-name{
+  font-size:16px;font-weight:600;color:rgba(255,255,255,0.85);
+  flex:1;
+}
+.mo-attendee-badge{
+  font-size:12px;font-weight:700;letter-spacing:0.8px;
+  padding:4px 10px;border-radius:20px;
+  text-transform:uppercase;
+}
+.mo-badge-physical{
+  background:rgba(74,222,128,0.2);color:#4ade80;
+  border:1px solid rgba(74,222,128,0.3);
+}
+.mo-badge-online{
+  background:rgba(96,165,250,0.2);color:#60a5fa;
+  border:1px solid rgba(96,165,250,0.3);
+}
+.mo-counts{
+  display:flex;gap:16px;margin-top:auto;
+}
+.mo-count-pill{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:20px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.12);
+}
+.mo-count-dot{
+  width:8px;height:8px;border-radius:4px;
+}
+.mo-count-dot.physical{background:#4ade80;}
+.mo-count-dot.online{background:#60a5fa;}
+.mo-count-num{
+  font-size:20px;font-weight:700;color:#fff;
+}
+.mo-count-label{
+  font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);
+  letter-spacing:0.5px;
+}
+
 /* ── Footer ── */
 .panel-footer{padding:16px 24px;text-align:center;}
 .panel-footer img{height:20px;opacity:0.4;}
@@ -419,7 +531,8 @@ body{
     <div class="drag-handle"></div>
     <!-- FREE STATE (HTML/CSS) -->
     <div id="freeCard" class="card-state active">
-      <div class="free-card">
+      <div style="position:relative">
+      <div class="free-card" id="freeCardInner">
         <!-- Header -->
         <div class="free-header">
           <span class="free-title">FREE</span>
@@ -442,10 +555,17 @@ body{
         <!-- Next Meetings (dynamic) -->
         <div id="freeMeetings"></div>
       </div>
+      <!-- Meeting Detail Overlay -->
+      <div class="meeting-overlay" id="freeOverlay">
+        <div class="mo-close" id="freeOverlayClose">&times;</div>
+        <div id="freeOverlayContent"></div>
+      </div>
+      </div>
     </div>
     <!-- OCCUPIED STATE (HTML/CSS) -->
     <div id="occupiedCard" class="card-state">
-      <div class="occ-card">
+      <div style="position:relative">
+      <div class="occ-card" id="occCardInner">
         <!-- Header -->
         <div class="occ-header">
           <span class="occ-title">OCCUPIED</span>
@@ -477,6 +597,12 @@ body{
         </div>
         <!-- Next Meetings (dynamic) -->
         <div id="occMeetings"></div>
+      </div>
+      <!-- Meeting Detail Overlay -->
+      <div class="meeting-overlay" id="occOverlay">
+        <div class="mo-close" id="occOverlayClose">&times;</div>
+        <div id="occOverlayContent"></div>
+      </div>
       </div>
     </div>
   </div>
@@ -577,9 +703,32 @@ setInterval(updateClock,1000);
 // Simulated schedule: next meeting is 90 min from now
 const NOW_BOOT=Date.now();
 const SCHEDULE=[
-  {start:NOW_BOOT+90*60*1000, end:NOW_BOOT+150*60*1000, title:'Java Engineering INNOVA..', sub:'julia.sustakova'},
-  {start:NOW_BOOT+180*60*1000, end:NOW_BOOT+210*60*1000, title:'Sharry — status meeting', sub:'Peter Novak'},
-  {start:NOW_BOOT+240*60*1000, end:NOW_BOOT+300*60*1000, title:'TRICSY UX display', sub:'jakub. reken'}
+  {start:NOW_BOOT+90*60*1000, end:NOW_BOOT+150*60*1000, title:'Java Engineering INNOVA..', sub:'julia.sustakova',
+   description:'Sprint review a plánovanie ďalšieho sprintu. Demo nových API endpointov pre integráciu s mobilnou aplikáciou.',
+   attendees:[
+     {name:'Júlia Šustáková', mode:'physical'},
+     {name:'Martin Kováč', mode:'physical'},
+     {name:'Anna Horváthová', mode:'online'},
+     {name:'Peter Baláž', mode:'physical'},
+     {name:'Tomáš Zelený', mode:'online'}
+   ], physical:3, online:2},
+  {start:NOW_BOOT+180*60*1000, end:NOW_BOOT+210*60*1000, title:'Sharry — status meeting', sub:'Peter Novak',
+   description:'Týždenný status call s partnerom Sharry. Aktuálny stav integrácie prístupového systému a timeline na Q2.',
+   attendees:[
+     {name:'Peter Novák', mode:'physical'},
+     {name:'Jakub Reken', mode:'physical'},
+     {name:'Sarah Chen', mode:'online'},
+     {name:'David Müller', mode:'online'},
+     {name:'Mária Tóthová', mode:'online'}
+   ], physical:2, online:3},
+  {start:NOW_BOOT+240*60*1000, end:NOW_BOOT+300*60*1000, title:'TRICSY UX display', sub:'jakub. reken',
+   description:'Prezentácia nového UX návrhu pre TRICSY hlasového asistenta. Review interakčných prototypov a user flow.',
+   attendees:[
+     {name:'Jakub Reken', mode:'physical'},
+     {name:'Lucia Krajčová', mode:'physical'},
+     {name:'Marek Dubský', mode:'physical'},
+     {name:'Filip Ondruš', mode:'online'}
+   ], physical:3, online:1}
 ];
 
 let countdownInterval=null;
@@ -624,12 +773,9 @@ function updateFreeState(){
   const next=getNextMeetingAfter(now);
   const gapMs=next?(next.start-now):999*60*1000;
   const gapMin=Math.floor(gapMs/60000);
-  // Update "FOR THE NEXT" display as MM:SS countdown
-  const gapSec=Math.ceil(gapMs/1000);
-  const mm=Math.floor(gapSec/60);
-  const ss=gapSec%60;
-  document.getElementById('freeCountdown').textContent=
-    String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');
+  // Update "FOR THE NEXT" display as minutes only
+  const mm=Math.ceil(gapMs/60000);
+  document.getElementById('freeCountdown').textContent=mm+'min.';
   // Enable/disable book buttons
   [15,30,60].forEach(m=>{
     const btn=document.getElementById('freeBtn'+m);
@@ -717,12 +863,9 @@ function updateOccupiedState(){
     return;
   }
 
-  // Countdown text
-  const remainSec=Math.ceil(remainMs/1000);
-  const min=Math.floor(remainSec/60);
-  const sec=remainSec%60;
-  document.getElementById('liveCountdown').textContent=
-    String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+  // Countdown text — minutes only
+  const min=Math.ceil(remainMs/60000);
+  document.getElementById('liveCountdown').textContent=min+'min.';
 
   // Timer bar progress (elapsed time, left to right, gradient trails behind dot)
   const elapsed=now-meetingStartMs;
@@ -881,6 +1024,113 @@ document.getElementById('recStop').addEventListener('click',()=>{
   recMuted=false;
   card.classList.remove('active','muted');
   showToast('Recording stopped');
+});
+
+// ── Meeting Detail Overlay ──
+function buildOverlayHTML(meeting){
+  const startStr=formatTime(new Date(meeting.start));
+  const endStr=formatTime(new Date(meeting.end));
+  let html='';
+  html+='<div class="mo-header">';
+  html+='<div class="mo-title">'+meeting.title+'</div>';
+  html+='<div class="mo-time">'+startStr+' – '+endStr+'</div>';
+  html+='</div>';
+  html+='<div class="mo-organizer">Organized by '+meeting.sub+'</div>';
+  html+='<div class="mo-divider"></div>';
+  html+='<div class="mo-section-label">About this meeting</div>';
+  html+='<div class="mo-description">'+meeting.description+'</div>';
+  html+='<div class="mo-section-label">Attendees ('+meeting.attendees.length+')</div>';
+  html+='<div class="mo-attendees-grid">';
+  meeting.attendees.forEach(a=>{
+    const initials=a.name.split(' ').map(w=>w[0]).join('').substring(0,2);
+    const badgeClass=a.mode==='physical'?'mo-badge-physical':'mo-badge-online';
+    const badgeText=a.mode==='physical'?'In Room':'Online';
+    html+='<div class="mo-attendee">';
+    html+='<div class="mo-avatar">'+initials+'</div>';
+    html+='<div class="mo-attendee-name">'+a.name+'</div>';
+    html+='<div class="mo-attendee-badge '+badgeClass+'">'+badgeText+'</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<div class="mo-counts">';
+  html+='<div class="mo-count-pill"><div class="mo-count-dot physical"></div><div class="mo-count-num">'+meeting.physical+'</div><div class="mo-count-label">In Room</div></div>';
+  html+='<div class="mo-count-pill"><div class="mo-count-dot online"></div><div class="mo-count-num">'+meeting.online+'</div><div class="mo-count-label">Online</div></div>';
+  html+='</div>';
+  return html;
+}
+
+function showMeetingOverlay(meeting, cardType){
+  const isOcc=cardType==='occupied';
+  const card=isOcc?document.getElementById('occCardInner'):document.getElementById('freeCardInner');
+  const overlay=isOcc?document.getElementById('occOverlay'):document.getElementById('freeOverlay');
+  const content=isOcc?document.getElementById('occOverlayContent'):document.getElementById('freeOverlayContent');
+  content.innerHTML=buildOverlayHTML(meeting);
+  card.classList.add('card-dimmed');
+  overlay.classList.add('visible');
+}
+
+function closeMeetingOverlay(cardType){
+  const isOcc=cardType==='occupied';
+  const card=isOcc?document.getElementById('occCardInner'):document.getElementById('freeCardInner');
+  const overlay=isOcc?document.getElementById('occOverlay'):document.getElementById('freeOverlay');
+  card.classList.remove('card-dimmed');
+  overlay.classList.remove('visible');
+}
+
+document.getElementById('occOverlayClose').addEventListener('click',()=>closeMeetingOverlay('occupied'));
+document.getElementById('freeOverlayClose').addEventListener('click',()=>closeMeetingOverlay('free'));
+document.getElementById('occOverlay').addEventListener('click',(e)=>{
+  if(e.target===e.currentTarget) closeMeetingOverlay('occupied');
+});
+document.getElementById('freeOverlay').addEventListener('click',(e)=>{
+  if(e.target===e.currentTarget) closeMeetingOverlay('free');
+});
+
+// Delegate click on .info-btn inside cards
+function findMeetingByTimeText(timeText){
+  // timeText looks like "HH:MM - HH:MM"
+  for(const m of SCHEDULE){
+    const s=formatTime(new Date(m.start));
+    const e=formatTime(new Date(m.end));
+    if(timeText.includes(s)&&timeText.includes(e)) return m;
+  }
+  return null;
+}
+
+document.addEventListener('click',(e)=>{
+  const btn=e.target.closest('.info-btn');
+  if(!btn) return;
+  const row=btn.closest('.occ-meeting-row,.free-meeting-row');
+  if(!row) return;
+  const timeEl=row.querySelector('.occ-meeting-time,.free-meeting-time');
+  if(!timeEl) return;
+  const meeting=findMeetingByTimeText(timeEl.textContent);
+  if(!meeting) return;
+  // Determine card type
+  const isOcc=!!btn.closest('#occupiedCard');
+  showMeetingOverlay(meeting, isOcc?'occupied':'free');
+});
+
+// Also handle "i" button on current occupied meeting
+document.querySelector('.occ-card > .occ-meeting-row .info-btn')?.addEventListener('click',(e)=>{
+  e.stopPropagation();
+  // Current meeting - find by displayed time
+  const timeEl=document.getElementById('occMeetingTime');
+  const meeting=findMeetingByTimeText(timeEl.textContent);
+  if(meeting){
+    showMeetingOverlay(meeting,'occupied');
+  }else{
+    // Ad-hoc booked meeting — show generic info
+    const now=Date.now();
+    const adhoc={
+      start:meetingStartMs, end:meetingEndMs,
+      title:'Ad-hoc Booking', sub:'jakub reken',
+      description:'Rýchla rezervácia miestnosti cez panel. Žiadne ďalšie detaily z kalendára.',
+      attendees:[{name:'Jakub Reken', mode:'physical'}],
+      physical:1, online:0
+    };
+    showMeetingOverlay(adhoc,'occupied');
+  }
 });
 
 // ── Drag & Drop reordering ──
