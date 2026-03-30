@@ -58,13 +58,15 @@ body{
 /* ── Recording section (pure HTML/CSS) ── */
 .rec-section{position:relative;width:720px}
 .rec-slash{
-  display:flex;align-items:center;justify-content:center;
-  height:20px;position:relative;
+  display:flex;align-items:center;
+  height:20px;padding:0 24px;gap:6px;
 }
-.rec-slash .line{position:absolute;width:100%;height:1px;background:#4590ff}
+.rec-slash .line{display:none}
 .rec-slash .label-wrap{
-  position:relative;z-index:1;display:flex;align-items:center;gap:6px;
-  padding:0 16px;background:#000;
+  display:flex;align-items:center;gap:6px;flex-shrink:0;
+}
+.rec-slash::after{
+  content:'';flex:1;height:1px;background:#4590ff;
 }
 .rec-slash .bracket{font-size:14px;color:#4590ff;font-weight:300;}
 .rec-slash .dot{display:none}
@@ -212,7 +214,7 @@ body{
   display:flex;align-items:center;
   height:20px;padding:0 30px;margin:8px 0 0;gap:6px;
 }
-.occ-slash::before,.occ-slash::after{
+.occ-slash::after{
   content:'';flex:1;height:1px;background:#4590ff;
 }
 .occ-slash .bracket{font-size:14px;color:#4590ff;font-weight:300;}
@@ -323,7 +325,7 @@ body{
   display:flex;align-items:center;
   height:20px;padding:0 30px;margin:8px 0 0;gap:6px;
 }
-.free-slash::before,.free-slash::after{
+.free-slash::after{
   content:'';flex:1;height:1px;background:#4590ff;
 }
 .free-slash .bracket{font-size:14px;color:#4590ff;font-weight:300;}
