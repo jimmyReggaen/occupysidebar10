@@ -536,8 +536,9 @@ body{
   border:1px solid rgba(156,163,175,0.3);
 }
 .mo-counts{
-  display:flex;gap:16px;
-  position:absolute;bottom:20px;left:30px;
+  display:flex;gap:16px;align-items:center;
+  position:absolute;bottom:20px;left:30px;right:30px;
+  justify-content:center;
 }
 .mo-count-pill{
   display:flex;align-items:center;gap:6px;
@@ -557,6 +558,10 @@ body{
 .mo-count-label{
   font-size:14px;font-weight:600;color:rgba(255,255,255,0.5);
   letter-spacing:0.5px;
+}
+.mo-meet-id{
+  font-size:13px;font-weight:700;color:#fff;
+  font-family:'Montserrat',sans-serif;
 }
 
 /* ── Footer ── */
@@ -775,7 +780,7 @@ const SCHEDULE=[
      {name:'Anna Horváthová', rsvp:'maybe'},
      {name:'Peter Baláž', rsvp:'yes'},
      {name:'Tomáš Zelený', rsvp:'no'}
-   ], yes:3, no:1, maybe:1},
+   ], yes:3, no:1, maybe:1, meetId:'meet.google.com/vkt-huyb-khb'},
   {start:NOW_BOOT+180*60*1000, end:NOW_BOOT+210*60*1000, title:'Sharry — status meeting', sub:'Peter Novak',
    description:'Týždenný status call s partnerom Sharry. Aktuálny stav integrácie prístupového systému a timeline na Q2.',
    attendees:[
@@ -784,7 +789,7 @@ const SCHEDULE=[
      {name:'Sarah Chen', rsvp:'maybe'},
      {name:'David Müller', rsvp:'no'},
      {name:'Mária Tóthová', rsvp:'yes'}
-   ], yes:3, no:1, maybe:1},
+   ], yes:3, no:1, maybe:1, meetId:'meet.google.com/abc-defg-hij'},
   {start:NOW_BOOT+240*60*1000, end:NOW_BOOT+300*60*1000, title:'TRICSY UX display', sub:'jakub. reken',
    description:'Prezentácia nového UX návrhu pre TRICSY hlasového asistenta. Review interakčných prototypov a user flow.',
    attendees:[
@@ -792,7 +797,7 @@ const SCHEDULE=[
      {name:'Lucia Krajčová', rsvp:'yes'},
      {name:'Marek Dubský', rsvp:'maybe'},
      {name:'Filip Ondruš', rsvp:'no'}
-   ], yes:2, no:1, maybe:1}
+   ], yes:2, no:1, maybe:1, meetId:'meet.google.com/xyz-klmn-opq'}
 ];
 
 let countdownInterval=null;
@@ -1169,6 +1174,7 @@ function buildOverlayHTML(meeting){
   html+='<div class="mo-count-pill"><div class="mo-count-dot yes"></div><div class="mo-count-num">'+(meeting.yes||0)+'</div><div class="mo-count-label">Yes</div></div>';
   html+='<div class="mo-count-pill"><div class="mo-count-dot no"></div><div class="mo-count-num">'+(meeting.no||0)+'</div><div class="mo-count-label">No</div></div>';
   html+='<div class="mo-count-pill"><div class="mo-count-dot maybe"></div><div class="mo-count-num">'+(meeting.maybe||0)+'</div><div class="mo-count-label">Maybe</div></div>';
+  if(meeting.meetId) html+='<div class="mo-meet-id">ID meet: '+meeting.meetId+'</div>';
   html+='</div>';
   return html;
 }
