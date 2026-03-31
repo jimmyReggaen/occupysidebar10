@@ -92,7 +92,7 @@ body{
   transition:background 0.4s,border-color 0.4s;
 }
 .rec-card.active{
-  background:#DC2626;
+  background:#FA003F;
   border-color:rgba(255,255,255,0.15);
 }
 .rec-card.muted{
@@ -114,9 +114,9 @@ body{
   flex-shrink:0;
 }
 .rec-card.active .rec-btn{
-  background:rgba(220,38,38,0.35);
+  background:rgba(250,0,63,0.35);
   border-color:rgba(255,255,255,0.3);
-  box-shadow:0 2px 10px rgba(220,38,38,0.4),0 0 24px rgba(220,38,38,0.3),0 4px 12px rgba(0,0,0,0.13);
+  box-shadow:0 2px 10px rgba(250,0,63,0.4),0 0 24px rgba(250,0,63,0.3),0 4px 12px rgba(0,0,0,0.13);
 }
 .rec-card.muted .rec-btn{
   background:rgba(69,144,255,0.25);
@@ -139,18 +139,18 @@ body{
   animation:none;
 }
 .rec-btn.active{
-  background:rgba(220,38,38,0.25);
-  border-color:rgba(220,38,38,0.5);
-  box-shadow:0 2px 10px rgba(220,38,38,0.4),0 0 24px rgba(220,38,38,0.3),0 4px 12px rgba(0,0,0,0.13);
+  background:rgba(250,0,63,0.25);
+  border-color:rgba(250,0,63,0.5);
+  box-shadow:0 2px 10px rgba(250,0,63,0.4),0 0 24px rgba(250,0,63,0.3),0 4px 12px rgba(0,0,0,0.13);
 }
 .rec-btn.active .rec-dot-inner{
-  background:#DC2626;
-  box-shadow:0 0 8px rgba(220,38,38,0.7);
+  background:#FA003F;
+  box-shadow:0 0 8px rgba(250,0,63,0.7);
   animation:pulse-rec 1.5s ease-in-out infinite;
 }
 @keyframes pulse-rec{
-  0%,100%{box-shadow:0 0 6px rgba(220,38,38,0.5)}
-  50%{box-shadow:0 0 14px 4px rgba(220,38,38,0.4)}
+  0%,100%{box-shadow:0 0 6px rgba(250,0,63,0.5)}
+  50%{box-shadow:0 0 14px 4px rgba(250,0,63,0.4)}
 }
 .rec-label{
   font-family:'Montserrat',sans-serif;font-size:16px;font-weight:600;
@@ -205,15 +205,17 @@ body{
 /* ── OCCUPIED Card (HTML) ── */
 .occ-card{
   width:672px;height:473px;margin:0 24px;border-radius:26px;overflow:hidden;
-  background:#e82428;position:relative;
+  background:#FA003F;position:relative;
   display:flex;flex-direction:column;justify-content:space-between;
   padding:14px 0 18px;
   background-image:
-    radial-gradient(ellipse at 25% 15%,rgba(255,85,85,0.5) 0%,transparent 55%),
-    radial-gradient(ellipse at 75% 60%,rgba(221,68,85,0.35) 0%,transparent 55%),
-    radial-gradient(ellipse at 55% 5%,rgba(255,102,102,0.35) 0%,transparent 45%),
-    radial-gradient(ellipse at 15% 65%,rgba(221,51,85,0.35) 0%,transparent 50%);
+    radial-gradient(ellipse 250px 190px at 25% 0%,rgba(255,85,85,0.67) 0%,transparent 100%),
+    radial-gradient(ellipse 280px 180px at 85% 55%,rgba(221,68,85,0.53) 0%,transparent 100%),
+    radial-gradient(ellipse 220px 155px at 65% 5%,rgba(255,102,102,0.53) 0%,transparent 100%),
+    radial-gradient(ellipse 240px 165px at 15% 60%,rgba(221,51,85,0.53) 0%,transparent 100%),
+    radial-gradient(ellipse 175px 120px at 40% 25%,rgba(255,136,136,0.33) 0%,transparent 100%);
 }
+
 .occ-header{
   display:flex;justify-content:space-between;align-items:center;
   padding:0 30px;height:60px;
@@ -249,7 +251,7 @@ body{
 /* Timer Bar */
 .occ-timer-track{
   position:relative;height:17px;margin:4px 30px;
-  background:rgba(98,0,0,0.52);border-radius:9px;
+  background:rgba(120,0,30,0.52);border-radius:9px;
 }
 .occ-timer-fill{
   position:absolute;left:0;top:0;height:17px;border-radius:9px;
@@ -296,10 +298,11 @@ body{
   display:flex;flex-direction:column;justify-content:space-between;
   padding:14px 0 18px;
   background-image:
-    radial-gradient(ellipse at 25% 15%,rgba(85,85,255,0.5) 0%,transparent 55%),
-    radial-gradient(ellipse at 75% 60%,rgba(68,85,221,0.35) 0%,transparent 55%),
-    radial-gradient(ellipse at 55% 5%,rgba(102,102,255,0.35) 0%,transparent 45%),
-    radial-gradient(ellipse at 15% 65%,rgba(51,85,221,0.35) 0%,transparent 50%);
+    radial-gradient(ellipse 250px 190px at 25% 0%,rgba(85,85,255,0.5) 0%,transparent 100%),
+    radial-gradient(ellipse 280px 180px at 85% 55%,rgba(68,85,221,0.4) 0%,transparent 100%),
+    radial-gradient(ellipse 220px 155px at 65% 5%,rgba(102,102,255,0.4) 0%,transparent 100%),
+    radial-gradient(ellipse 240px 165px at 15% 60%,rgba(51,85,221,0.4) 0%,transparent 100%),
+    radial-gradient(ellipse 175px 120px at 40% 25%,rgba(100,100,255,0.3) 0%,transparent 100%);
 }
 .free-header{
   display:flex;justify-content:space-between;align-items:center;
@@ -387,7 +390,7 @@ body{
   position:absolute;z-index:6;
   font-family:'Montserrat',sans-serif;
   font-size:20px;font-weight:600;color:#FFFFFFCC;
-  line-height:24px;
+  line-height:42px;
 }
 
 /* ── Countdown overlay (occupied card) ── */
@@ -400,24 +403,33 @@ body{
 
 /* ── Next Meeting Warning ── */
 /* OCCUPIED card (red) → warning full blue */
-/* Warning row: overlay, no layout shift */
-.warn-wrap{position:relative;}
-.warn-wrap .warn-overlay{
-  position:absolute;inset:0;
+/* Warning: time text swap */
+.warn-time{
+  position:relative;
+}
+.warn-time .time-normal{
+  transition:opacity 0.3s;
+}
+.warn-time{
   display:flex;align-items:center;
-  padding:6px 30px;
-  opacity:0;pointer-events:none;
-  transition:opacity 0.15s;
 }
-.warn-wrap.flash .warn-overlay{opacity:1;pointer-events:auto;}
-.warn-overlay.occ-warn{background:#1b00e2;}
-.warn-overlay .warn-big{
-  font-size:28px;font-weight:700;color:#fff;
-  letter-spacing:1px;flex:1;text-align:center;
+.warn-time .time-alert{
+  display:none;
 }
-.warn-overlay .info-btn{flex-shrink:0;}
-
-.warn-overlay.free-warn{background:#e82428;}
+.warn-time.flash .time-normal{display:none;}
+.warn-time.flash .time-alert{
+  display:flex;align-items:center;
+}
+.warn-time .time-alert span{
+  font-family:'Montserrat',sans-serif;
+  font-size:16px;font-weight:700;color:#FA003F;
+  padding:8px 18px;border-radius:10px;
+  letter-spacing:0.5px;white-space:nowrap;
+  background:#FFD700;
+  margin-right:20px;
+}
+.warn-time.flash .time-normal{opacity:0;}
+.warn-time.flash .time-alert{opacity:1;pointer-events:auto;}
 
 /* ── Toast ── */
 .toast{
@@ -560,7 +572,7 @@ body{
     <div class="drag-handle"></div>
     <img src="occupy-assets/r9Fnl.png" alt="" id="statusBarImg">
     <!-- Live clock over the transparent text in the glass pill -->
-    <div class="live-clock" id="liveClock" style="left:74px;top:22px;line-height:42px;">00:00</div>
+    <div class="live-clock" id="liveClock" style="left:84px;top:21px;line-height:42px;">00:00</div>
     <!-- Tricsy pill = refresh -->
     <div class="hotspot" id="tricsyPill" style="left:654px;top:22px;width:42px;height:42px;border-radius:50%;"></div>
   </div>
@@ -850,13 +862,13 @@ function renderFreeMeetings(){
     const isWarning=i===0&&minsUntil<=15;
     html+='<div class="free-slash"><span class="bracket">(</span><span class="txt">NEXT MEETING</span><span class="bracket">)</span></div>';
     if(isWarning){
-      html+='<div class="warn-wrap'+(warningShowText?' flash':'')+'">';
       html+='<div class="free-meeting-row">';
       html+='<div class="free-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
-      html+='<div class="free-meeting-time">'+startStr+' - '+endStr+'</div>';
-      html+='<div class="info-btn">i</div>';
+      html+='<div class="warn-time free-warn'+(warningShowText?' flash':'')+'">';
+      html+='<div class="free-meeting-time time-normal">'+startStr+' - '+endStr+'</div>';
+      html+='<div class="time-alert"><span>STARTS IN '+minsUntil+' MIN</span></div>';
       html+='</div>';
-      html+='<div class="warn-overlay free-warn"><div class="warn-big">⚠ STARTS IN '+minsUntil+' MIN</div><div class="info-btn">i</div></div>';
+      html+='<div class="info-btn">i</div>';
       html+='</div>';
     }else{
       html+='<div class="free-meeting-row">';
@@ -955,13 +967,13 @@ function renderOccMeetings(){
     const isWarning=i===0&&minsUntil<=15;
     html+='<div class="occ-slash"><span class="bracket">(</span><span class="txt">NEXT MEETING</span><span class="bracket">)</span></div>';
     if(isWarning){
-      html+='<div class="warn-wrap'+(warningShowText?' flash':'')+'">';
       html+='<div class="occ-meeting-row">';
       html+='<div class="occ-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
-      html+='<div class="occ-meeting-time">'+startStr+' - '+endStr+'</div>';
-      html+='<div class="info-btn">i</div>';
+      html+='<div class="warn-time occ-warn'+(warningShowText?' flash':'')+'">';
+      html+='<div class="occ-meeting-time time-normal">'+startStr+' - '+endStr+'</div>';
+      html+='<div class="time-alert"><span>STARTS IN '+minsUntil+' MIN</span></div>';
       html+='</div>';
-      html+='<div class="warn-overlay occ-warn"><div class="warn-big">⚠ STARTS IN '+minsUntil+' MIN</div><div class="info-btn">i</div></div>';
+      html+='<div class="info-btn">i</div>';
       html+='</div>';
     }else{
       html+='<div class="occ-meeting-row">';
