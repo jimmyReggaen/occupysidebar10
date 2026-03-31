@@ -14,7 +14,7 @@ body{
   min-height:100vh;padding:20px 0;
 }
 .panel{
-  width:720px;background:#000;
+  width:720px;background:#000;position:relative;
   display:flex;flex-direction:column;gap:4px;overflow:hidden;
 }
 .section{position:relative;width:720px;flex-shrink:0;}
@@ -564,6 +564,42 @@ body{
   font-family:'Montserrat',sans-serif;
 }
 
+/* ── Weather Forecast Overlay ── */
+.weather-overlay{
+  position:absolute;
+  left:0;right:0;
+  z-index:15;
+  background:#000;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.3s ease;
+}
+.weather-overlay.visible{
+  opacity:1;pointer-events:auto;
+}
+.weather-overlay.visible{
+  opacity:1;pointer-events:auto;
+}
+.weather-overlay img{
+  display:block;width:720px;height:auto;
+}
+.weather-pill-hotspot{
+  position:absolute;z-index:6;cursor:pointer;
+}
+.weather-pill-active{
+  position:absolute;z-index:7;pointer-events:none;
+  opacity:0;transition:opacity 0.3s;
+  border-radius:25px;
+  background:linear-gradient(135deg,#1b00e2,#0057FF);
+  display:flex;align-items:center;justify-content:center;
+  padding:8px 18px;gap:10px;
+  box-shadow:0 8px 30px rgba(27,0,226,0.25);
+}
+.weather-pill-active.visible{opacity:1;}
+.weather-pill-active span{
+  font-family:'Montserrat',sans-serif;
+  font-size:20px;font-weight:600;color:#fff;
+}
+
 /* ── Footer ── */
 .panel-footer{padding:16px 24px;text-align:center;}
 .panel-footer img{height:20px;opacity:0.4;}
@@ -578,6 +614,11 @@ body{
     <img src="occupy-assets/r9Fnl.png" alt="" id="statusBarImg">
     <!-- Live clock over the transparent text in the glass pill -->
     <div class="live-clock" id="liveClock" style="left:84px;top:21px;line-height:42px;">00:00</div>
+    <!-- Weather pill -->
+    <div class="weather-pill-hotspot" id="weatherPill" style="left:452px;top:17px;width:134px;height:42px;border-radius:25px;"></div>
+    <div class="weather-pill-active" id="weatherPillActive" style="left:452px;top:17px;width:134px;height:42px;">
+      <span>22 °C</span>
+    </div>
     <!-- Tricsy pill = refresh -->
     <div class="hotspot" id="tricsyPill" style="left:654px;top:22px;width:42px;height:42px;border-radius:50%;"></div>
   </div>
@@ -589,7 +630,7 @@ body{
   </div>
 
   <!-- ═══ BOOKING CARD (FREE ↔ OCCUPIED) ═══ -->
-  <div class="section" data-name="booking-card" style="padding:16px 0">
+  <div class="section" data-name="booking-card" style="padding:16px 0;position:relative">
     <div class="drag-handle"></div>
     <!-- FREE STATE (HTML/CSS) -->
     <div id="freeCard" class="card-state active">
@@ -752,6 +793,11 @@ body{
   </div>
 
   <!-- Footer -->
+  <!-- Weather Forecast Overlay -->
+  <div class="weather-overlay" id="weatherOverlay">
+    <img src="occupy-assets/i6jfl.png" alt="Weather Forecast" style="display:block;width:672px;margin:0 24px;">
+  </div>
+
   <div class="panel-footer"><img src="bh-logo-white.svg" alt="Biometrics House"></div>
 
 </div>
@@ -1056,6 +1102,27 @@ document.querySelectorAll('.auto-toggle-area').forEach(el=>{
     const name=el.dataset.section;
     showToast(name.charAt(0).toUpperCase()+name.slice(1)+' Auto '+(isOn?'ON':'OFF'));
   });
+});
+
+// ── Weather Pill Toggle ──
+let weatherOpen=false;
+document.getElementById('weatherPill')?.addEventListener('click',()=>{
+  weatherOpen=!weatherOpen;
+  const overlay=document.getElementById('weatherOverlay');
+  const pillActive=document.getElementById('weatherPillActive');
+  if(weatherOpen){
+    // Position overlay right after statusbar
+    const statusbar=document.querySelector('[data-name="statusbar"]');
+    const panelRect=document.getElementById('panel').getBoundingClientRect();
+    const statusRect=statusbar.getBoundingClientRect();
+    overlay.style.top=(statusRect.bottom-panelRect.top)+'px';
+    overlay.classList.add('visible');
+    pillActive.classList.add('visible');
+    showToast('Weather Forecast');
+  }else{
+    overlay.classList.remove('visible');
+    pillActive.classList.remove('visible');
+  }
 });
 
 // ── Tricsy Pill = Refresh ──
