@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=720">
+<title>Biometrics House — OCCUPY Room Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Montserrat',sans-serif;
+  background:#111;
+  display:flex;justify-content:center;align-items:flex-start;
+  min-height:100vh;padding:20px 0;
+}
+.panel{
+  width:720px;background:#000;
+  display:flex;flex-direction:column;gap:4px;overflow:hidden;
+}
+.section{position:relative;width:720px;flex-shrink:0;}
+.section img{display:block;width:720px;height:auto;}
+
+/* ── Drag & Drop ── */
+.section.draggable{cursor:grab;user-select:none;}
+.section.draggable:active{cursor:grabbing;}
+.section.dragging{opacity:0.4;}
+.section.drag-over{border-top:3px solid #4590FF;}
+.drag-handle{
+  position:absolute;top:4px;right:4px;z-index:10;
+  width:28px;height:28px;border-radius:6px;
+  background:rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:center;
+  cursor:grab;opacity:0;transition:opacity 0.2s;
+}
+.section:hover .drag-handle{opacity:1;}
+.drag-handle::before{
+  content:'⋮⋮';font-size:14px;color:rgba(255,255,255,0.4);letter-spacing:2px;
+}
+
+/* ── Hotspot ── */
+.hotspot{
+  position:absolute;cursor:pointer;z-index:5;border-radius:16px;
+  transition:background 0.15s;
+}
+.hotspot:hover{background:rgba(255,255,255,0.04)}
+.hotspot:active{background:rgba(255,255,255,0.08)}
+
+/* ── Tile flash ── */
+.tile-flash{
+  position:absolute;z-index:5;cursor:pointer;
+  background:transparent;transition:background 0.15s,box-shadow 0.15s;
+}
+.tile-flash.flash{
+  background:linear-gradient(160deg,rgba(27,0,226,0.65) 0%,rgba(14,0,113,0.65) 100%);
+  box-shadow:0 0 20px rgba(27,0,226,0.3);
+}
+
+/* ── Auto Toggle area (invisible clickable zone) ── */
+.auto-toggle-area{
+  position:absolute;z-index:6;cursor:pointer;
+}
+/* When auto is ON, dim only button areas */
+.section.auto-on .tile-flash{
+  pointer-events:none;
+  background:rgba(0,0,0,0.65);
+  border-radius:16px;
+  transition:background 0.3s;
+}
+
+/* ── Recording section (pure HTML/CSS) ── */
+.rec-section{position:relative;width:720px}
+.rec-slash{
+  display:flex;align-items:center;
+  height:20px;padding:0 24px;gap:6px;
+}
+.rec-slash .line{display:none}
+.rec-slash .label-wrap{
+  display:flex;align-items:center;gap:6px;flex-shrink:0;
+}
+.rec-slash::before,.rec-slash::after{
+  content:'';flex:1;height:1px;background:#ffffffcc;
+}
+.rec-slash .bracket{font-size:14px;color:#ffffffcc;font-weight:300;}
+.rec-slash .dot{display:none}
+.rec-slash span.txt{font-size:12px;font-weight:600;color:#ffffffcc;letter-spacing:2px;text-transform:uppercase}
+.rec-card{
+  margin:14px 24px 0;border-radius:20px;background:#0d0f1a;
+  border:1px solid #ffffff12;
+  padding:0 26px;height:80px;
+  display:flex;align-items:center;gap:12px;
+  position:relative;overflow:hidden;
+  transition:background 0.4s,border-color 0.4s;
+}
+.rec-card.active{
+  background:#FA003F;
+  border-color:rgba(255,255,255,0.15);
+}
+.rec-card.muted{
+  background:#1b00e2;
+  border-color:rgba(69,144,255,0.3);
+}
+.rec-card::before{
+  content:'';position:absolute;inset:1px;border-radius:19px;
+  background:linear-gradient(212deg,rgba(255,255,255,0.12) 0%,transparent 55%);
+  pointer-events:none;
+}
+.rec-btn{
+  width:46px;height:46px;border-radius:23px;cursor:pointer;
+  background:rgba(100,116,139,0.19);position:relative;
+  border:1.5px solid rgba(100,116,139,0.45);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 10px rgba(100,116,139,0.37),0 0 24px rgba(100,116,139,0.31),0 4px 12px rgba(0,0,0,0.13);
+  transition:background 0.3s,box-shadow 0.3s,border-color 0.3s;
+  flex-shrink:0;
+}
+.rec-card.active .rec-btn{
+  background:rgba(250,0,63,0.35);
+  border-color:rgba(255,255,255,0.3);
+  box-shadow:0 2px 10px rgba(250,0,63,0.4),0 0 24px rgba(250,0,63,0.3),0 4px 12px rgba(0,0,0,0.13);
+}
+.rec-card.muted .rec-btn{
+  background:rgba(69,144,255,0.25);
+  border-color:rgba(255,255,255,0.3);
+  box-shadow:0 2px 10px rgba(69,144,255,0.3),0 0 24px rgba(69,144,255,0.2),0 4px 12px rgba(0,0,0,0.13);
+}
+.rec-btn .rec-dot-inner{
+  width:14px;height:14px;border-radius:50%;
+  background:#64748B;transition:background 0.3s;
+  box-shadow:0 0 8px rgba(100,116,139,0.66);
+}
+.rec-card.active .rec-btn .rec-dot-inner{
+  background:#fff;
+  box-shadow:0 0 8px rgba(255,255,255,0.5);
+  animation:pulse-rec 1.5s ease-in-out infinite;
+}
+.rec-card.muted .rec-btn .rec-dot-inner{
+  background:#4590ff;
+  box-shadow:0 0 8px rgba(69,144,255,0.5);
+  animation:none;
+}
+.rec-btn.active{
+  background:rgba(250,0,63,0.25);
+  border-color:rgba(250,0,63,0.5);
+  box-shadow:0 2px 10px rgba(250,0,63,0.4),0 0 24px rgba(250,0,63,0.3),0 4px 12px rgba(0,0,0,0.13);
+}
+.rec-btn.active .rec-dot-inner{
+  background:#FA003F;
+  box-shadow:0 0 8px rgba(250,0,63,0.7);
+  animation:pulse-rec 1.5s ease-in-out infinite;
+}
+@keyframes pulse-rec{
+  0%,100%{box-shadow:0 0 6px rgba(250,0,63,0.5)}
+  50%{box-shadow:0 0 14px 4px rgba(250,0,63,0.4)}
+}
+.rec-label{
+  font-family:'Montserrat',sans-serif;font-size:16px;font-weight:600;
+  color:rgba(255,255,255,0.87);letter-spacing:1.5px;
+  flex-shrink:0;
+}
+.rec-time{
+  font-family:'Montserrat',sans-serif;font-size:16px;font-weight:600;
+  color:#64748B;letter-spacing:0.52px;
+  transition:color 0.4s;flex-shrink:0;
+}
+.rec-card.active .rec-time{color:#fff}
+.rec-card.muted .rec-time{color:rgba(255,255,255,0.6)}
+.rec-waveform{
+  flex:1;height:28px;display:flex;align-items:center;gap:2px;
+  overflow:hidden;margin:0 4px;
+}
+.rec-waveform span{
+  width:3px;border-radius:2px;background:#64748B66;
+  flex-shrink:0;transition:background 0.4s;
+}
+.rec-card.active .rec-waveform span{
+  background:rgba(255,255,255,0.5);
+  animation:wave-active 0.8s ease-in-out infinite;
+}
+.rec-card.muted .rec-waveform span{
+  background:rgba(69,144,255,0.4);
+  animation:none;
+}
+@keyframes wave-active{
+  0%,100%{transform:scaleY(0.3);opacity:0.6}
+  50%{transform:scaleY(1);opacity:1}
+}
+.rec-controls{display:flex;gap:8px;flex-shrink:0}
+.rec-ctrl{
+  width:46px;height:46px;border-radius:23px;cursor:pointer;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(12px);
+  box-shadow:0 2px 8px rgba(255,255,255,0.15);
+  transition:border-color 0.4s;
+}
+.rec-card.active .rec-ctrl{
+  border-color:rgba(255,255,255,0.3);
+}
+.rec-card.muted .rec-ctrl{
+  border-color:rgba(69,144,255,0.3);
+}
+.rec-ctrl svg{width:18px;height:18px;fill:rgba(255,255,255,0.7);color:rgba(255,255,255,0.7)}
+
+/* ── OCCUPIED Card (HTML) ── */
+.occ-card{
+  width:672px;height:473px;margin:0 24px;border-radius:26px;overflow:hidden;
+  background:#FA003F;position:relative;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:14px 0 18px;
+  background-image:
+    radial-gradient(ellipse 250px 190px at 25% 0%,rgba(255,85,85,0.67) 0%,transparent 100%),
+    radial-gradient(ellipse 280px 180px at 85% 55%,rgba(221,68,85,0.53) 0%,transparent 100%),
+    radial-gradient(ellipse 220px 155px at 65% 5%,rgba(255,102,102,0.53) 0%,transparent 100%),
+    radial-gradient(ellipse 240px 165px at 15% 60%,rgba(221,51,85,0.53) 0%,transparent 100%),
+    radial-gradient(ellipse 175px 120px at 40% 25%,rgba(255,136,136,0.33) 0%,transparent 100%);
+}
+
+.occ-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 30px;height:60px;
+}
+.occ-title{font-size:44px;font-weight:700;color:#fff;line-height:1;}
+.occ-fornext{display:flex;align-items:baseline;gap:12px;}
+.occ-fornext-label{font-size:21px;font-weight:700;color:#fff;}
+.occ-fornext-time{font-size:38px;font-weight:700;color:#fff;}
+.occ-slash{
+  display:flex;align-items:center;
+  height:20px;padding:0 30px;margin:8px 0 0;gap:6px;
+}
+.occ-slash::before,.occ-slash::after{
+  content:'';flex:1;height:1px;background:#fff;
+}
+.occ-slash .bracket{font-size:14px;color:#fff;font-weight:300;}
+.occ-slash span.txt{
+  font-size:12px;font-weight:600;color:#fff;letter-spacing:2px;
+  text-transform:uppercase;flex-shrink:0;
+}
+.occ-meeting-row{
+  display:flex;align-items:center;
+  padding:6px 30px;
+  min-height:58px;
+}
+.occ-meeting-info{
+  font-size:21px;font-weight:700;color:#fff;line-height:1.25;flex:1;
+}
+.occ-meeting-time{
+  font-size:38px;font-weight:700;color:#fff;letter-spacing:-1px;line-height:1;
+  text-align:right;margin-right:20px;
+}
+/* Timer Bar */
+.occ-timer-track{
+  position:relative;height:17px;margin:4px 30px;
+  background:rgba(120,0,30,0.52);border-radius:9px;
+}
+.occ-timer-fill{
+  position:absolute;left:0;top:0;height:17px;border-radius:9px;
+  background:linear-gradient(to left,#FFD700,#FFB800 20%,#FF8C00AA 40%,#FF660055 65%,#cc330022 100%);
+  transition:width 1s linear;
+}
+.occ-timer-dot{
+  position:absolute;top:-3px;width:23px;height:23px;border-radius:50%;
+  background:#FFD700;
+  box-shadow:0 0 8px rgba(255,215,0,0.53),0 0 4px rgba(255,215,0,0.67);
+  transition:left 1s linear;
+}
+/* Extend Buttons */
+.occ-extend-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 30px;
+}
+.occ-extend-label{
+  font-size:16px;font-weight:700;color:#fff;letter-spacing:-0.5px;
+}
+.occ-extend-buttons{display:flex;gap:6px;}
+.occ-ext-btn{
+  width:137px;height:47px;border-radius:65px;cursor:pointer;
+  background:rgba(255,255,255,0.33);
+  border:1.5px solid rgba(255,255,255,0.35);
+  backdrop-filter:blur(24px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.3s,background 0.3s;
+  box-shadow:0 0 8px rgba(0,0,0,0.09),0 0 4px rgba(255,255,255,0.27);
+}
+.occ-ext-btn .num{font-size:28px;font-weight:700;color:#fff;line-height:1;letter-spacing:-0.3px;}
+.occ-ext-btn .unit{font-size:10px;font-weight:700;color:#fff;line-height:1;letter-spacing:0.8px;}
+.occ-ext-btn.disabled{
+  opacity:0.3;cursor:not-allowed;pointer-events:none;
+  background:rgba(255,255,255,0.08);
+}
+.occ-ext-btn:not(.disabled):hover{background:rgba(255,255,255,0.45);}
+.occ-ext-btn:not(.disabled):active{background:rgba(255,255,255,0.55);}
+
+/* ── FREE Card (HTML) ── */
+.free-card{
+  width:672px;height:473px;margin:0 24px;border-radius:26px;overflow:hidden;
+  background:#1b00e2;position:relative;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:14px 0 18px;
+  background-image:
+    radial-gradient(ellipse 250px 190px at 25% 0%,rgba(85,85,255,0.5) 0%,transparent 100%),
+    radial-gradient(ellipse 280px 180px at 85% 55%,rgba(68,85,221,0.4) 0%,transparent 100%),
+    radial-gradient(ellipse 220px 155px at 65% 5%,rgba(102,102,255,0.4) 0%,transparent 100%),
+    radial-gradient(ellipse 240px 165px at 15% 60%,rgba(51,85,221,0.4) 0%,transparent 100%),
+    radial-gradient(ellipse 175px 120px at 40% 25%,rgba(100,100,255,0.3) 0%,transparent 100%);
+}
+.free-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 30px;height:60px;
+}
+.free-title{font-size:44px;font-weight:700;color:#fff;line-height:1;}
+.free-fornext{display:flex;align-items:baseline;gap:12px;}
+.free-fornext-label{font-size:21px;font-weight:700;color:#fff;}
+.free-fornext-time{font-size:38px;font-weight:700;color:#fff;}
+.free-line{height:1px;background:rgba(255,255,255,0.25);margin:8px 30px 0;}
+.free-book-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 30px;
+}
+.free-book-label{font-size:16px;font-weight:700;color:#fff;}
+.free-book-buttons{display:flex;gap:6px;}
+.free-btn{
+  width:137px;height:47px;border-radius:65px;cursor:pointer;
+  background:rgba(255,255,255,0.33);
+  border:1.5px solid rgba(255,255,255,0.35);
+  backdrop-filter:blur(24px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.3s,background 0.3s;
+  box-shadow:0 0 8px rgba(0,0,0,0.09),0 0 4px rgba(255,255,255,0.27);
+}
+.free-btn .num{font-size:28px;font-weight:700;color:#fff;line-height:1;letter-spacing:-0.3px;}
+.free-btn .unit{font-size:10px;font-weight:700;color:#fff;line-height:1;letter-spacing:0.8px;}
+.free-btn.disabled{
+  opacity:0.3;cursor:not-allowed;pointer-events:none;
+  background:rgba(255,255,255,0.08);
+}
+.free-btn:not(.disabled):hover{background:rgba(255,255,255,0.45);}
+.free-btn:not(.disabled):active{background:rgba(255,255,255,0.55);}
+/* Free card meeting rows */
+.free-slash{
+  display:flex;align-items:center;
+  height:20px;padding:0 30px;margin:8px 0 0;gap:6px;
+}
+.free-slash::before,.free-slash::after{
+  content:'';flex:1;height:1px;background:#fff;
+}
+.free-slash .bracket{font-size:14px;color:#fff;font-weight:300;}
+.free-slash span.txt{
+  font-size:12px;font-weight:600;color:#fff;letter-spacing:2px;
+  text-transform:uppercase;flex-shrink:0;
+}
+.free-meeting-row{
+  display:flex;align-items:center;
+  padding:6px 30px;
+  min-height:58px;
+}
+.free-meeting-info{
+  font-size:21px;font-weight:700;color:#fff;line-height:1.25;flex:1;
+}
+.free-meeting-time{
+  font-size:38px;font-weight:700;color:#fff;letter-spacing:-1px;line-height:1;
+  text-align:right;margin-right:20px;
+}
+/* Info button (shared) */
+.info-btn{
+  width:32px;height:32px;border-radius:16px;flex-shrink:0;
+  background:rgba(255,255,255,0.27);
+  backdrop-filter:blur(20px);
+  border:1.5px solid rgba(255,255,255,0.4);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Montserrat',sans-serif;font-size:18px;font-style:italic;
+  font-weight:600;color:rgba(255,255,255,0.93);
+  box-shadow:0 2px 6px rgba(0,0,0,0.12),0 1px 3px rgba(255,255,255,0.2);
+  cursor:pointer;
+}
+
+/* ── Card state switching ── */
+.card-state{display:none;position:relative;}
+.card-state.active{display:block;}
+.card-state img{display:block;width:720px;height:auto;}
+.card-state .hotspot{
+  position:absolute;cursor:pointer;z-index:5;border-radius:65px;
+  transition:background 0.15s;
+}
+.card-state .hotspot:hover{background:rgba(255,255,255,0.08)}
+.card-state .hotspot:active{background:rgba(255,255,255,0.15)}
+
+/* ── Live clock overlay (status bar pill) ── */
+.live-clock{
+  position:absolute;z-index:6;
+  font-family:'Montserrat',sans-serif;
+  font-size:20px;font-weight:600;color:#FFFFFFCC;
+  line-height:42px;
+}
+
+/* ── Countdown overlay (occupied card) ── */
+.live-countdown{
+  position:absolute;z-index:6;
+  font-family:'Montserrat',sans-serif;
+  font-size:32px;font-weight:700;color:#fff;
+  text-align:right;line-height:1;
+}
+
+/* ── Next Meeting Warning ── */
+/* OCCUPIED card (red) → warning full blue */
+/* Warning: time text swap */
+.warn-time{
+  position:relative;
+}
+.warn-time .time-normal{
+  transition:opacity 0.3s;
+}
+.warn-time{
+  display:flex;align-items:center;
+}
+.warn-time .time-alert{
+  display:none;
+}
+.warn-time.flash .time-normal{display:none;}
+.warn-time.flash .time-alert{
+  display:flex;align-items:center;
+}
+.warn-time .time-alert span{
+  font-family:'Montserrat',sans-serif;
+  font-size:16px;font-weight:700;color:#FA003F;
+  padding:8px 18px;border-radius:10px;
+  letter-spacing:0.5px;white-space:nowrap;
+  background:#FFD700;
+  margin-right:20px;
+}
+.warn-time.flash .time-normal{opacity:0;}
+.warn-time.flash .time-alert{opacity:1;pointer-events:auto;}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:40px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:#1B00E2;color:#fff;padding:12px 24px;border-radius:12px;
+  font-size:14px;font-weight:600;letter-spacing:0.5px;
+  opacity:0;transition:all 0.3s;z-index:100;pointer-events:none;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── Meeting Detail Overlay ── */
+.card-dimmed{
+  filter:brightness(0.7) saturate(0.75);
+  transition:filter 0.35s ease;
+}
+.meeting-overlay{
+  position:absolute;top:0;left:24px;right:24px;bottom:0;z-index:20;
+  display:flex;flex-direction:column;
+  padding:20px 30px 16px;
+  border-radius:26px;
+  background:rgba(0,0,0,0.25);
+  backdrop-filter:blur(14px);
+  overflow:hidden;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.3s ease;
+}
+.meeting-overlay.visible{
+  opacity:1;pointer-events:auto;
+}
+.mo-close{
+  position:absolute;top:14px;right:16px;
+  width:40px;height:40px;border-radius:20px;
+  background:rgba(255,255,255,0.12);
+  border:1.5px solid rgba(255,255,255,0.25);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:22px;color:rgba(255,255,255,0.8);
+  transition:background 0.2s;
+}
+.mo-close:hover{background:rgba(255,255,255,0.22);}
+.mo-header{
+  display:flex;flex-direction:column;gap:2px;
+  margin-bottom:4px;padding-right:50px;
+}
+.mo-title{
+  font-size:24px;font-weight:700;color:#fff;
+  line-height:1.2;
+}
+.mo-time{
+  font-size:24px;font-weight:600;color:rgba(255,255,255,0.7);
+  white-space:nowrap;
+}
+.mo-organizer{
+  font-size:16px;font-weight:600;color:rgba(255,255,255,0.5);
+  letter-spacing:0.5px;margin-bottom:10px;
+}
+.mo-divider{
+  height:1px;background:rgba(255,255,255,0.15);
+  margin:0 0 10px;
+}
+.mo-section-label{
+  font-size:14px;font-weight:700;color:rgba(255,255,255,0.4);
+  letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.mo-description{
+  font-size:18px;font-weight:500;color:rgba(255,255,255,0.8);
+  line-height:1.4;margin-bottom:12px;
+}
+.mo-attendees-grid{
+  display:flex;flex-direction:column;gap:5px;
+  margin-bottom:12px;
+}
+.mo-attendee{
+  display:flex;align-items:center;gap:10px;
+}
+.mo-avatar{
+  width:28px;height:28px;border-radius:14px;
+  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);
+  flex-shrink:0;
+}
+.mo-attendee-name{
+  font-size:18px;font-weight:600;color:rgba(255,255,255,0.85);
+  flex:1;
+}
+.mo-attendee-badge{
+  font-size:13px;font-weight:700;letter-spacing:0.8px;
+  padding:4px 10px;border-radius:20px;
+  text-transform:uppercase;
+}
+.mo-badge-yes{
+  background:rgba(96,165,250,0.2);color:#60a5fa;
+  border:1px solid rgba(96,165,250,0.3);
+}
+.mo-badge-no{
+  background:rgba(248,113,113,0.2);color:#f87171;
+  border:1px solid rgba(248,113,113,0.3);
+}
+.mo-badge-maybe{
+  background:rgba(156,163,175,0.2);color:#9ca3af;
+  border:1px solid rgba(156,163,175,0.3);
+}
+.mo-counts{
+  display:flex;gap:16px;
+  position:absolute;bottom:20px;left:30px;
+}
+.mo-count-pill{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:20px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.12);
+}
+.mo-count-dot{
+  width:8px;height:8px;border-radius:4px;
+}
+.mo-count-dot.yes{background:#60a5fa;}
+.mo-count-dot.no{background:#f87171;}
+.mo-count-dot.maybe{background:#9ca3af;}
+.mo-count-num{
+  font-size:22px;font-weight:700;color:#fff;
+}
+.mo-count-label{
+  font-size:14px;font-weight:600;color:rgba(255,255,255,0.5);
+  letter-spacing:0.5px;
+}
+
+/* ── Footer ── */
+.panel-footer{padding:16px 24px;text-align:center;}
+.panel-footer img{height:20px;opacity:0.4;}
+</style>
+</head>
+<body>
+<div class="panel" id="panel">
+
+  <!-- ═══ STATUS BAR ═══ -->
+  <div class="section draggable" draggable="true" data-name="statusbar">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/r9Fnl.png" alt="" id="statusBarImg">
+    <!-- Live clock over the transparent text in the glass pill -->
+    <div class="live-clock" id="liveClock" style="left:84px;top:21px;line-height:42px;">00:00</div>
+    <!-- Tricsy pill = refresh -->
+    <div class="hotspot" id="tricsyPill" style="left:654px;top:22px;width:42px;height:42px;border-radius:50%;"></div>
+  </div>
+
+  <!-- ═══ ROOM NAME ═══ -->
+  <div class="section draggable" draggable="true" data-name="roomname">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/xEPzK.png" alt="">
+  </div>
+
+  <!-- ═══ BOOKING CARD (FREE ↔ OCCUPIED) ═══ -->
+  <div class="section" data-name="booking-card" style="padding:16px 0">
+    <div class="drag-handle"></div>
+    <!-- FREE STATE (HTML/CSS) -->
+    <div id="freeCard" class="card-state active">
+      <div style="position:relative">
+      <div class="free-card" id="freeCardInner">
+        <!-- Header -->
+        <div class="free-header">
+          <span class="free-title">FREE</span>
+          <div class="free-fornext">
+            <span class="free-fornext-label">FOR THE NEXT</span>
+            <span class="free-fornext-time" id="freeCountdown">90min.</span>
+          </div>
+        </div>
+        <!-- Separator -->
+        <div class="free-line"></div>
+        <!-- Book Now -->
+        <div class="free-book-row">
+          <span class="free-book-label">BOOK NOW:</span>
+          <div class="free-book-buttons">
+            <div class="free-btn" id="freeBtn15" data-min="15"><span class="num">15</span><span class="unit">min</span></div>
+            <div class="free-btn" id="freeBtn30" data-min="30"><span class="num">30</span><span class="unit">min</span></div>
+            <div class="free-btn" id="freeBtn60" data-min="60"><span class="num">60</span><span class="unit">min</span></div>
+          </div>
+        </div>
+        <!-- Next Meetings (dynamic) -->
+        <div id="freeMeetings"></div>
+      </div>
+      <!-- Meeting Detail Overlay -->
+      <div class="meeting-overlay" id="freeOverlay">
+        <div class="mo-close" id="freeOverlayClose">&times;</div>
+        <div id="freeOverlayContent"></div>
+      </div>
+      </div>
+    </div>
+    <!-- OCCUPIED STATE (HTML/CSS) -->
+    <div id="occupiedCard" class="card-state">
+      <div style="position:relative">
+      <div class="occ-card" id="occCardInner">
+        <!-- Header -->
+        <div class="occ-header">
+          <span class="occ-title">OCCUPIED</span>
+          <div class="occ-fornext">
+            <span class="occ-fornext-label">FOR THE NEXT</span>
+            <span class="occ-fornext-time" id="liveCountdown">60:00</span>
+          </div>
+        </div>
+        <!-- Actual Meeting -->
+        <div class="occ-slash"><span class="bracket">(</span><span class="txt">ACTUAL MEETING</span><span class="bracket">)</span></div>
+        <div class="occ-meeting-row">
+          <div class="occ-meeting-info" id="occMeetingInfo">display book now:<br>jakub reken</div>
+          <div class="occ-meeting-time" id="occMeetingTime">11:00 - 12:00</div>
+          <div class="info-btn">i</div>
+        </div>
+        <!-- Timer Bar -->
+        <div class="occ-timer-track" id="timerTrack">
+          <div class="occ-timer-fill" id="timerFill"></div>
+          <div class="occ-timer-dot" id="timerDot"></div>
+        </div>
+        <!-- Extend Meeting -->
+        <div class="occ-extend-row">
+          <span class="occ-extend-label">EXTEND MEETING</span>
+          <div class="occ-extend-buttons">
+            <div class="occ-ext-btn" id="extBtn15" data-ext="15"><span class="num">15</span><span class="unit">min</span></div>
+            <div class="occ-ext-btn" id="extBtn30" data-ext="30"><span class="num">30</span><span class="unit">min</span></div>
+            <div class="occ-ext-btn" id="extBtn60" data-ext="60"><span class="num">60</span><span class="unit">min</span></div>
+          </div>
+        </div>
+        <!-- Next Meetings (dynamic) -->
+        <div id="occMeetings"></div>
+      </div>
+      <!-- Meeting Detail Overlay -->
+      <div class="meeting-overlay" id="occOverlay">
+        <div class="mo-close" id="occOverlayClose">&times;</div>
+        <div id="occOverlayContent"></div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RECORDING ═══ -->
+  <div class="section draggable rec-section" draggable="true" data-name="recording">
+    <div class="drag-handle"></div>
+    <div class="rec-slash">
+      <div class="line"></div>
+      <div class="label-wrap">
+        <span class="bracket">(</span>
+        <span class="txt">RECORDING</span>
+        <span class="bracket">)</span>
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-btn" id="recBtn">
+        <div class="rec-dot-inner"></div>
+      </div>
+      <span class="rec-label">Recording</span>
+      <span class="rec-time" id="recTime">00:00</span>
+      <div class="rec-waveform" id="recWaveform"></div>
+      <div class="rec-controls">
+        <div class="rec-ctrl" id="recMute"><svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" fill="currentColor"/><path d="M19 11a7 7 0 0 1-6 6.93V21h3v1H8v-1h3v-3.07A7 7 0 0 1 5 11h1.5a5.5 5.5 0 0 0 11 0H19z" fill="currentColor"/><line x1="3" y1="1" x2="21" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="rec-ctrl" id="recStop"><svg viewBox="0 0 11 11"><rect x="0" y="0" width="11" height="11" rx="2"/></svg></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ LIGHTS ═══ -->
+  <div class="section draggable" draggable="true" data-name="lights">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/5ZVwo.png" alt="" data-off="occupy-assets/5ZVwo.png" data-on="occupy-assets/5ZVwo-on.png">
+    <div class="tile-flash" data-group="lights" data-idx="0" style="left:20px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="tile-flash" data-group="lights" data-idx="1" style="left:195px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="tile-flash" data-group="lights" data-idx="2" style="left:370px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="auto-toggle-area" data-section="lights" style="left:552px;top:47px;width:140px;height:117px;"></div>
+  </div>
+
+  <!-- ═══ BLINDS ═══ -->
+  <div class="section draggable" draggable="true" data-name="blinds">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/HRZBU.png" alt="" data-off="occupy-assets/HRZBU.png" data-on="occupy-assets/HRZBU-on.png">
+    <div class="tile-flash" data-group="blinds" data-idx="0" style="left:195px;top:44px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="auto-toggle-area" data-section="blinds" style="left:377px;top:44px;width:140px;height:117px;"></div>
+  </div>
+
+  <!-- ═══ SHADES ═══ -->
+  <div class="section draggable" draggable="true" data-name="shades">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/Z4lIp.png" alt="" data-off="occupy-assets/Z4lIp.png" data-on="occupy-assets/Z4lIp-on.png">
+    <div class="tile-flash" data-group="shades" data-idx="0" style="left:20px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="tile-flash" data-group="shades" data-idx="1" style="left:195px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="tile-flash" data-group="shades" data-idx="2" style="left:370px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
+    <div class="auto-toggle-area" data-section="shades" style="left:552px;top:47px;width:140px;height:117px;"></div>
+  </div>
+
+  <!-- ═══ HEY TRICSY ═══ -->
+  <div class="section draggable" draggable="true" data-name="tricsy">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/yZm7M.png" alt="">
+    <div class="hotspot" data-action="tricsy" style="left:48px;top:75px;width:56px;height:56px;border-radius:28px;"></div>
+  </div>
+
+  <!-- ═══ SERVICES ═══ -->
+  <div class="section draggable" draggable="true" data-name="services">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/PIqES.png" alt="">
+    <div class="tile-flash" data-group="services" data-idx="0" style="left:24px;top:35px;width:159px;height:146px;"></div>
+    <div class="tile-flash" data-group="services" data-idx="1" style="left:195px;top:35px;width:159px;height:146px;"></div>
+    <div class="tile-flash" data-group="services" data-idx="2" style="left:365px;top:35px;width:159px;height:146px;"></div>
+    <div class="tile-flash" data-group="services" data-idx="3" style="left:536px;top:35px;width:159px;height:146px;"></div>
+  </div>
+
+  <!-- ═══ ENVIRONMENT ═══ -->
+  <div class="section draggable" draggable="true" data-name="environment">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/r9Zk9.png" alt="">
+  </div>
+
+  <!-- ═══ WEATHER ═══ -->
+  <div class="section draggable" draggable="true" data-name="weather">
+    <div class="drag-handle"></div>
+    <img src="occupy-assets/ETRs6.png" alt="">
+  </div>
+
+  <!-- Footer -->
+  <div class="panel-footer"><img src="bh-logo-white.svg" alt="Biometrics House"></div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Live Clock ──
+function updateClock(){
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0');
+  const m=String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('liveClock').textContent=h+':'+m;
+}
+updateClock();
+setInterval(updateClock,1000);
+
+// ── Meeting Schedule & State ──
+// Simulated schedule: next meeting is 90 min from now
+const NOW_BOOT=Date.now();
+const SCHEDULE=[
+  {start:NOW_BOOT+16*60*1000, end:NOW_BOOT+76*60*1000, title:'Java Engineering INNOVA..', sub:'julia.sustakova',
+   description:'Sprint review a plánovanie ďalšieho sprintu. Demo nových API endpointov pre integráciu s mobilnou aplikáciou.',
+   attendees:[
+     {name:'Júlia Šustáková', rsvp:'yes'},
+     {name:'Martin Kováč', rsvp:'yes'},
+     {name:'Anna Horváthová', rsvp:'maybe'},
+     {name:'Peter Baláž', rsvp:'yes'},
+     {name:'Tomáš Zelený', rsvp:'no'}
+   ], yes:3, no:1, maybe:1},
+  {start:NOW_BOOT+180*60*1000, end:NOW_BOOT+210*60*1000, title:'Sharry — status meeting', sub:'Peter Novak',
+   description:'Týždenný status call s partnerom Sharry. Aktuálny stav integrácie prístupového systému a timeline na Q2.',
+   attendees:[
+     {name:'Peter Novák', rsvp:'yes'},
+     {name:'Jakub Reken', rsvp:'yes'},
+     {name:'Sarah Chen', rsvp:'maybe'},
+     {name:'David Müller', rsvp:'no'},
+     {name:'Mária Tóthová', rsvp:'yes'}
+   ], yes:3, no:1, maybe:1},
+  {start:NOW_BOOT+240*60*1000, end:NOW_BOOT+300*60*1000, title:'TRICSY UX display', sub:'jakub. reken',
+   description:'Prezentácia nového UX návrhu pre TRICSY hlasového asistenta. Review interakčných prototypov a user flow.',
+   attendees:[
+     {name:'Jakub Reken', rsvp:'yes'},
+     {name:'Lucia Krajčová', rsvp:'yes'},
+     {name:'Marek Dubský', rsvp:'maybe'},
+     {name:'Filip Ondruš', rsvp:'no'}
+   ], yes:2, no:1, maybe:1}
+];
+
+let countdownInterval=null;
+let freeInterval=null;
+const freeCard=document.getElementById('freeCard');
+const occupiedCard=document.getElementById('occupiedCard');
+
+// Current meeting
+let meetingStartMs=0;
+let meetingEndMs=0;
+
+function getNextMeetingAfter(timeMs){
+  return SCHEDULE.find(m=>m.start>timeMs)||null;
+}
+
+function getGapMinutes(fromMs){
+  const next=getNextMeetingAfter(fromMs);
+  if(!next) return 999;
+  return Math.floor((next.start-fromMs)/60000);
+}
+
+function formatTime(d){
+  return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
+
+// ── FREE Card Logic ──
+function showFreeCard(){
+  freeCard.classList.add('active');
+  occupiedCard.classList.remove('active');
+  clearInterval(countdownInterval);
+  startFreeUpdater();
+}
+
+function startFreeUpdater(){
+  clearInterval(freeInterval);
+  updateFreeState();
+  freeInterval=setInterval(updateFreeState,1000);
+}
+
+function updateFreeState(){
+  const now=Date.now();
+  const next=getNextMeetingAfter(now);
+  const gapMs=next?(next.start-now):999*60*1000;
+  const gapMin=Math.floor(gapMs/60000);
+  // Update "FOR THE NEXT" display as minutes only
+  const mm=Math.ceil(gapMs/60000);
+  document.getElementById('freeCountdown').textContent=mm+'min.';
+  // Enable/disable book buttons
+  [15,30,60].forEach(m=>{
+    const btn=document.getElementById('freeBtn'+m);
+    if(m>gapMin){btn.classList.add('disabled');}
+    else{btn.classList.remove('disabled');}
+  });
+  // Render next meetings
+  renderFreeMeetings();
+}
+
+function renderFreeMeetings(){
+  const container=document.getElementById('freeMeetings');
+  const now=Date.now();
+  const upcoming=SCHEDULE.filter(m=>m.start>now).slice(0,3);
+  let html='';
+  upcoming.forEach((m,i)=>{
+    const startStr=formatTime(new Date(m.start));
+    const endStr=formatTime(new Date(m.end));
+    const minsUntil=Math.ceil((m.start-now)/60000);
+    const isWarning=i===0&&minsUntil<=15;
+    html+='<div class="free-slash"><span class="bracket">(</span><span class="txt">NEXT MEETING</span><span class="bracket">)</span></div>';
+    if(isWarning){
+      html+='<div class="free-meeting-row">';
+      html+='<div class="free-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
+      html+='<div class="warn-time free-warn'+(warningShowText?' flash':'')+'">';
+      html+='<div class="free-meeting-time time-normal">'+startStr+' - '+endStr+'</div>';
+      html+='<div class="time-alert"><span>STARTS IN '+minsUntil+' MIN</span></div>';
+      html+='</div>';
+      html+='<div class="info-btn">i</div>';
+      html+='</div>';
+    }else{
+      html+='<div class="free-meeting-row">';
+      html+='<div class="free-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
+      html+='<div class="free-meeting-time">'+startStr+' - '+endStr+'</div>';
+      html+='<div class="info-btn">i</div>';
+      html+='</div>';
+    }
+  });
+  container.innerHTML=html;
+}
+
+// ── OCCUPIED Card Logic ──
+function showOccupiedCard(minutes){
+  freeCard.classList.remove('active');
+  occupiedCard.classList.add('active');
+  clearInterval(freeInterval);
+
+  const now=Date.now();
+  meetingStartMs=now;
+  meetingEndMs=now+minutes*60*1000;
+
+  // Set current meeting display
+  document.getElementById('occMeetingInfo').innerHTML='display book now:<br>jakub reken';
+  document.getElementById('occMeetingTime').textContent=
+    formatTime(new Date(meetingStartMs))+' - '+formatTime(new Date(meetingEndMs));
+
+  // Render next meetings in occupied card
+  renderOccMeetings();
+
+  updateExtendButtons();
+  startCountdown();
+}
+
+function extendMeeting(minutes){
+  meetingEndMs+=minutes*60*1000;
+  // Reset timer bar - new start from now
+  meetingStartMs=Date.now();
+  document.getElementById('occMeetingTime').textContent=
+    formatTime(new Date(Date.now()))+' - '+formatTime(new Date(meetingEndMs));
+  updateExtendButtons();
+  renderOccMeetings();
+  showToast('Meeting extended by '+minutes+' minutes until '+formatTime(new Date(meetingEndMs)));
+}
+
+function updateExtendButtons(){
+  const gapMin=getGapMinutes(meetingEndMs);
+  [15,30,60].forEach(m=>{
+    const btn=document.getElementById('extBtn'+m);
+    if(m>gapMin){btn.classList.add('disabled');}
+    else{btn.classList.remove('disabled');}
+  });
+}
+
+function startCountdown(){
+  clearInterval(countdownInterval);
+  updateOccupiedState();
+  countdownInterval=setInterval(updateOccupiedState,1000);
+}
+
+function updateOccupiedState(){
+  const now=Date.now();
+  const remainMs=meetingEndMs-now;
+  const totalMs=meetingEndMs-meetingStartMs;
+
+  if(remainMs<=0){
+    showFreeCard();
+    showToast('Meeting ended — room is FREE');
+    return;
+  }
+
+  // Countdown text — minutes only
+  const min=Math.ceil(remainMs/60000);
+  document.getElementById('liveCountdown').textContent=min+'min.';
+
+
+  // Timer bar progress (elapsed time, left to right, gradient trails behind dot)
+  const elapsed=now-meetingStartMs;
+  const progress=Math.min(elapsed/totalMs,1);
+  const trackWidth=document.getElementById('timerTrack').offsetWidth;
+  const fillWidth=progress*trackWidth;
+  document.getElementById('timerFill').style.width=fillWidth+'px';
+  document.getElementById('timerDot').style.left=Math.max(0,fillWidth-11)+'px';
+  renderOccMeetings();
+}
+
+function renderOccMeetings(){
+  const container=document.getElementById('occMeetings');
+  const now=Date.now();
+  const upcoming=SCHEDULE.filter(m=>m.start>meetingEndMs).slice(0,2);
+  let html='';
+  upcoming.forEach((m,i)=>{
+    const startStr=formatTime(new Date(m.start));
+    const endStr=formatTime(new Date(m.end));
+    const minsUntil=Math.ceil((m.start-now)/60000);
+    const isWarning=i===0&&minsUntil<=15;
+    html+='<div class="occ-slash"><span class="bracket">(</span><span class="txt">NEXT MEETING</span><span class="bracket">)</span></div>';
+    if(isWarning){
+      html+='<div class="occ-meeting-row">';
+      html+='<div class="occ-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
+      html+='<div class="warn-time occ-warn'+(warningShowText?' flash':'')+'">';
+      html+='<div class="occ-meeting-time time-normal">'+startStr+' - '+endStr+'</div>';
+      html+='<div class="time-alert"><span>STARTS IN '+minsUntil+' MIN</span></div>';
+      html+='</div>';
+      html+='<div class="info-btn">i</div>';
+      html+='</div>';
+    }else{
+      html+='<div class="occ-meeting-row">';
+      html+='<div class="occ-meeting-info">'+m.title+'<br>'+m.sub+'</div>';
+      html+='<div class="occ-meeting-time">'+startStr+' - '+endStr+'</div>';
+      html+='<div class="info-btn">i</div>';
+      html+='</div>';
+    }
+  });
+  container.innerHTML=html;
+}
+
+// Warning flash toggle (alternates every 2s)
+let warningShowText=false;
+setInterval(()=>{warningShowText=!warningShowText;},2000);
+
+// Start in FREE mode
+startFreeUpdater();
+
+// ── Toast ──
+let toastTimer=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// ── Inside Booking (FREE → OCCUPIED) ──
+document.querySelectorAll('.free-btn').forEach(el=>{
+  el.addEventListener('click',()=>{
+    if(el.classList.contains('disabled'))return;
+    const min=parseInt(el.dataset.min);
+    showOccupiedCard(min);
+    showToast('Room booked for '+min+' minutes until '+formatTime(new Date(Date.now()+min*60*1000)));
+  });
+});
+
+// ── Extend Meeting ──
+document.querySelectorAll('.occ-ext-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    if(btn.classList.contains('disabled'))return;
+    const min=parseInt(btn.dataset.ext);
+    extendMeeting(min);
+  });
+});
+
+// ── Tile Flash ──
+document.querySelectorAll('.tile-flash').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const group=el.dataset.group;
+    document.querySelectorAll('.tile-flash[data-group="'+group+'"]').forEach(e=>e.classList.remove('flash'));
+    el.classList.add('flash');
+    setTimeout(()=>el.classList.remove('flash'),1000);
+    const names={
+      lights:['Off','Dim Light','Full Light'],
+      blinds:['Blinds closed'],
+      shades:['Closed Shades','Half way','Open Shades'],
+      services:['ITO support','Reception call','Ordering','Cleaning needed']
+    };
+    const idx=parseInt(el.dataset.idx);
+    if(names[group]&&names[group][idx])showToast(names[group][idx]);
+  });
+});
+
+// ── Auto Toggle (swap entire section PNG between OFF↔ON) ──
+document.querySelectorAll('.auto-toggle-area').forEach(el=>{
+  let isOn=false;
+  el.addEventListener('click',()=>{
+    isOn=!isOn;
+    const section=el.closest('.section');
+    const img=section.querySelector('img[data-off]');
+    img.src=isOn?img.dataset.on:img.dataset.off;
+    section.classList.toggle('auto-on',isOn);
+    const name=el.dataset.section;
+    showToast(name.charAt(0).toUpperCase()+name.slice(1)+' Auto '+(isOn?'ON':'OFF'));
+  });
+});
+
+// ── Tricsy Pill = Refresh ──
+document.getElementById('tricsyPill')?.addEventListener('click',()=>{
+  showToast('Refreshing...');
+  setTimeout(()=>location.reload(),500);
+});
+
+// ── Tricsy ──
+let tricsyActive=false;
+document.querySelector('[data-action="tricsy"]').addEventListener('click',()=>{
+  tricsyActive=!tricsyActive;
+  showToast(tricsyActive?'Tricsy is listening...':'Tricsy stopped');
+});
+
+
+// ── Recording ──
+let recSeconds=0,recActive=false,recInterval=null;
+
+(function(){
+  const wf=document.getElementById('recWaveform');
+  for(let i=0;i<80;i++){
+    const bar=document.createElement('span');
+    bar.style.height=(4+Math.random()*18)+'px';
+    bar.style.animationDelay=(Math.random()*1.2).toFixed(2)+'s';
+    wf.appendChild(bar);
+  }
+})();
+
+function updateRecTime(){
+  const m=String(Math.floor(recSeconds/60)).padStart(2,'0');
+  const s=String(recSeconds%60).padStart(2,'0');
+  document.getElementById('recTime').textContent=m+':'+s;
+}
+
+let recMuted=false;
+
+// Record button: start/resume recording
+document.getElementById('recBtn').addEventListener('click',()=>{
+  const card=document.querySelector('.rec-card');
+  if(!recActive){
+    recActive=true;
+    recMuted=false;
+    recSeconds=0;
+    updateRecTime();
+    card.classList.remove('muted');
+    card.classList.add('active');
+    recInterval=setInterval(()=>{recSeconds++;updateRecTime();},1000);
+    showToast('Recording started');
+  }else if(recMuted){
+    recMuted=false;
+    card.classList.remove('muted');
+    card.classList.add('active');
+    recInterval=setInterval(()=>{recSeconds++;updateRecTime();},1000);
+    showToast('Recording resumed');
+  }
+});
+
+// Mute button: toggle mute (blue) / unmute (red)
+document.getElementById('recMute').addEventListener('click',()=>{
+  if(!recActive) return;
+  const card=document.querySelector('.rec-card');
+  if(!recMuted){
+    recMuted=true;
+    clearInterval(recInterval);
+    card.classList.remove('active');
+    card.classList.add('muted');
+    showToast('Microphone muted');
+  }else{
+    recMuted=false;
+    card.classList.remove('muted');
+    card.classList.add('active');
+    recInterval=setInterval(()=>{recSeconds++;updateRecTime();},1000);
+    showToast('Microphone unmuted');
+  }
+});
+
+// Stop button: stop recording, back to inactive
+document.getElementById('recStop').addEventListener('click',()=>{
+  if(!recActive) return;
+  const card=document.querySelector('.rec-card');
+  clearInterval(recInterval);
+  recActive=false;
+  recMuted=false;
+  card.classList.remove('active','muted');
+  showToast('Recording stopped');
+});
+
+// ── Meeting Detail Overlay ──
+function buildOverlayHTML(meeting){
+  const startStr=formatTime(new Date(meeting.start));
+  const endStr=formatTime(new Date(meeting.end));
+  let html='';
+  html+='<div class="mo-header">';
+  html+='<div class="mo-title">'+meeting.title+'</div>';
+  html+='<div class="mo-time">'+startStr+' – '+endStr+'</div>';
+  html+='</div>';
+  html+='<div class="mo-organizer">Organized by '+meeting.sub+'</div>';
+  html+='<div class="mo-divider"></div>';
+  html+='<div class="mo-section-label">About this meeting</div>';
+  html+='<div class="mo-description">'+meeting.description+'</div>';
+  html+='<div class="mo-section-label">Attendees ('+meeting.attendees.length+')</div>';
+  html+='<div class="mo-attendees-grid">';
+  meeting.attendees.forEach(a=>{
+    const initials=a.name.split(' ').map(w=>w[0]).join('').substring(0,2);
+    const badgeClass=a.rsvp==='yes'?'mo-badge-yes':a.rsvp==='no'?'mo-badge-no':'mo-badge-maybe';
+    const badgeText=a.rsvp==='yes'?'YES':a.rsvp==='no'?'NO':'MAYBE';
+    html+='<div class="mo-attendee">';
+    html+='<div class="mo-avatar">'+initials+'</div>';
+    html+='<div class="mo-attendee-name">'+a.name+'</div>';
+    html+='<div class="mo-attendee-badge '+badgeClass+'">'+badgeText+'</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<div class="mo-counts">';
+  html+='<div class="mo-count-pill"><div class="mo-count-dot yes"></div><div class="mo-count-num">'+(meeting.yes||0)+'</div><div class="mo-count-label">Yes</div></div>';
+  html+='<div class="mo-count-pill"><div class="mo-count-dot no"></div><div class="mo-count-num">'+(meeting.no||0)+'</div><div class="mo-count-label">No</div></div>';
+  html+='<div class="mo-count-pill"><div class="mo-count-dot maybe"></div><div class="mo-count-num">'+(meeting.maybe||0)+'</div><div class="mo-count-label">Maybe</div></div>';
+  html+='</div>';
+  return html;
+}
+
+function showMeetingOverlay(meeting, cardType){
+  const isOcc=cardType==='occupied';
+  const card=isOcc?document.getElementById('occCardInner'):document.getElementById('freeCardInner');
+  const overlay=isOcc?document.getElementById('occOverlay'):document.getElementById('freeOverlay');
+  const content=isOcc?document.getElementById('occOverlayContent'):document.getElementById('freeOverlayContent');
+  content.innerHTML=buildOverlayHTML(meeting);
+  card.classList.add('card-dimmed');
+  overlay.classList.add('visible');
+}
+
+function closeMeetingOverlay(cardType){
+  const isOcc=cardType==='occupied';
+  const card=isOcc?document.getElementById('occCardInner'):document.getElementById('freeCardInner');
+  const overlay=isOcc?document.getElementById('occOverlay'):document.getElementById('freeOverlay');
+  card.classList.remove('card-dimmed');
+  overlay.classList.remove('visible');
+}
+
+document.getElementById('occOverlayClose').addEventListener('click',()=>closeMeetingOverlay('occupied'));
+document.getElementById('freeOverlayClose').addEventListener('click',()=>closeMeetingOverlay('free'));
+document.getElementById('occOverlay').addEventListener('click',(e)=>{
+  if(e.target===e.currentTarget) closeMeetingOverlay('occupied');
+});
+document.getElementById('freeOverlay').addEventListener('click',(e)=>{
+  if(e.target===e.currentTarget) closeMeetingOverlay('free');
+});
+
+// Delegate click on .info-btn inside cards
+function findMeetingByTimeText(timeText){
+  // timeText looks like "HH:MM - HH:MM"
+  for(const m of SCHEDULE){
+    const s=formatTime(new Date(m.start));
+    const e=formatTime(new Date(m.end));
+    if(timeText.includes(s)&&timeText.includes(e)) return m;
+  }
+  return null;
+}
+
+document.addEventListener('click',(e)=>{
+  const btn=e.target.closest('.info-btn');
+  if(!btn) return;
+  const row=btn.closest('.occ-meeting-row,.free-meeting-row');
+  if(!row) return;
+  const timeEl=row.querySelector('.occ-meeting-time,.free-meeting-time');
+  if(!timeEl) return;
+  const meeting=findMeetingByTimeText(timeEl.textContent);
+  if(!meeting) return;
+  // Determine card type
+  const isOcc=!!btn.closest('#occupiedCard');
+  showMeetingOverlay(meeting, isOcc?'occupied':'free');
+});
+
+// Also handle "i" button on current occupied meeting
+document.querySelector('.occ-card > .occ-meeting-row .info-btn')?.addEventListener('click',(e)=>{
+  e.stopPropagation();
+  // Current meeting - find by displayed time
+  const timeEl=document.getElementById('occMeetingTime');
+  const meeting=findMeetingByTimeText(timeEl.textContent);
+  if(meeting){
+    showMeetingOverlay(meeting,'occupied');
+  }else{
+    // Ad-hoc booked meeting — show generic info
+    const now=Date.now();
+    const adhoc={
+      start:meetingStartMs, end:meetingEndMs,
+      title:'Ad-hoc Booking', sub:'jakub reken',
+      description:'Rýchla rezervácia miestnosti cez panel. Žiadne ďalšie detaily z kalendára.',
+      attendees:[{name:'Jakub Reken', rsvp:'yes'}],
+      yes:1, no:0, maybe:0
+    };
+    showMeetingOverlay(adhoc,'occupied');
+  }
+});
+
+// ── Drag & Drop reordering ──
+let draggedEl=null;
+
+document.querySelectorAll('.draggable').forEach(section=>{
+  section.addEventListener('dragstart',(e)=>{
+    draggedEl=section;
+    section.classList.add('dragging');
+    e.dataTransfer.effectAllowed='move';
+    e.dataTransfer.setData('text/plain','');
+  });
+
+  section.addEventListener('dragend',()=>{
+    section.classList.remove('dragging');
+    document.querySelectorAll('.drag-over').forEach(el=>el.classList.remove('drag-over'));
+    draggedEl=null;
+  });
+
+  section.addEventListener('dragover',(e)=>{
+    e.preventDefault();
+    e.dataTransfer.dropEffect='move';
+    if(section!==draggedEl){
+      section.classList.add('drag-over');
+    }
+  });
+
+  section.addEventListener('dragleave',()=>{
+    section.classList.remove('drag-over');
+  });
+
+  section.addEventListener('drop',(e)=>{
+    e.preventDefault();
+    section.classList.remove('drag-over');
+    if(draggedEl&&draggedEl!==section){
+      const panel=document.getElementById('panel');
+      const children=[...panel.querySelectorAll('.draggable')];
+      const fromIdx=children.indexOf(draggedEl);
+      const toIdx=children.indexOf(section);
+      if(fromIdx<toIdx){
+        section.after(draggedEl);
+      }else{
+        section.before(draggedEl);
+      }
+      showToast('Section moved');
+    }
+  });
+});
+</script>
+</body>
+</html>
