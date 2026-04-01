@@ -582,27 +582,112 @@ body{
 .weather-overlay img{
   display:block;width:720px;height:auto;
 }
-.weather-pill-hotspot{
+.pill-hotspot{
   position:absolute;z-index:6;cursor:pointer;
+  overflow:hidden;
 }
-.weather-pill-active{
-  position:absolute;z-index:7;pointer-events:none;
+.pill-on{
+  display:block;object-fit:cover;
   opacity:0;transition:opacity 0.3s;
-  border-radius:25px;
-  background:linear-gradient(135deg,#1b00e2,#0057FF);
-  display:flex;align-items:center;justify-content:center;
-  padding:8px 18px;gap:10px;
-  box-shadow:0 8px 30px rgba(27,0,226,0.25);
+  position:absolute;inset:0;
 }
-.weather-pill-active.visible{opacity:1;}
-.weather-pill-active span{
+.pill-hotspot.active .pill-on{opacity:1;}
+.pill-live-text{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  display:flex;align-items:center;justify-content:center;
   font-family:'Montserrat',sans-serif;
   font-size:20px;font-weight:600;color:#fff;
+  z-index:2;pointer-events:none;
+  padding-left:36px;
 }
 
 /* ── Footer ── */
 .panel-footer{padding:16px 24px;text-align:center;}
 .panel-footer img{height:20px;opacity:0.4;}
+
+/* ── Live Calendar Card ── */
+.cal-card{
+  background:#000;border-radius:24px;border:1px solid #ffffff12;
+  padding:24px;width:672px;height:668px;margin:0 24px;
+  font-family:'Montserrat',sans-serif;
+}
+.cal-header{
+  display:flex;align-items:center;gap:10px;margin-bottom:18px;
+}
+.cal-header-icon{font-size:24px;}
+.cal-header-title{font-size:28px;font-weight:700;color:#fff;}
+.cal-days-header{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px;
+}
+.cal-days-header span{
+  text-align:center;font-size:14px;font-weight:600;color:#ffffff80;
+}
+.cal-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:6px;
+}
+.cal-cell{
+  aspect-ratio:1;border-radius:12px;background:#131826;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:70px;
+}
+.cal-cell.empty{background:transparent;}
+.cal-cell .cal-num{font-size:18px;font-weight:600;color:#fff;}
+.cal-cell.today{background:#1b00e2;}
+.cal-cell.today .cal-today-label{
+  font-size:11px;font-weight:600;color:#fff;margin-top:2px;opacity:0.85;
+}
+
+/* ── Live Weather Card (matches Pencil: 672x668) ── */
+.wthr-card{
+  background:#000;border-radius:24px;border:1px solid #ffffff12;
+  padding:24px;width:672px;height:668px;margin:0 24px;
+  font-family:'Montserrat',sans-serif;color:#fff;
+  display:flex;flex-direction:column;gap:7px;
+  position:relative;overflow:hidden;
+}
+.wthr-current{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  height:74px;
+}
+.wthr-current-label{font-size:16px;font-weight:700;color:#fff;}
+.wthr-current-icon{font-size:64px;line-height:1;color:#FBBF24;}
+.wthr-current-temp{font-size:48px;font-weight:700;color:#fff;}
+
+.wthr-hourly{
+  display:flex;justify-content:center;gap:51px;
+  padding:16px 16px 19px;height:115px;align-items:center;
+}
+.wthr-hour{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.wthr-hour-time{font-size:12px;font-weight:600;color:#ffffff80;}
+.wthr-hour-icon{font-size:24px;}
+.wthr-hour-temp{font-size:14px;font-weight:700;color:#06b6d4;}
+
+.wthr-stats{
+  display:flex;gap:8px;
+  background:#ffffff08;border-radius:12px;padding:12px 16px;
+  justify-content:space-around;align-items:center;
+}
+.wthr-stat{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.wthr-stat-icon{font-size:20px;color:#ffffff80;}
+.wthr-stat-val{font-size:18px;font-weight:700;color:#fff;}
+.wthr-stat-label{font-size:11px;font-weight:600;color:#ffffff80;}
+
+.wthr-divider{height:1px;background:#ffffff15;width:100%;}
+
+.wthr-daily{display:flex;flex-direction:column;gap:10px;flex:1;}
+.wthr-daily-title{font-size:16px;font-weight:700;color:#fff;}
+.wthr-day-row{
+  display:flex;align-items:center;padding:10px 12px;
+  background:#ffffff08;border-radius:12px;gap:12px;
+}
+.wthr-day-name{font-size:15px;font-weight:700;color:#fff;width:44px;}
+.wthr-day-icon{font-size:20px;width:30px;text-align:center;}
+.wthr-day-desc{font-size:14px;font-weight:500;color:#ffffff80;flex:1;}
+.wthr-day-temps{font-size:15px;font-weight:700;color:#06b6d4;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -612,15 +697,20 @@ body{
   <div class="section draggable" draggable="true" data-name="statusbar">
     <div class="drag-handle"></div>
     <img src="occupy-assets/r9Fnl.png" alt="" id="statusBarImg">
-    <!-- Live clock over the transparent text in the glass pill -->
-    <div class="live-clock" id="liveClock" style="left:84px;top:21px;line-height:42px;">00:00</div>
-    <!-- Weather pill -->
-    <div class="weather-pill-hotspot" id="weatherPill" style="left:452px;top:17px;width:134px;height:42px;border-radius:25px;"></div>
-    <div class="weather-pill-active" id="weatherPillActive" style="left:452px;top:17px;width:134px;height:42px;">
-      <span>22 °C</span>
+    <!-- Live clock inside pillTime (after icon+gap) -->
+    <div class="live-clock" id="liveClock" style="left:130px;top:18px;height:42px;line-height:42px;">00:00</div>
+    <!-- Pill hotspots + ON overlays -->
+    <div class="pill-hotspot" id="pillCalendar" data-card="calendarOverlay" style="left:230px;top:18px;width:198px;height:42px;border-radius:25px;">
+      <img class="pill-on" src="occupy-assets/k8iAW.png" style="width:198px;height:42px;border-radius:25px;">
+      <span class="pill-live-text" id="liveDate">1 Apr 2026</span>
     </div>
-    <!-- Tricsy pill = refresh -->
-    <div class="hotspot" id="tricsyPill" style="left:654px;top:22px;width:42px;height:42px;border-radius:50%;"></div>
+    <div class="pill-hotspot" id="pillWeather" data-card="weatherOverlay" style="left:451px;top:18px;width:134px;height:42px;border-radius:25px;">
+      <img class="pill-on" src="occupy-assets/Cezvt.png" style="width:134px;height:42px;border-radius:25px;">
+      <span class="pill-live-text" id="liveTemp">-- °C</span>
+    </div>
+    <div class="pill-hotspot" id="pillFace" data-card="faceOverlay" style="left:607px;top:18px;width:44px;height:42px;border-radius:25px;">
+      <img class="pill-on" src="occupy-assets/TzblB.png" style="width:44px;height:42px;border-radius:25px;">
+    </div>
   </div>
 
   <!-- ═══ ROOM NAME ═══ -->
@@ -793,9 +883,17 @@ body{
   </div>
 
   <!-- Footer -->
-  <!-- Weather Forecast Overlay -->
+  <!-- Card Overlays -->
+  <div class="weather-overlay" id="calendarOverlay">
+    <div class="cal-card" id="calCardLive"></div>
+  </div>
   <div class="weather-overlay" id="weatherOverlay">
-    <img src="occupy-assets/i6jfl.png" alt="Weather Forecast" style="display:block;width:672px;margin:0 24px;">
+    <div class="wthr-card" id="wthrCardLive">
+      <div style="text-align:center;padding:40px 0;color:#ffffff80;font-size:14px;">Loading weather...</div>
+    </div>
+  </div>
+  <div class="weather-overlay" id="faceOverlay">
+    <img src="occupy-assets/qQWs8.png" alt="Personal Services" style="display:block;width:672px;margin:0 24px;">
   </div>
 
   <div class="panel-footer"><img src="bh-logo-white.svg" alt="Biometrics House"></div>
@@ -813,6 +911,14 @@ function updateClock(){
 }
 updateClock();
 setInterval(updateClock,1000);
+
+// Live date on calendar pill
+function updateDate(){
+  const now=new Date();
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('liveDate').textContent=now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+}
+updateDate();
 
 // ── Meeting Schedule & State ──
 // Simulated schedule: next meeting is 90 min from now
@@ -1104,31 +1210,42 @@ document.querySelectorAll('.auto-toggle-area').forEach(el=>{
   });
 });
 
-// ── Weather Pill Toggle ──
-let weatherOpen=false;
-document.getElementById('weatherPill')?.addEventListener('click',()=>{
-  weatherOpen=!weatherOpen;
-  const overlay=document.getElementById('weatherOverlay');
-  const pillActive=document.getElementById('weatherPillActive');
-  if(weatherOpen){
-    // Position overlay right after statusbar
-    const statusbar=document.querySelector('[data-name="statusbar"]');
-    const panelRect=document.getElementById('panel').getBoundingClientRect();
-    const statusRect=statusbar.getBoundingClientRect();
-    overlay.style.top=(statusRect.bottom-panelRect.top)+'px';
-    overlay.classList.add('visible');
-    pillActive.classList.add('visible');
-    showToast('Weather Forecast');
-  }else{
-    overlay.classList.remove('visible');
-    pillActive.classList.remove('visible');
-  }
-});
+// ── Pill Card Toggle System ──
+let activePill=null;
+let pillTimer=null;
 
-// ── Tricsy Pill = Refresh ──
-document.getElementById('tricsyPill')?.addEventListener('click',()=>{
-  showToast('Refreshing...');
-  setTimeout(()=>location.reload(),500);
+function closePillCard(){
+  if(!activePill) return;
+  const overlay=document.getElementById(activePill.dataset.card);
+  activePill.classList.remove('active');
+  overlay.classList.remove('visible');
+  activePill=null;
+  clearTimeout(pillTimer);
+}
+
+function openPillCard(pill){
+  closePillCard();
+  activePill=pill;
+  const overlay=document.getElementById(pill.dataset.card);
+  pill.classList.add('active');
+  // Position overlay under statusbar
+  const statusbar=document.querySelector('[data-name="statusbar"]');
+  const panelRect=document.getElementById('panel').getBoundingClientRect();
+  const statusRect=statusbar.getBoundingClientRect();
+  overlay.style.top=(statusRect.bottom-panelRect.top)+'px';
+  overlay.classList.add('visible');
+  // Auto-close after 4s
+  pillTimer=setTimeout(()=>{closePillCard();},4000);
+}
+
+document.querySelectorAll('.pill-hotspot').forEach(pill=>{
+  pill.addEventListener('click',()=>{
+    if(activePill===pill){
+      closePillCard();
+    }else{
+      openPillCard(pill);
+    }
+  });
 });
 
 // ── Tricsy ──
@@ -1366,6 +1483,146 @@ document.querySelectorAll('.draggable').forEach(section=>{
     }
   });
 });
+
+// ── Live Calendar ──
+function renderCalendar(){
+  const now=new Date();
+  const year=now.getFullYear();
+  const month=now.getMonth();
+  const today=now.getDate();
+  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+  const firstDay=new Date(year,month,1);
+  const lastDay=new Date(year,month+1,0);
+  const daysInMonth=lastDay.getDate();
+  // Monday=0 ... Sunday=6
+  let startDow=firstDay.getDay()-1;
+  if(startDow<0) startDow=6;
+
+  let html='<div class="cal-header"><span class="cal-header-icon">📅</span><span class="cal-header-title">'+monthNames[month]+' '+today+', '+year+'</span></div>';
+  html+='<div class="cal-days-header">';
+  dayNames.forEach(d=>{html+='<span>'+d+'</span>';});
+  html+='</div>';
+  html+='<div class="cal-grid">';
+  // Empty cells before first day
+  for(let i=0;i<startDow;i++){
+    html+='<div class="cal-cell empty"></div>';
+  }
+  for(let d=1;d<=daysInMonth;d++){
+    const isToday=d===today;
+    html+='<div class="cal-cell'+(isToday?' today':'')+'">';
+    html+='<span class="cal-num">'+d+'</span>';
+    if(isToday) html+='<span class="cal-today-label">Today</span>';
+    html+='</div>';
+  }
+  // Fill remaining cells
+  const totalCells=startDow+daysInMonth;
+  const remainder=totalCells%7;
+  if(remainder>0){
+    for(let i=0;i<7-remainder;i++){
+      html+='<div class="cal-cell empty"></div>';
+    }
+  }
+  html+='</div>';
+  document.getElementById('calCardLive').innerHTML=html;
+}
+renderCalendar();
+
+// ── Live Weather ──
+const WMO_ICON={0:'☀️',1:'⛅',2:'⛅',3:'⛅',45:'🌫️',48:'🌫️',51:'🌧️',53:'🌧️',55:'🌧️',56:'🌧️',57:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',67:'🌧️',71:'🌨️',73:'🌨️',75:'🌨️',77:'🌨️',80:'🌧️',81:'🌧️',82:'🌧️',95:'⛈️',96:'⛈️',99:'⛈️'};
+const WMO_TEXT={0:'Sunny',1:'Mostly Clear',2:'Partly Cloudy',3:'Overcast',45:'Foggy',48:'Foggy',51:'Drizzle',53:'Drizzle',55:'Drizzle',56:'Drizzle',57:'Drizzle',61:'Rainy',63:'Rainy',65:'Rainy',67:'Rainy',71:'Snowy',73:'Snowy',75:'Snowy',77:'Snowy',80:'Showers',81:'Showers',82:'Showers',95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
+
+function getWmoIcon(code){return WMO_ICON[code]||'🌡️';}
+function getWmoText(code){return WMO_TEXT[code]||'Unknown';}
+
+async function fetchWeather(){
+  try{
+    const url='https://api.open-meteo.com/v1/forecast?latitude=48.15&longitude=17.11&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,surface_pressure&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe/Bratislava';
+    const res=await fetch(url);
+    const data=await res.json();
+    renderWeather(data);
+  }catch(e){
+    document.getElementById('wthrCardLive').innerHTML='<div style="text-align:center;padding:40px 0;color:#ff6b6b;font-size:14px;">Weather unavailable</div>';
+  }
+}
+
+function renderWeather(data){
+  const cur=data.current;
+  const hourly=data.hourly;
+  const daily=data.daily;
+  const now=new Date();
+  const curIcon=getWmoIcon(cur.weather_code);
+  const curText=getWmoText(cur.weather_code);
+  const curTemp=Math.round(cur.temperature_2m);
+
+  let html='';
+  // Current weather — "Today [icon] 12°C"
+  html+='<div class="wthr-current">';
+  html+='<span class="wthr-current-label">Today</span>';
+  html+='<span class="wthr-current-icon">'+curIcon+'</span>';
+  html+='<span class="wthr-current-temp">'+curTemp+'°C</span>';
+  html+='</div>';
+
+  // Hourly forecast — 6 hours
+  const currentHourIndex=hourly.time.findIndex(t=>{
+    const h=new Date(t);
+    return h.getHours()===now.getHours()&&h.getDate()===now.getDate();
+  });
+  html+='<div class="wthr-hourly">';
+  for(let i=0;i<6;i++){
+    const idx=currentHourIndex+i;
+    if(idx>=hourly.time.length) break;
+    const hTime=new Date(hourly.time[idx]);
+    const hh=String(hTime.getHours()).padStart(2,'0')+(hTime.getHours()<12?'AM':'PM');
+    const hIcon=getWmoIcon(hourly.weather_code[idx]);
+    const hTemp=Math.round(hourly.temperature_2m[idx]);
+    html+='<div class="wthr-hour">';
+    html+='<span class="wthr-hour-time">'+hh+'</span>';
+    html+='<span class="wthr-hour-icon">'+hIcon+'</span>';
+    html+='<span class="wthr-hour-temp">'+hTemp+'°</span>';
+    html+='</div>';
+  }
+  html+='</div>';
+
+  // Stats bar — pressure, humidity, wind
+  html+='<div class="wthr-stats">';
+  html+='<div class="wthr-stat"><span class="wthr-stat-icon">🌡️</span><span class="wthr-stat-val">'+Math.round(cur.surface_pressure)+' hPa</span><span class="wthr-stat-label">Air Pressure</span></div>';
+  html+='<div class="wthr-stat"><span class="wthr-stat-icon">💧</span><span class="wthr-stat-val">'+Math.round(cur.relative_humidity_2m)+'%</span><span class="wthr-stat-label">Humidity</span></div>';
+  html+='<div class="wthr-stat"><span class="wthr-stat-icon">💨</span><span class="wthr-stat-val">'+Math.round(cur.wind_speed_10m)+' km/h</span><span class="wthr-stat-label">Wind Speed</span></div>';
+  html+='</div>';
+
+  // Divider
+  html+='<div class="wthr-divider"></div>';
+
+  // 5-Day forecast
+  const dayNamesShort=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  html+='<div class="wthr-daily">';
+  html+='<div class="wthr-daily-title">5-Day Forecast</div>';
+  for(let i=0;i<5&&i<daily.time.length;i++){
+    const d=new Date(daily.time[i]);
+    const dayName=dayNamesShort[d.getDay()];
+    const dIcon=getWmoIcon(daily.weather_code[i]);
+    const dText=getWmoText(daily.weather_code[i]);
+    const hi=Math.round(daily.temperature_2m_max[i]);
+    const lo=Math.round(daily.temperature_2m_min[i]);
+    html+='<div class="wthr-day-row">';
+    html+='<span class="wthr-day-name">'+dayName+'</span>';
+    html+='<span class="wthr-day-icon">'+dIcon+'</span>';
+    html+='<span class="wthr-day-desc">'+dText+'</span>';
+    html+='<span class="wthr-day-temps">'+lo+'–'+hi+'°C</span>';
+    html+='</div>';
+  }
+  html+='</div>';
+
+  document.getElementById('wthrCardLive').innerHTML=html;
+
+  // Update weather pill with real temperature
+  const tempEl=document.getElementById('liveTemp');
+  if(tempEl) tempEl.textContent=curTemp+' °C';
+}
+
+fetchWeather();
 </script>
 </body>
 </html>
