@@ -225,7 +225,7 @@ body{
 /* ── Recording Detail Overlay ── */
 /* ══ Recording Detail Overlay ══ */
 .rec-detail-overlay{
-  padding:16px 22px 14px;
+  padding:20px 26px 16px;
   gap:0;overflow:hidden;
 }
 .rec-detail-overlay .recOverlayContent{
@@ -247,92 +247,93 @@ body{
   animation:none;
 }
 
-/* Title row: name + status inline */
+/* ── Title row ── */
 .rec-top-row{
-  display:flex;align-items:baseline;gap:12px;
-  padding-right:44px;margin-bottom:2px;
+  display:flex;align-items:baseline;gap:14px;
+  padding-right:48px;margin-bottom:4px;
 }
 .rec-top-title{
-  font-size:20px;font-weight:700;color:#fff;line-height:1.2;
+  font-size:22px;font-weight:700;color:#fff;line-height:1.15;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .rec-top-status{
-  display:flex;align-items:center;gap:6px;flex-shrink:0;
+  display:flex;align-items:center;gap:7px;flex-shrink:0;
 }
 .rec-top-dot{
-  width:8px;height:8px;border-radius:50%;background:#FA003F;flex-shrink:0;
+  width:9px;height:9px;border-radius:50%;background:#FA003F;flex-shrink:0;
 }
 .rec-top-dot.recording{animation:pulse-rec 1.5s ease-in-out infinite;}
 .rec-top-dot.paused{background:#4590ff;animation:none;}
 .rec-top-label{
-  font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);
+  font-size:14px;font-weight:700;color:rgba(255,255,255,0.55);
   font-variant-numeric:tabular-nums;
 }
 
-/* Timeline row */
+/* ── Timeline row ── */
 .rec-tl{
-  display:flex;flex-wrap:wrap;gap:3px 14px;
-  margin:6px 0 0;
+  display:flex;flex-wrap:wrap;gap:4px 16px;
+  margin:8px 0 0;
 }
 .rec-tl-item{
-  display:flex;align-items:center;gap:4px;
-  font-size:11px;font-weight:600;color:rgba(255,255,255,0.4);
+  display:flex;align-items:center;gap:5px;
+  font-size:12px;font-weight:600;color:rgba(255,255,255,0.38);
   font-variant-numeric:tabular-nums;
 }
-.rec-tl-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.rec-tl-time{color:rgba(255,255,255,0.65);font-weight:700;}
-/* Thin divider */
+.rec-tl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.rec-tl-time{color:rgba(255,255,255,0.7);font-weight:700;}
+
+/* ── Divider ── */
 .rec-div{
   height:1px;background:rgba(255,255,255,0.1);
-  margin:10px 0;
+  margin:12px 0;
 }
 
-/* Section label */
+/* ── Section label ── */
 .rec-label{
-  font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);
-  letter-spacing:1.8px;text-transform:uppercase;
-  margin-bottom:6px;
+  font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);
+  letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:8px;
 }
 
-/* People grid — 2 columns, fills available space */
+/* ── People grid — 2 columns ── */
 .rec-people-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   grid-auto-rows:1fr;
-  gap:4px 8px;
+  gap:5px 10px;
   flex:1;min-height:0;
 }
 .rec-person{
   display:flex;align-items:center;gap:8px;
-  padding:5px 6px;border-radius:10px;
+  padding:5px 8px;border-radius:12px;
   background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.06);
-  min-height:36px;
+  border:1px solid rgba(255,255,255,0.07);
+  min-height:38px;
 }
 .rec-person.empty{
   background:transparent;
   border:1px solid transparent;
 }
 .rec-person-avatar{
-  width:26px;height:26px;border-radius:13px;
-  background:rgba(255,255,255,0.15);
+  width:28px;height:28px;border-radius:14px;
+  background:rgba(255,255,255,0.14);
   border:1px solid rgba(255,255,255,0.2);
   display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:700;color:rgba(255,255,255,0.7);
+  font-size:11px;font-weight:700;color:rgba(255,255,255,0.7);
   flex-shrink:0;
 }
 .rec-person-name{
-  font-size:12px;font-weight:600;color:rgba(255,255,255,0.8);
+  font-size:13px;font-weight:600;color:rgba(255,255,255,0.85);
   flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .rec-person-time{
-  font-size:10px;font-weight:600;color:rgba(255,255,255,0.3);
+  font-size:11px;font-weight:600;color:rgba(255,255,255,0.35);
   font-variant-numeric:tabular-nums;flex-shrink:0;
 }
 .rec-person-share{
   display:flex;align-items:center;justify-content:center;
   width:36px;height:36px;border-radius:10px;
-  background:rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.07);
   border:1px solid rgba(255,255,255,0.1);
   flex-shrink:0;
   transition:background 0.2s ease-out,border-color 0.2s ease-out;
@@ -342,8 +343,8 @@ body{
   border-color:rgba(69,144,255,0.5);
 }
 .rec-person-share.shared{
-  background:rgba(74,222,128,0.2);
-  border-color:rgba(74,222,128,0.4);
+  background:rgba(69,144,255,0.25);
+  border-color:rgba(69,144,255,0.4);
   pointer-events:none;
 }
 .rec-person-share svg{width:16px;height:16px;}
@@ -352,21 +353,21 @@ body{
 .rec-person-share.shared .share-check{display:block;}
 .rec-person-share.shared .share-arrow{display:none;}
 
-/* Share all button — pinned to bottom */
+/* ── Share all — pinned to bottom ── */
 .rec-share-all{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  padding:14px 16px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  padding:14px 18px;border-radius:14px;
   background:#1b00e2;
   border:1px solid rgba(69,144,255,0.35);
-  margin-top:10px;flex-shrink:0;
+  margin-top:12px;flex-shrink:0;
   transition:background 0.15s ease-out;
 }
 .rec-share-all:active{
   background:#2a10f0;
 }
-.rec-share-all svg{width:18px;height:18px;flex-shrink:0;}
+.rec-share-all svg{width:20px;height:20px;flex-shrink:0;}
 .rec-share-all-text{
-  font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);
+  font-size:14px;font-weight:700;color:#fff;
   letter-spacing:0.5px;
 }
 
@@ -1186,7 +1187,7 @@ updateDate();
 // Simulated schedule: next meeting is 90 min from now
 const NOW_BOOT=Date.now();
 const SCHEDULE=[
-  {start:NOW_BOOT+16*60*1000, end:NOW_BOOT+76*60*1000, title:'Java Engineering INNOVA..', sub:'julia.sustakova',
+  {start:NOW_BOOT+60*60*1000, end:NOW_BOOT+120*60*1000, title:'Java Engineering INNOVA..', sub:'julia.sustakova',
    description:'Sprint review a plánovanie ďalšieho sprintu. Demo nových API endpointov pre integráciu s mobilnou aplikáciou.',
    attendees:[
      {name:'Júlia Šustáková', rsvp:'yes'},
@@ -1463,6 +1464,14 @@ document.querySelectorAll('.occ-ext-btn').forEach(btn=>{
 document.querySelectorAll('.tile-flash').forEach(el=>{
   el.addEventListener('click',()=>{
     const group=el.dataset.group;
+    const idx=parseInt(el.dataset.idx);
+    // Hidden trigger: lights OFF resets schedule to 16min warning mode
+    if(group==='lights'&&idx===0){
+      const now=Date.now();
+      SCHEDULE[0].start=now+16*60*1000;
+      SCHEDULE[0].end=now+76*60*1000;
+      showFreeCard();
+    }
     document.querySelectorAll('.tile-flash[data-group="'+group+'"]').forEach(e=>e.classList.remove('flash'));
     el.classList.add('flash');
     setTimeout(()=>el.classList.remove('flash'),1000);
@@ -1472,7 +1481,6 @@ document.querySelectorAll('.tile-flash').forEach(el=>{
       shades:['Closed Shades','Half way','Open Shades'],
       services:['ITO support','Reception call','Ordering','Cleaning needed']
     };
-    const idx=parseInt(el.dataset.idx);
     if(names[group]&&names[group][idx])showToast(names[group][idx]);
   });
 });
@@ -1651,7 +1659,7 @@ function buildRecOverlayHTML(){
   const peoplePresent=roomPeople.filter(p=>p.joinedOffset<=elapsed);
   const totalSlots=8;
   const shareArrow='<svg class="share-arrow" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
-  const shareCheck='<svg class="share-check" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  const shareCheck='<svg class="share-check" viewBox="0 0 24 24" fill="none" stroke="#4590FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
 
   let html='';
 
@@ -1719,6 +1727,24 @@ function buildRecOverlayHTML(){
 
 let recOverlayInterval=null;
 let recOverlayAutoClose=null;
+const sharedPeople=new Set();
+let sharedAll=false;
+
+function restoreSharedState(overlay){
+  overlay.querySelectorAll('.rec-person-share').forEach(btn=>{
+    const name=btn.getAttribute('aria-label')?.replace('Share to ','');
+    if(sharedAll||sharedPeople.has(name)) btn.classList.add('shared');
+  });
+  if(sharedAll){
+    const allBtn=overlay.querySelector('.rec-share-all');
+    if(allBtn){
+      allBtn.style.background='#16a34a';
+      allBtn.style.borderColor='rgba(74,222,128,0.5)';
+      allBtn.querySelector('.rec-share-all-text').textContent='Shared to All';
+      allBtn.style.pointerEvents='none';
+    }
+  }
+}
 
 function getActiveBookingCard(){
   // Return whichever card inner is currently visible
@@ -1747,6 +1773,7 @@ function openRecOverlay(){
   const overlay=getActiveRecOverlay();
   const card=getActiveBookingCard();
   overlay.querySelector('.recOverlayContent').innerHTML=buildRecOverlayHTML();
+  restoreSharedState(overlay);
   card.classList.add('card-dimmed');
   overlay.classList.add('visible');
   updateRecOverlayState(overlay);
@@ -1758,6 +1785,7 @@ function openRecOverlay(){
   recOverlayInterval=setInterval(()=>{
     if(!overlay.classList.contains('visible')) return;
     overlay.querySelector('.recOverlayContent').innerHTML=buildRecOverlayHTML();
+    restoreSharedState(overlay);
     updateRecOverlayState(overlay);
   },1000);
 }
@@ -1797,17 +1825,17 @@ function handlePersonShare(btn,e){
   e.stopPropagation();
   if(btn.classList.contains('shared')) return;
   btn.classList.add('shared');
-  // Reset auto-close timer on interaction
+  const name=btn.getAttribute('aria-label')?.replace('Share to ','');
+  if(name) sharedPeople.add(name);
   clearTimeout(recOverlayAutoClose);
   recOverlayAutoClose=setTimeout(()=>closeRecOverlay(),10000);
 }
 
 function handleShareAll(btn,e){
   e.stopPropagation();
-  // Mark all person share buttons as shared
+  sharedAll=true;
   const overlay=getActiveRecOverlay();
   overlay.querySelectorAll('.rec-person-share').forEach(b=>b.classList.add('shared'));
-  // Change button to success state
   btn.style.background='#16a34a';
   btn.style.borderColor='rgba(74,222,128,0.5)';
   btn.querySelector('.rec-share-all-text').textContent='Shared to All';
@@ -1815,6 +1843,9 @@ function handleShareAll(btn,e){
   clearTimeout(recOverlayAutoClose);
   recOverlayAutoClose=setTimeout(()=>closeRecOverlay(),10000);
 }
+
+// Hidden refresh — tap clock to reload
+document.getElementById('liveClock').addEventListener('click',()=>location.reload());
 
 // Track recording start time
 const origRecBtn=document.getElementById('recBtn');
@@ -1824,6 +1855,7 @@ origRecBtn.addEventListener('click',()=>{
     recStartTime=Date.now();
     recHasRecorded=true;
     recEventLog=[{type:'started',time:Date.now()}];
+    sharedPeople.clear();sharedAll=false;
     document.getElementById('recInfoBtn').classList.add('enabled');
   }
 },true);
