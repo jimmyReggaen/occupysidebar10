@@ -24,8 +24,8 @@ body{
 .section img{display:block;width:720px;height:auto;}
 
 /* ── Drag & Drop ── */
-.section.draggable{cursor:grab;user-select:none;}
-.section.draggable:active{cursor:grabbing;}
+.section.draggable{user-select:none;}
+.section.draggable:active{}
 .section.dragging{
   opacity:0.5;
   transform:scale(1.015);
@@ -40,9 +40,8 @@ body{
   width:28px;height:28px;border-radius:6px;
   background:rgba(255,255,255,0.06);
   display:flex;align-items:center;justify-content:center;
-  cursor:grab;opacity:0;transition:opacity 0.2s;
+  opacity:0.5;
 }
-.section:hover .drag-handle{opacity:1;}
 .drag-handle::before{
   content:'⋮⋮';font-size:14px;color:rgba(255,255,255,0.4);letter-spacing:2px;
 }
@@ -52,17 +51,14 @@ body{
   position:absolute;cursor:pointer;z-index:5;border-radius:16px;
   transition:background 0.15s;
 }
-.hotspot:hover{background:rgba(255,255,255,0.04)}
 .hotspot:active{background:rgba(255,255,255,0.08)}
 
 /* ── Tile flash ── */
 .tile-flash{
-  position:absolute;z-index:5;cursor:pointer;
-  background:transparent;
+  position:absolute;z-index:5;  background:transparent;
   transition:background 0.2s ease-out,box-shadow 0.2s ease-out,transform 0.2s ease-out;
   border-radius:16px;
 }
-.tile-flash:hover{background:rgba(27,0,226,0.08);}
 .tile-flash:active{transform:scale(0.97);transition-duration:0.08s;}
 .tile-flash.flash{
   background:linear-gradient(160deg,rgba(27,0,226,0.65) 0%,rgba(14,0,113,0.65) 100%);
@@ -77,8 +73,7 @@ body{
 
 /* ── Auto Toggle area (invisible clickable zone) ── */
 .auto-toggle-area{
-  position:absolute;z-index:6;cursor:pointer;
-}
+  position:absolute;z-index:6;}
 /* When auto is ON, dim only button areas */
 .section.auto-on .tile-flash{
   pointer-events:none;
@@ -125,15 +120,13 @@ body{
   pointer-events:none;
 }
 .rec-btn{
-  width:46px;height:46px;border-radius:23px;cursor:pointer;
-  background:rgba(100,116,139,0.19);position:relative;
+  width:46px;height:46px;border-radius:23px;  background:rgba(100,116,139,0.19);position:relative;
   border:1.5px solid rgba(100,116,139,0.45);
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 2px 10px rgba(100,116,139,0.37),0 0 24px rgba(100,116,139,0.31),0 4px 12px rgba(0,0,0,0.13);
   transition:background 0.3s ease-out,box-shadow 0.3s ease-out,border-color 0.3s ease-out,transform 0.15s ease-out;
   flex-shrink:0;
 }
-.rec-btn:hover{transform:scale(1.06);}
 .rec-btn:active{transform:scale(0.94);transition-duration:0.08s;}
 .rec-card.active .rec-btn{
   background:rgba(250,0,63,0.35);
@@ -209,8 +202,7 @@ body{
 }
 .rec-controls{display:flex;gap:8px;flex-shrink:0}
 .rec-ctrl{
-  width:46px;height:46px;border-radius:23px;cursor:pointer;
-  background:rgba(255,255,255,0.08);
+  width:46px;height:46px;border-radius:23px;  background:rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.15);
   display:flex;align-items:center;justify-content:center;
   backdrop-filter:blur(12px);
@@ -223,7 +215,6 @@ body{
 .rec-card.muted .rec-ctrl{
   border-color:rgba(69,144,255,0.3);
 }
-.rec-ctrl:hover{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.25);}
 .rec-ctrl:active{background:rgba(255,255,255,0.22);}
 .rec-ctrl svg{width:18px;height:18px;fill:rgba(255,255,255,0.7);color:rgba(255,255,255,0.7)}
 
@@ -306,8 +297,7 @@ body{
 }
 .occ-extend-buttons{display:flex;gap:6px;}
 .occ-ext-btn{
-  width:137px;height:47px;border-radius:65px;cursor:pointer;
-  background:rgba(255,255,255,0.33);
+  width:137px;height:47px;border-radius:65px;  background:rgba(255,255,255,0.33);
   border:1.5px solid rgba(255,255,255,0.35);
   backdrop-filter:blur(24px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -317,13 +307,8 @@ body{
 .occ-ext-btn .num{font-size:28px;font-weight:700;color:#fff;line-height:1;letter-spacing:-0.3px;}
 .occ-ext-btn .unit{font-size:11px;font-weight:600;color:rgba(255,255,255,0.85);line-height:1;letter-spacing:1.5px;text-transform:uppercase;}
 .occ-ext-btn.disabled{
-  opacity:0.3;cursor:not-allowed;pointer-events:none;
+  opacity:0.3;pointer-events:none;
   background:rgba(255,255,255,0.08);
-}
-.occ-ext-btn:not(.disabled):hover{
-  background:rgba(255,255,255,0.45);
-  transform:translateY(-1px);
-  box-shadow:0 4px 16px rgba(0,0,0,0.15),0 0 4px rgba(255,255,255,0.35);
 }
 .occ-ext-btn:not(.disabled):active{
   background:rgba(255,255,255,0.55);
@@ -361,8 +346,7 @@ body{
 .free-book-label{font-size:16px;font-weight:700;color:#fff;}
 .free-book-buttons{display:flex;gap:6px;}
 .free-btn{
-  width:137px;height:47px;border-radius:65px;cursor:pointer;
-  background:rgba(255,255,255,0.33);
+  width:137px;height:47px;border-radius:65px;  background:rgba(255,255,255,0.33);
   border:1.5px solid rgba(255,255,255,0.35);
   backdrop-filter:blur(24px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -372,13 +356,8 @@ body{
 .free-btn .num{font-size:28px;font-weight:700;color:#fff;line-height:1;letter-spacing:-0.3px;}
 .free-btn .unit{font-size:11px;font-weight:600;color:rgba(255,255,255,0.85);line-height:1;letter-spacing:1.5px;text-transform:uppercase;}
 .free-btn.disabled{
-  opacity:0.3;cursor:not-allowed;pointer-events:none;
+  opacity:0.3;pointer-events:none;
   background:rgba(255,255,255,0.08);
-}
-.free-btn:not(.disabled):hover{
-  background:rgba(255,255,255,0.45);
-  transform:translateY(-1px);
-  box-shadow:0 4px 16px rgba(0,0,0,0.15),0 0 4px rgba(255,255,255,0.35);
 }
 .free-btn:not(.disabled):active{
   background:rgba(255,255,255,0.55);
@@ -423,7 +402,6 @@ body{
   box-shadow:0 2px 6px rgba(0,0,0,0.12),0 1px 3px rgba(255,255,255,0.2);
   cursor:pointer;transition:background 0.2s ease-out,border-color 0.2s ease-out;
 }
-.info-btn:hover{background:rgba(255,255,255,0.4);border-color:rgba(255,255,255,0.55);}
 .info-btn:active{background:rgba(255,255,255,0.5);}
 
 /* ── Card state switching (crossfade) ── */
@@ -450,7 +428,6 @@ body{
   position:absolute;cursor:pointer;z-index:5;border-radius:65px;
   transition:background 0.15s;
 }
-.card-state .hotspot:hover{background:rgba(255,255,255,0.08)}
 .card-state .hotspot:active{background:rgba(255,255,255,0.15)}
 
 /* ── Live clock overlay (status bar pill) ── */
@@ -548,7 +525,6 @@ body{
   cursor:pointer;font-size:22px;color:rgba(255,255,255,0.8);
   transition:background 0.2s;
 }
-.mo-close:hover{background:rgba(255,255,255,0.22);}
 .mo-close:active{background:rgba(255,255,255,0.32);}
 .mo-header{
   display:flex;flex-direction:column;gap:2px;
@@ -663,8 +639,7 @@ body{
   display:block;width:720px;height:auto;
 }
 .pill-hotspot{
-  position:absolute;z-index:6;cursor:pointer;
-  overflow:hidden;
+  position:absolute;z-index:6;  overflow:hidden;
   transition:transform 0.2s ease-out;
 }
 .pill-hotspot:active{transform:scale(0.96);}
