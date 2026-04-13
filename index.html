@@ -83,7 +83,7 @@ body{
 }
 
 /* ── Recording section (pure HTML/CSS) ── */
-.rec-section{position:relative;width:720px}
+.rec-section{position:relative;width:720px;}
 .rec-slash{
   display:flex;align-items:center;
   height:20px;padding:0 24px;gap:6px;
@@ -217,6 +217,158 @@ body{
 }
 .rec-ctrl:active{background:rgba(255,255,255,0.22);}
 .rec-ctrl svg{width:18px;height:18px;fill:rgba(255,255,255,0.7);color:rgba(255,255,255,0.7)}
+
+/* ── Recording Info Button ── */
+.rec-info-btn{margin-left:4px;opacity:0.2;pointer-events:none;transition:opacity 0.3s ease-out;}
+.rec-info-btn.enabled{opacity:1;pointer-events:auto;}
+
+/* ── Recording Detail Overlay ── */
+/* ══ Recording Detail Overlay ══ */
+.rec-detail-overlay{
+  padding:16px 22px 14px;
+  gap:0;overflow:hidden;
+}
+.rec-detail-overlay .recOverlayContent{
+  display:flex;flex-direction:column;
+  flex:1;min-height:0;
+}
+.rec-detail-overlay.rec-active{
+  background:rgba(80,0,15,0.35);
+  border:1px solid rgba(250,0,63,0.15);
+  animation:rec-bg-pulse 3s ease-in-out infinite;
+}
+@keyframes rec-bg-pulse{
+  0%,100%{background:rgba(80,0,15,0.35);}
+  50%{background:rgba(100,0,20,0.45);}
+}
+.rec-detail-overlay.rec-paused{
+  background:rgba(10,0,60,0.35);
+  border:1px solid rgba(69,144,255,0.15);
+  animation:none;
+}
+
+/* Title row: name + status inline */
+.rec-top-row{
+  display:flex;align-items:baseline;gap:12px;
+  padding-right:44px;margin-bottom:2px;
+}
+.rec-top-title{
+  font-size:20px;font-weight:700;color:#fff;line-height:1.2;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.rec-top-status{
+  display:flex;align-items:center;gap:6px;flex-shrink:0;
+}
+.rec-top-dot{
+  width:8px;height:8px;border-radius:50%;background:#FA003F;flex-shrink:0;
+}
+.rec-top-dot.recording{animation:pulse-rec 1.5s ease-in-out infinite;}
+.rec-top-dot.paused{background:#4590ff;animation:none;}
+.rec-top-label{
+  font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);
+  font-variant-numeric:tabular-nums;
+}
+
+/* Timeline row */
+.rec-tl{
+  display:flex;flex-wrap:wrap;gap:3px 14px;
+  margin:6px 0 0;
+}
+.rec-tl-item{
+  display:flex;align-items:center;gap:4px;
+  font-size:11px;font-weight:600;color:rgba(255,255,255,0.4);
+  font-variant-numeric:tabular-nums;
+}
+.rec-tl-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.rec-tl-time{color:rgba(255,255,255,0.65);font-weight:700;}
+/* Thin divider */
+.rec-div{
+  height:1px;background:rgba(255,255,255,0.1);
+  margin:10px 0;
+}
+
+/* Section label */
+.rec-label{
+  font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);
+  letter-spacing:1.8px;text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+/* People grid — 2 columns, fills available space */
+.rec-people-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-auto-rows:1fr;
+  gap:4px 8px;
+  flex:1;min-height:0;
+}
+.rec-person{
+  display:flex;align-items:center;gap:8px;
+  padding:5px 6px;border-radius:10px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);
+  min-height:36px;
+}
+.rec-person.empty{
+  background:transparent;
+  border:1px solid transparent;
+}
+.rec-person-avatar{
+  width:26px;height:26px;border-radius:13px;
+  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:rgba(255,255,255,0.7);
+  flex-shrink:0;
+}
+.rec-person-name{
+  font-size:12px;font-weight:600;color:rgba(255,255,255,0.8);
+  flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.rec-person-time{
+  font-size:10px;font-weight:600;color:rgba(255,255,255,0.3);
+  font-variant-numeric:tabular-nums;flex-shrink:0;
+}
+.rec-person-share{
+  display:flex;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.1);
+  flex-shrink:0;
+  transition:background 0.2s ease-out,border-color 0.2s ease-out;
+}
+.rec-person-share:active{
+  background:rgba(69,144,255,0.3);
+  border-color:rgba(69,144,255,0.5);
+}
+.rec-person-share.shared{
+  background:rgba(74,222,128,0.2);
+  border-color:rgba(74,222,128,0.4);
+  pointer-events:none;
+}
+.rec-person-share svg{width:16px;height:16px;}
+.rec-person-share .share-check{display:none;}
+.rec-person-share .share-arrow{display:block;}
+.rec-person-share.shared .share-check{display:block;}
+.rec-person-share.shared .share-arrow{display:none;}
+
+/* Share all button — pinned to bottom */
+.rec-share-all{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px 16px;border-radius:14px;
+  background:#1b00e2;
+  border:1px solid rgba(69,144,255,0.35);
+  margin-top:10px;flex-shrink:0;
+  transition:background 0.15s ease-out;
+}
+.rec-share-all:active{
+  background:#2a10f0;
+}
+.rec-share-all svg{width:18px;height:18px;flex-shrink:0;}
+.rec-share-all-text{
+  font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);
+  letter-spacing:0.5px;
+}
 
 /* ── OCCUPIED Card (HTML) ── */
 .occ-card{
@@ -593,6 +745,13 @@ body{
   background:rgba(156,163,175,0.2);color:#9ca3af;
   border:1px solid rgba(156,163,175,0.3);
 }
+.mo-badge-time{
+  font-size:12px;font-weight:600;letter-spacing:0.3px;
+  padding:4px 10px;border-radius:20px;
+  background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.55);
+  border:1px solid rgba(255,255,255,0.1);
+  font-variant-numeric:tabular-nums;
+}
 .mo-counts{
   display:flex;gap:16px;align-items:center;
   position:absolute;bottom:20px;left:30px;right:30px;
@@ -845,6 +1004,11 @@ body{
         <div class="mo-close" id="freeOverlayClose" role="button" aria-label="Close detail" tabindex="0">&times;</div>
         <div id="freeOverlayContent"></div>
       </div>
+      <!-- Recording Detail Overlay -->
+      <div class="meeting-overlay rec-detail-overlay" id="freeRecOverlay">
+        <div class="mo-close freeRecOverlayClose" role="button" aria-label="Close detail" tabindex="0">&times;</div>
+        <div class="recOverlayContent"></div>
+      </div>
       </div>
     </div>
     <!-- OCCUPIED STATE (HTML/CSS) -->
@@ -888,6 +1052,11 @@ body{
         <div class="mo-close" id="occOverlayClose" role="button" aria-label="Close detail" tabindex="0">&times;</div>
         <div id="occOverlayContent"></div>
       </div>
+      <!-- Recording Detail Overlay -->
+      <div class="meeting-overlay rec-detail-overlay" id="occRecOverlay">
+        <div class="mo-close occRecOverlayClose" role="button" aria-label="Close detail" tabindex="0">&times;</div>
+        <div class="recOverlayContent"></div>
+      </div>
       </div>
     </div>
   </div>
@@ -914,6 +1083,7 @@ body{
         <div class="rec-ctrl" id="recMute" role="button" aria-label="Mute microphone" tabindex="0"><svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" fill="currentColor"/><path d="M19 11a7 7 0 0 1-6 6.93V21h3v1H8v-1h3v-3.07A7 7 0 0 1 5 11h1.5a5.5 5.5 0 0 0 11 0H19z" fill="currentColor"/><line x1="3" y1="1" x2="21" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
         <div class="rec-ctrl" id="recStop" role="button" aria-label="Stop recording" tabindex="0"><svg viewBox="0 0 11 11"><rect x="0" y="0" width="11" height="11" rx="2"/></svg></div>
       </div>
+      <div class="info-btn rec-info-btn" id="recInfoBtn" role="button" aria-label="Recording details" tabindex="0">i</div>
     </div>
   </div>
 
@@ -1072,6 +1242,8 @@ function showFreeCard(){
   freeCard.classList.add('active');
   occupiedCard.classList.remove('active');
   clearInterval(countdownInterval);
+  closeRecOverlay();
+  closeMeetingOverlay('occupied');
   freeCard.classList.add('flash-in');
   freeCard.addEventListener('animationend',()=>freeCard.classList.remove('flash-in'),{once:true});
   startFreeUpdater();
@@ -1138,6 +1310,8 @@ function showOccupiedCard(minutes){
   occupiedCard.classList.add('active');
   occupiedCard.classList.add('flash-in');
   occupiedCard.addEventListener('animationend',()=>occupiedCard.classList.remove('flash-in'),{once:true});
+  closeRecOverlay();
+  closeMeetingOverlay('free');
   clearInterval(freeInterval);
 
   const now=Date.now();
@@ -1414,12 +1588,14 @@ document.getElementById('recMute').addEventListener('click',()=>{
     clearInterval(recInterval);
     card.classList.remove('active');
     card.classList.add('muted');
+    recEventLog.push({type:'paused',time:Date.now()});
     showToast('Microphone muted');
   }else{
     recMuted=false;
     card.classList.remove('muted');
     card.classList.add('active');
     recInterval=setInterval(()=>{recSeconds++;updateRecTime();},1000);
+    recEventLog.push({type:'resumed',time:Date.now()});
     showToast('Microphone unmuted');
   }
 });
@@ -1431,9 +1607,226 @@ document.getElementById('recStop').addEventListener('click',()=>{
   clearInterval(recInterval);
   recActive=false;
   recMuted=false;
-  card.classList.remove('active','muted');
+  card.classList.remove('active','muted','detail-open');
+  recEventLog.push({type:'stopped',time:Date.now()});
+  closeRecOverlay();
   showToast('Recording stopped');
 });
+
+// ── Recording Detail Overlay ──
+// Track people in the room (simulated — in production, comes from biometric sensors/presence detection)
+let recStartTime=null;
+let recHasRecorded=false;
+let recEventLog=[];
+const roomPeople=[
+  {name:'Jakub Reken', joinedOffset:0},
+  {name:'Júlia Šustáková', joinedOffset:2},
+  {name:'Martin Kováč', joinedOffset:3},
+  {name:'Anna Horváthová', joinedOffset:5},
+  {name:'Peter Novák', joinedOffset:6},
+  {name:'Tomáš Černý', joinedOffset:8},
+  {name:'Eva Kučerová', joinedOffset:9},
+  {name:'Marek Vlček', joinedOffset:10},
+];
+
+function getRecordingMeeting(){
+  // If there's a scheduled meeting running, use it; otherwise it's ad-hoc
+  const now=Date.now();
+  const current=SCHEDULE.find(m=>m.start<=now&&m.end>now);
+  if(current) return current;
+  if(occupiedCard.classList.contains('active')){
+    return {title:'Ad-hoc Meeting',sub:'jakub reken',start:meetingStartMs,end:meetingEndMs,
+      description:'Rýchla rezervácia miestnosti cez panel. Nahrávka bude zdieľaná so všetkými prítomnými.',
+      attendees:[{name:'Jakub Reken',rsvp:'yes'}],meetId:null};
+  }
+  return {title:'Quick Recording',sub:'—',start:now,end:null,
+    description:'Nahrávanie bez aktívneho meetingu. Nahrávka bude uložená na Google Drive.',
+    attendees:[],meetId:null};
+}
+
+function buildRecOverlayHTML(){
+  const meeting=getRecordingMeeting();
+  const recTimeStr=document.getElementById('recTime').textContent;
+  const elapsed=recStartTime?(Date.now()-recStartTime)/1000:0;
+  const peoplePresent=roomPeople.filter(p=>p.joinedOffset<=elapsed);
+  const totalSlots=8;
+  const shareArrow='<svg class="share-arrow" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
+  const shareCheck='<svg class="share-check" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+  let html='';
+
+  // Row 1: Title + status + duration
+  const dotClass='rec-top-dot'+(recMuted?' paused':recActive?' recording':'');
+  let totalSec=0;let lastStart=null;
+  recEventLog.forEach(ev=>{
+    if(ev.type==='started'||ev.type==='resumed') lastStart=ev.time;
+    if((ev.type==='paused'||ev.type==='stopped')&&lastStart){totalSec+=(ev.time-lastStart)/1000;lastStart=null;}
+  });
+  if(lastStart&&recActive&&!recMuted) totalSec+=(Date.now()-lastStart)/1000;
+  const durStr=Math.floor(totalSec)>0?' · '+Math.floor(totalSec)+'s':'';
+  const statusLabel=(recMuted?'Paused':recActive?'Recording':'Stopped')+' · '+recTimeStr+durStr;
+  html+='<div class="rec-top-row">';
+  html+='<span class="rec-top-title">'+meeting.title+'</span>';
+  html+='<span class="rec-top-status"><span class="'+dotClass+'"></span><span class="rec-top-label">'+statusLabel+'</span></span>';
+  html+='</div>';
+
+  // Row 2: Timeline events
+  if(recEventLog.length>0){
+    html+='<div class="rec-tl">';
+    recEventLog.forEach(ev=>{
+      const t=formatTime(new Date(ev.time));
+      const labels={started:'Start',paused:'Pause',resumed:'Resume',stopped:'Stop'};
+      const colors={started:'#4ade80',paused:'#FBBF24',resumed:'#4ade80',stopped:'#FA003F'};
+      html+='<span class="rec-tl-item"><span class="rec-tl-dot" style="background:'+colors[ev.type]+'"></span>'+labels[ev.type]+' <span class="rec-tl-time">'+t+'</span></span>';
+    });
+    html+='</div>';
+  }
+
+  // Divider
+  html+='<div class="rec-div"></div>';
+
+  // People grid label
+  html+='<div class="rec-label">People in Room ('+peoplePresent.length+'/'+totalSlots+')</div>';
+
+  // 2-column grid, 4 rows = 8 slots
+  html+='<div class="rec-people-grid">';
+  for(let i=0;i<totalSlots;i++){
+    if(i<peoplePresent.length){
+      const p=peoplePresent[i];
+      const initials=p.name.split(' ').map(w=>w[0]).join('').substring(0,2);
+      const joinTime=new Date(recStartTime+p.joinedOffset*1000);
+      html+='<div class="rec-person">';
+      html+='<div class="rec-person-avatar">'+initials+'</div>';
+      html+='<div class="rec-person-name">'+p.name+'</div>';
+      html+='<div class="rec-person-time">'+formatTime(joinTime)+'</div>';
+      html+='<div class="rec-person-share" role="button" aria-label="Share to '+p.name+'" tabindex="0" onclick="handlePersonShare(this,event)">'+shareArrow+shareCheck+'</div>';
+      html+='</div>';
+    } else {
+      html+='<div class="rec-person empty"></div>';
+    }
+  }
+  html+='</div>';
+
+  // Share all button
+  const driveIcon='<svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
+  html+='<div class="rec-share-all" role="button" tabindex="0" onclick="handleShareAll(this,event)">';
+  html+=driveIcon;
+  html+='<span class="rec-share-all-text">Share to All · Google Drive</span>';
+  html+='</div>';
+
+  return html;
+}
+
+let recOverlayInterval=null;
+let recOverlayAutoClose=null;
+
+function getActiveBookingCard(){
+  // Return whichever card inner is currently visible
+  if(freeCard.classList.contains('active')) return document.getElementById('freeCardInner');
+  return document.getElementById('occCardInner');
+}
+
+function getActiveRecOverlay(){
+  const isFree=freeCard.classList.contains('active');
+  return document.getElementById(isFree?'freeRecOverlay':'occRecOverlay');
+}
+
+function updateRecOverlayState(overlay){
+  overlay.classList.toggle('rec-active',recActive&&!recMuted);
+  overlay.classList.toggle('rec-paused',recMuted);
+  if(!recActive&&!recMuted){
+    overlay.classList.remove('rec-active','rec-paused');
+  }
+}
+
+function openRecOverlay(){
+  // Close any open meeting overlay first
+  closeMeetingOverlay('occupied');
+  closeMeetingOverlay('free');
+
+  const overlay=getActiveRecOverlay();
+  const card=getActiveBookingCard();
+  overlay.querySelector('.recOverlayContent').innerHTML=buildRecOverlayHTML();
+  card.classList.add('card-dimmed');
+  overlay.classList.add('visible');
+  updateRecOverlayState(overlay);
+  // Auto-close after 10s
+  clearTimeout(recOverlayAutoClose);
+  recOverlayAutoClose=setTimeout(()=>closeRecOverlay(),10000);
+  // Live-update every second
+  clearInterval(recOverlayInterval);
+  recOverlayInterval=setInterval(()=>{
+    if(!overlay.classList.contains('visible')) return;
+    overlay.querySelector('.recOverlayContent').innerHTML=buildRecOverlayHTML();
+    updateRecOverlayState(overlay);
+  },1000);
+}
+
+function closeRecOverlay(){
+  document.querySelectorAll('.rec-detail-overlay').forEach(o=>{
+    o.classList.remove('visible','rec-active','rec-paused');
+  });
+  document.getElementById('freeCardInner').classList.remove('card-dimmed');
+  document.getElementById('occCardInner').classList.remove('card-dimmed');
+  clearInterval(recOverlayInterval);
+  clearTimeout(recOverlayAutoClose);
+}
+
+document.getElementById('recInfoBtn').addEventListener('click',()=>{
+  const overlay=getActiveRecOverlay();
+  if(overlay.classList.contains('visible')){
+    closeRecOverlay();
+  }else{
+    openRecOverlay();
+  }
+});
+
+document.querySelectorAll('.freeRecOverlayClose,.occRecOverlayClose').forEach(btn=>{
+  btn.addEventListener('click',()=>closeRecOverlay());
+});
+
+// Any interaction inside overlay resets 10s auto-close
+document.querySelectorAll('.rec-detail-overlay').forEach(overlay=>{
+  overlay.addEventListener('click',()=>{
+    clearTimeout(recOverlayAutoClose);
+    recOverlayAutoClose=setTimeout(()=>closeRecOverlay(),10000);
+  });
+});
+
+function handlePersonShare(btn,e){
+  e.stopPropagation();
+  if(btn.classList.contains('shared')) return;
+  btn.classList.add('shared');
+  // Reset auto-close timer on interaction
+  clearTimeout(recOverlayAutoClose);
+  recOverlayAutoClose=setTimeout(()=>closeRecOverlay(),10000);
+}
+
+function handleShareAll(btn,e){
+  e.stopPropagation();
+  // Mark all person share buttons as shared
+  const overlay=getActiveRecOverlay();
+  overlay.querySelectorAll('.rec-person-share').forEach(b=>b.classList.add('shared'));
+  // Change button to success state
+  btn.style.background='#16a34a';
+  btn.style.borderColor='rgba(74,222,128,0.5)';
+  btn.querySelector('.rec-share-all-text').textContent='Shared to All';
+  btn.style.pointerEvents='none';
+  clearTimeout(recOverlayAutoClose);
+  recOverlayAutoClose=setTimeout(()=>closeRecOverlay(),10000);
+}
+
+// Track recording start time
+const origRecBtn=document.getElementById('recBtn');
+const origRecClick=origRecBtn.onclick;
+origRecBtn.addEventListener('click',()=>{
+  if(!recActive){
+    recStartTime=Date.now();
+    recHasRecorded=true;
+    recEventLog=[{type:'started',time:Date.now()}];
+    document.getElementById('recInfoBtn').classList.add('enabled');
+  }
+},true);
 
 // ── Meeting Detail Overlay ──
 function buildOverlayHTML(meeting){
