@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather Forecast Card — OCCUPY Preview</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:#111;display:flex;justify-content:center;align-items:center;
+  min-height:100vh;font-family:'Montserrat',sans-serif;
+}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+.wthr-card{
+  background:#000;border-radius:24px;border:1px solid #ffffff12;
+  padding:24px;width:672px;height:668px;
+  font-family:'Montserrat',sans-serif;color:#fff;
+  display:flex;flex-direction:column;gap:7px;
+  position:relative;overflow:hidden;
+}
+
+/* Current weather top */
+.wthr-current{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  height:74px;
+}
+.wthr-current-label{font-size:16px;font-weight:700;color:#fff;}
+.wthr-current-icon{font-size:80px;line-height:1;color:#FBBF24;}
+.wthr-current-temp{font-size:61px;font-weight:700;color:#fff;}
+
+/* Hourly row */
+.wthr-hourly{
+  display:flex;justify-content:center;gap:51px;
+  padding:16px 16px 19px;height:115px;align-items:center;
+}
+.wthr-hour{
+  display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px;
+}
+.wthr-hour-time{font-size:13px;font-weight:400;color:#94A3B8;}
+.wthr-hour-icon{font-size:48px;line-height:1;}
+.wthr-hour-icon.sunny{color:#FBBF24;}
+.wthr-hour-icon.cloudy{color:#94A3B8;}
+.wthr-hour-icon.rainy{color:#64B5F6;}
+.wthr-hour-icon.stormy{color:#FBBF24;}
+.wthr-hour-temp{font-size:14px;font-weight:700;color:#fff;}
+
+/* Stats bar */
+.wthr-stats{
+  display:flex;gap:8px;
+  background:#ffffff08;border-radius:12px;padding:12px 16px;
+  justify-content:space-around;align-items:center;
+}
+.wthr-stat{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.wthr-stat-icon{font-size:28px;}
+.wthr-stat-icon.pressure{color:#64B5F6;}
+.wthr-stat-icon.humidity{color:#22D3EE;}
+.wthr-stat-icon.wind{color:#FBBF24;}
+.wthr-stat-val{font-size:14px;font-weight:600;color:#fff;}
+.wthr-stat-label{font-size:11px;font-weight:400;color:#94A3B8;}
+
+/* Divider */
+.wthr-divider{height:1px;background:#ffffff15;width:100%;}
+
+/* 5-Day forecast — Pencil style: no background boxes, separator lines */
+.wthr-daily{display:flex;flex-direction:column;flex:1;}
+.wthr-daily-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;}
+.wthr-day-row{
+  display:flex;align-items:center;padding:10px 12px;
+  gap:12px;
+  border-bottom:1px solid #ffffff10;
+}
+.wthr-day-row:last-child{border-bottom:none;}
+.wthr-day-name{font-size:15px;font-weight:600;color:#fff;width:44px;}
+.wthr-day-icon{font-size:28px;width:30px;text-align:center;}
+.wthr-day-icon.sunny{color:#FBBF24;}
+.wthr-day-icon.cloudy{color:#94A3B8;}
+.wthr-day-icon.rainy{color:#64B5F6;}
+.wthr-day-icon.stormy{color:#FBBF24;}
+.wthr-day-desc{font-size:14px;font-weight:500;color:#94A3B8;flex:1;}
+.wthr-day-temps{font-size:15px;font-weight:600;color:#22D3EE;white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<div class="wthr-card" id="wthrCardLive">
+  <div style="text-align:center;padding:40px 0;color:#ffffff80;font-size:14px;">Loading weather...</div>
+</div>
+
+<script>
+const WMO_ICON={0:'☀️',1:'⛅',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌧️',53:'🌧️',55:'🌧️',56:'🌧️',57:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',67:'🌧️',71:'🌨️',73:'🌨️',75:'🌨️',77:'🌨️',80:'🌧️',81:'🌧️',82:'🌧️',95:'⛈️',96:'⛈️',99:'⛈️'};
+const WMO_CLASS={0:'sunny',1:'cloudy',2:'cloudy',3:'cloudy',45:'cloudy',48:'cloudy',51:'rainy',53:'rainy',55:'rainy',61:'rainy',63:'rainy',65:'rainy',71:'rainy',80:'rainy',95:'stormy',96:'stormy',99:'stormy'};
+const WMO_TEXT={0:'Sunny',1:'Mostly Clear',2:'Partly Cloudy',3:'Overcast',45:'Foggy',48:'Foggy',51:'Drizzle',53:'Drizzle',55:'Drizzle',56:'Drizzle',57:'Drizzle',61:'Rainy',63:'Rainy',65:'Rainy',67:'Rainy',71:'Snowy',73:'Snowy',75:'Snowy',77:'Snowy',80:'Showers',81:'Showers',82:'Showers',95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
+
+function getWmoIcon(code){return WMO_ICON[code]||'🌡️';}
+function getWmoClass(code){return WMO_CLASS[code]||'cloudy';}
+function getWmoText(code){return WMO_TEXT[code]||'Unknown';}
+
+async function fetchWeather(){
+  try{
+    const url='https://api.open-meteo.com/v1/forecast?latitude=48.15&longitude=17.11&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,surface_pressure&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe/Bratislava';
+    const res=await fetch(url);
+    const data=await res.json();
+    renderWeather(data);
+  }catch(e){
+    document.getElementById('wthrCardLive').innerHTML='<div style="text-align:center;padding:40px 0;color:#ff6b6b;font-size:14px;">Weather unavailable</div>';
+  }
+}
+
+function renderWeather(data){
+  const cur=data.current;
+  const hourly=data.hourly;
+  const daily=data.daily;
+  const now=new Date();
+  const curIcon=getWmoIcon(cur.weather_code);
+  const curTemp=Math.round(cur.temperature_2m);
+
+  let html='';
+  // Current weather
+  html+='<div class="wthr-current">';
+  html+='<span class="wthr-current-label">Today</span>';
+  html+='<span class="wthr-current-icon">'+curIcon+'</span>';
+  html+='<span class="wthr-current-temp">'+curTemp+'°C</span>';
+  html+='</div>';
+
+  // Hourly forecast — 6 hours
+  const currentHourIndex=hourly.time.findIndex(t=>{
+    const h=new Date(t);
+    return h.getHours()===now.getHours()&&h.getDate()===now.getDate();
+  });
+  html+='<div class="wthr-hourly">';
+  for(let i=0;i<6;i++){
+    const idx=currentHourIndex+i;
+    if(idx>=hourly.time.length) break;
+    const hTime=new Date(hourly.time[idx]);
+    const hr=hTime.getHours();
+    const hh=hr===0?'12AM':hr<12?hr+'AM':hr===12?'12PM':(hr-12)+'PM';
+    const hIcon=getWmoIcon(hourly.weather_code[idx]);
+    const hClass=getWmoClass(hourly.weather_code[idx]);
+    const hTemp=Math.round(hourly.temperature_2m[idx]);
+    html+='<div class="wthr-hour">';
+    html+='<span class="wthr-hour-time">'+hh+'</span>';
+    html+='<span class="wthr-hour-icon '+hClass+'">'+hIcon+'</span>';
+    html+='<span class="wthr-hour-temp">'+hTemp+'°</span>';
+    html+='</div>';
+  }
+  html+='</div>';
+
+  // Stats bar
+  html+='<div class="wthr-stats">';
+  html+='<div class="wthr-stat"><span class="wthr-stat-icon pressure">🌡️</span><span class="wthr-stat-val">'+Math.round(cur.surface_pressure)+' hPa</span><span class="wthr-stat-label">Air Pressure</span></div>';
+  html+='<div class="wthr-stat"><span class="wthr-stat-icon humidity">💧</span><span class="wthr-stat-val">'+Math.round(cur.relative_humidity_2m)+'%</span><span class="wthr-stat-label">Humidity</span></div>';
+  html+='<div class="wthr-stat"><span class="wthr-stat-icon wind">💨</span><span class="wthr-stat-val">'+Math.round(cur.wind_speed_10m)+' km/h</span><span class="wthr-stat-label">Wind Speed</span></div>';
+  html+='</div>';
+
+  // Divider
+  html+='<div class="wthr-divider"></div>';
+
+  // 5-Day forecast
+  const dayNamesShort=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  html+='<div class="wthr-daily">';
+  html+='<div class="wthr-daily-title">5-Day Forecast</div>';
+  for(let i=0;i<5&&i<daily.time.length;i++){
+    const d=new Date(daily.time[i]);
+    const dayName=dayNamesShort[d.getDay()];
+    const dIcon=getWmoIcon(daily.weather_code[i]);
+    const dClass=getWmoClass(daily.weather_code[i]);
+    const dText=getWmoText(daily.weather_code[i]);
+    const hi=Math.round(daily.temperature_2m_max[i]);
+    const lo=Math.round(daily.temperature_2m_min[i]);
+    html+='<div class="wthr-day-row">';
+    html+='<span class="wthr-day-name">'+dayName+'</span>';
+    html+='<span class="wthr-day-icon '+dClass+'">'+dIcon+'</span>';
+    html+='<span class="wthr-day-desc">'+dText+'</span>';
+    html+='<span class="wthr-day-temps">'+lo+'–'+hi+'°C</span>';
+    html+='</div>';
+  }
+  html+='</div>';
+
+  document.getElementById('wthrCardLive').innerHTML=html;
+}
+
+fetchWeather();
+</script>
+</body>
+</html>

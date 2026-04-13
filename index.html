@@ -645,8 +645,13 @@ body{
   background:#000;border-radius:24px;border:1px solid #ffffff12;
   padding:24px;width:672px;height:668px;margin:0 24px;
   font-family:'Montserrat',sans-serif;color:#fff;
-  display:flex;flex-direction:column;gap:7px;
+  display:flex;flex-direction:column;gap:35px;
   position:relative;overflow:hidden;
+  backdrop-filter:blur(4px);
+}
+.wthr-card::before{
+  content:'';position:absolute;inset:0;border-radius:24px;pointer-events:none;
+  background:linear-gradient(212deg,#ffffff1f 0%,#ffffff00 55%);
 }
 .wthr-current{
   display:flex;align-items:center;justify-content:center;gap:16px;
@@ -654,52 +659,52 @@ body{
 }
 .wthr-current-label{font-size:16px;font-weight:700;color:#fff;}
 .wthr-current-icon{display:flex;align-items:center;}
-.wthr-current-icon svg{width:56px;height:56px;}
+.wthr-current-icon svg{width:80px;height:80px;}
 .wthr-current-temp{font-size:61px;font-weight:700;color:#fff;}
 
 .wthr-hourly{
-  display:flex;justify-content:center;gap:51px;
-  padding:16px 16px 19px;height:115px;align-items:center;
+  display:flex;justify-content:center;gap:33px;
+  padding:16px 16px 19px 16px;align-items:center;
 }
 .wthr-hour{
   display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px;
 }
 .wthr-hour-time{font-size:13px;font-weight:400;color:#94A3B8;}
-.wthr-hour-icon{display:flex;align-items:center;justify-content:center;width:40px;height:40px;}
-.wthr-hour-icon svg{width:36px;height:36px;}
+.wthr-hour-icon{display:flex;align-items:center;justify-content:center;width:58px;height:58px;}
+.wthr-hour-icon svg{width:58px;height:58px;}
 .wthr-hour-temp{font-size:14px;font-weight:700;color:#fff;}
 
 .wthr-stats{
   display:flex;gap:8px;
-  justify-content:center;align-items:stretch;
+  background:#ffffff08;border-radius:12px;
+  align-items:stretch;
 }
 .wthr-stat{
-  display:flex;align-items:center;gap:10px;
-  background:#ffffff08;border-radius:16px;border:1px solid #ffffff12;
+  display:flex;align-items:center;gap:12px;
+  background:#ffffff08;border-radius:12px;
   padding:12px 16px;flex:1;
 }
 .wthr-stat-icon{display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.wthr-stat-icon svg{width:28px;height:28px;}
+.wthr-stat-icon svg{width:40px;height:40px;}
 .wthr-stat-text{display:flex;flex-direction:column;gap:2px;}
-.wthr-stat-label{font-size:11px;font-weight:400;color:#94A3B8;}
-.wthr-stat-val{font-size:14px;font-weight:700;color:#fff;}
+.wthr-stat-label{font-size:13px;font-weight:400;color:#94A3B8;}
+.wthr-stat-val{font-size:18px;font-weight:700;color:#fff;}
 
 .wthr-divider{height:1px;background:#ffffff15;width:100%;}
 
-.wthr-daily{display:flex;flex-direction:column;flex:1;}
-.wthr-daily-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;text-align:center;}
-.wthr-daily-cards{display:flex;gap:0;flex:1;}
+.wthr-daily{display:flex;flex-direction:column;justify-content:flex-end;flex:1;}
+.wthr-daily-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;text-align:center;}
+.wthr-daily-cards{display:flex;gap:8px;}
 .wthr-day-card{
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  flex:1;padding:16px 8px;
-  border-right:1px solid #ffffff10;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  flex:1;padding:20px 8px;
+  background:#ffffff08;border-radius:12px;
 }
-.wthr-day-card:last-child{border-right:none;}
-.wthr-day-name{font-size:15px;font-weight:700;color:#fff;}
+.wthr-day-name{font-size:18px;font-weight:700;color:#fff;}
 .wthr-day-icon{display:flex;align-items:center;justify-content:center;width:40px;height:40px;}
-.wthr-day-icon svg{width:32px;height:32px;}
-.wthr-day-desc{font-size:13px;font-weight:500;color:#94A3B8;}
-.wthr-day-temps{font-size:14px;font-weight:600;color:#22D3EE;white-space:nowrap;}
+.wthr-day-icon svg{width:40px;height:40px;}
+.wthr-day-desc{font-size:14px;font-weight:500;color:#94A3B8;}
+.wthr-day-temps{font-size:16px;font-weight:700;color:#22D3EE;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -900,9 +905,7 @@ body{
     <div class="cal-card" id="calCardLive"></div>
   </div>
   <div class="weather-overlay" id="weatherOverlay">
-    <div class="wthr-card" id="wthrCardLive">
-      <div style="text-align:center;padding:40px 0;color:#ffffff80;font-size:14px;">Loading weather...</div>
-    </div>
+    <img src="occupy-assets/i6jfl.png" alt="Weather Forecast" style="display:block;width:672px;margin:0 24px;border-radius:24px;">
   </div>
   <div class="weather-overlay" id="faceOverlay">
     <img src="occupy-assets/qQWs8.png" alt="Personal Services" style="display:block;width:672px;margin:0 24px;">
@@ -1550,7 +1553,7 @@ const SVG_STORM='<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-li
 const SVG_SNOW='<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 15a4 4 0 0 1-.68-7.95A5 5 0 0 1 15 8.9 3 3 0 0 1 15 15z" stroke="#94A3B8"/><circle cx="8" cy="19" r="0.5" fill="#fff" stroke="#fff"/><circle cx="12" cy="19" r="0.5" fill="#fff" stroke="#fff"/><circle cx="16" cy="19" r="0.5" fill="#fff" stroke="#fff"/><circle cx="10" cy="21" r="0.5" fill="#fff" stroke="#fff"/><circle cx="14" cy="21" r="0.5" fill="#fff" stroke="#fff"/></svg>';
 const SVG_FOG='<svg viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"><path d="M4 14h16M4 18h12M6 10h12"/></svg>';
 
-const SVG_PRESSURE='<svg viewBox="0 0 24 24" fill="none" stroke="#64B5F6" stroke-width="2" stroke-linecap="round"><path d="M12 3v10l3 3M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="M12 7v1"/></svg>';
+const SVG_PRESSURE='<svg viewBox="0 0 24 24" fill="none" stroke="#64B5F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.34 17a10 10 0 1 1 17.32 0"/><path d="M12 12l3.5-3.5"/><circle cx="12" cy="12" r="1.5" fill="#64B5F6" stroke="none"/></svg>';
 const SVG_HUMIDITY='<svg viewBox="0 0 24 24" fill="none" stroke="#22D3EE" stroke-width="2" stroke-linecap="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>';
 const SVG_WIND='<svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2" stroke-linecap="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2M12.59 19.41A2 2 0 1 0 14 16H2M17.73 7.73A2.5 2.5 0 1 1 19.5 12H2"/></svg>';
 
