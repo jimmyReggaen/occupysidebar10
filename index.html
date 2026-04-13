@@ -26,7 +26,14 @@ body{
 /* ── Drag & Drop ── */
 .section.draggable{cursor:grab;user-select:none;}
 .section.draggable:active{cursor:grabbing;}
-.section.dragging{opacity:0.4;}
+.section.dragging{
+  opacity:0.5;
+  transform:scale(1.015);
+  box-shadow:0 12px 40px rgba(0,0,0,0.5),0 0 0 1px rgba(69,144,255,0.15);
+  border-radius:8px;
+  z-index:50;
+  transition:opacity 0.25s ease-out,transform 0.25s ease-out,box-shadow 0.25s ease-out;
+}
 .section.drag-over{border-top:3px solid #4590FF;}
 .drag-handle{
   position:absolute;top:4px;right:4px;z-index:10;
@@ -51,11 +58,21 @@ body{
 /* ── Tile flash ── */
 .tile-flash{
   position:absolute;z-index:5;cursor:pointer;
-  background:transparent;transition:background 0.15s,box-shadow 0.15s;
+  background:transparent;
+  transition:background 0.2s ease-out,box-shadow 0.2s ease-out,transform 0.2s ease-out;
+  border-radius:16px;
 }
+.tile-flash:hover{background:rgba(27,0,226,0.08);}
+.tile-flash:active{transform:scale(0.97);transition-duration:0.08s;}
 .tile-flash.flash{
   background:linear-gradient(160deg,rgba(27,0,226,0.65) 0%,rgba(14,0,113,0.65) 100%);
   box-shadow:0 0 20px rgba(27,0,226,0.3);
+  animation:tile-pulse 0.35s ease-out;
+}
+@keyframes tile-pulse{
+  0%{transform:scale(0.95);opacity:0.7;}
+  50%{transform:scale(1.02);}
+  100%{transform:scale(1);opacity:1;}
 }
 
 /* ── Auto Toggle area (invisible clickable zone) ── */
@@ -113,9 +130,11 @@ body{
   border:1.5px solid rgba(100,116,139,0.45);
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 2px 10px rgba(100,116,139,0.37),0 0 24px rgba(100,116,139,0.31),0 4px 12px rgba(0,0,0,0.13);
-  transition:background 0.3s,box-shadow 0.3s,border-color 0.3s;
+  transition:background 0.3s ease-out,box-shadow 0.3s ease-out,border-color 0.3s ease-out,transform 0.15s ease-out;
   flex-shrink:0;
 }
+.rec-btn:hover{transform:scale(1.06);}
+.rec-btn:active{transform:scale(0.94);transition-duration:0.08s;}
 .rec-card.active .rec-btn{
   background:rgba(250,0,63,0.35);
   border-color:rgba(255,255,255,0.3);
@@ -270,6 +289,13 @@ body{
   box-shadow:0 0 8px rgba(255,215,0,0.53),0 0 4px rgba(255,215,0,0.67);
   transition:left 1s linear;
 }
+.occ-timer-dot.urgent{
+  animation:dot-urgent 1.2s ease-in-out infinite;
+}
+@keyframes dot-urgent{
+  0%,100%{box-shadow:0 0 8px rgba(255,215,0,0.53),0 0 4px rgba(255,215,0,0.67);}
+  50%{box-shadow:0 0 16px rgba(255,215,0,0.8),0 0 32px rgba(255,165,0,0.4);}
+}
 /* Extend Buttons */
 .occ-extend-row{
   display:flex;align-items:center;justify-content:space-between;
@@ -285,7 +311,7 @@ body{
   border:1.5px solid rgba(255,255,255,0.35);
   backdrop-filter:blur(24px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  transition:opacity 0.3s,background 0.3s;
+  transition:opacity 0.2s ease-out,background 0.2s ease-out,transform 0.2s ease-out,box-shadow 0.2s ease-out;
   box-shadow:0 0 8px rgba(0,0,0,0.09),0 0 4px rgba(255,255,255,0.27);
 }
 .occ-ext-btn .num{font-size:28px;font-weight:700;color:#fff;line-height:1;letter-spacing:-0.3px;}
@@ -294,8 +320,17 @@ body{
   opacity:0.3;cursor:not-allowed;pointer-events:none;
   background:rgba(255,255,255,0.08);
 }
-.occ-ext-btn:not(.disabled):hover{background:rgba(255,255,255,0.45);}
-.occ-ext-btn:not(.disabled):active{background:rgba(255,255,255,0.55);}
+.occ-ext-btn:not(.disabled):hover{
+  background:rgba(255,255,255,0.45);
+  transform:translateY(-1px);
+  box-shadow:0 4px 16px rgba(0,0,0,0.15),0 0 4px rgba(255,255,255,0.35);
+}
+.occ-ext-btn:not(.disabled):active{
+  background:rgba(255,255,255,0.55);
+  transform:translateY(1px) scale(0.97);
+  box-shadow:0 1px 4px rgba(0,0,0,0.12);
+  transition-duration:0.08s;
+}
 
 /* ── FREE Card (HTML) ── */
 .free-card{
@@ -331,7 +366,7 @@ body{
   border:1.5px solid rgba(255,255,255,0.35);
   backdrop-filter:blur(24px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  transition:opacity 0.3s,background 0.3s;
+  transition:opacity 0.2s ease-out,background 0.2s ease-out,transform 0.2s ease-out,box-shadow 0.2s ease-out;
   box-shadow:0 0 8px rgba(0,0,0,0.09),0 0 4px rgba(255,255,255,0.27);
 }
 .free-btn .num{font-size:28px;font-weight:700;color:#fff;line-height:1;letter-spacing:-0.3px;}
@@ -340,8 +375,17 @@ body{
   opacity:0.3;cursor:not-allowed;pointer-events:none;
   background:rgba(255,255,255,0.08);
 }
-.free-btn:not(.disabled):hover{background:rgba(255,255,255,0.45);}
-.free-btn:not(.disabled):active{background:rgba(255,255,255,0.55);}
+.free-btn:not(.disabled):hover{
+  background:rgba(255,255,255,0.45);
+  transform:translateY(-1px);
+  box-shadow:0 4px 16px rgba(0,0,0,0.15),0 0 4px rgba(255,255,255,0.35);
+}
+.free-btn:not(.disabled):active{
+  background:rgba(255,255,255,0.55);
+  transform:translateY(1px) scale(0.97);
+  box-shadow:0 1px 4px rgba(0,0,0,0.12);
+  transition-duration:0.08s;
+}
 /* Free card meeting rows */
 .free-slash{
   display:flex;align-items:center;
@@ -382,9 +426,25 @@ body{
 .info-btn:hover{background:rgba(255,255,255,0.4);border-color:rgba(255,255,255,0.55);}
 .info-btn:active{background:rgba(255,255,255,0.5);}
 
-/* ── Card state switching ── */
-.card-state{display:none;position:relative;}
-.card-state.active{display:block;}
+/* ── Card state switching (crossfade) ── */
+.card-state{
+  position:relative;
+  opacity:0;
+  transform:scale(0.98);
+  transition:opacity 0.4s ease-out,transform 0.4s ease-out;
+  height:0;overflow:hidden;pointer-events:none;
+}
+.card-state.active{
+  opacity:1;
+  transform:scale(1);
+  height:auto;overflow:visible;pointer-events:auto;
+}
+/* Success flash on card activation */
+.card-state.flash-in{animation:card-flash 0.6s ease-out;}
+@keyframes card-flash{
+  0%{filter:brightness(1.3);}
+  100%{filter:brightness(1);}
+}
 .card-state img{display:block;width:720px;height:auto;}
 .card-state .hotspot{
   position:absolute;cursor:pointer;z-index:5;border-radius:65px;
@@ -443,12 +503,20 @@ body{
 /* ── Toast ── */
 .toast{
   position:fixed;bottom:40px;left:50%;
-  transform:translateX(-50%) translateY(20px);
-  background:#1B00E2;color:#fff;padding:12px 24px;border-radius:12px;
+  transform:translateX(-50%) translateY(12px) scale(0.96);
+  background:rgba(27,0,226,0.85);
+  backdrop-filter:blur(20px);
+  color:#fff;padding:14px 28px;border-radius:14px;
   font-size:14px;font-weight:600;letter-spacing:0.5px;
-  opacity:0;transition:all 0.3s;z-index:100;pointer-events:none;white-space:nowrap;
+  border:1px solid rgba(69,144,255,0.2);
+  box-shadow:0 8px 32px rgba(27,0,226,0.3),0 2px 8px rgba(0,0,0,0.2);
+  opacity:0;transition:opacity 0.3s ease-out,transform 0.3s ease-out;
+  z-index:100;pointer-events:none;white-space:nowrap;
 }
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0) scale(1);
+}
 
 /* ── Meeting Detail Overlay ── */
 .card-dimmed{
@@ -464,10 +532,12 @@ body{
   backdrop-filter:blur(14px);
   overflow:hidden;
   opacity:0;pointer-events:none;
-  transition:opacity 0.3s ease;
+  transform:scale(1.02);
+  transition:opacity 0.35s ease-out,transform 0.35s ease-out,backdrop-filter 0.35s ease-out;
 }
 .meeting-overlay.visible{
   opacity:1;pointer-events:auto;
+  transform:scale(1);
 }
 .mo-close{
   position:absolute;top:14px;right:16px;
@@ -595,6 +665,11 @@ body{
 .pill-hotspot{
   position:absolute;z-index:6;cursor:pointer;
   overflow:hidden;
+  transition:transform 0.2s ease-out;
+}
+.pill-hotspot:active{transform:scale(0.96);}
+.pill-hotspot.active{
+  box-shadow:0 0 12px rgba(69,144,255,0.3);
 }
 .pill-on{
   display:block;object-fit:cover;
@@ -1021,6 +1096,8 @@ function showFreeCard(){
   freeCard.classList.add('active');
   occupiedCard.classList.remove('active');
   clearInterval(countdownInterval);
+  freeCard.classList.add('flash-in');
+  freeCard.addEventListener('animationend',()=>freeCard.classList.remove('flash-in'),{once:true});
   startFreeUpdater();
 }
 
@@ -1083,6 +1160,8 @@ function renderFreeMeetings(){
 function showOccupiedCard(minutes){
   freeCard.classList.remove('active');
   occupiedCard.classList.add('active');
+  occupiedCard.classList.add('flash-in');
+  occupiedCard.addEventListener('animationend',()=>occupiedCard.classList.remove('flash-in'),{once:true});
   clearInterval(freeInterval);
 
   const now=Date.now();
@@ -1109,7 +1188,16 @@ function extendMeeting(minutes){
     formatTime(new Date(Date.now()))+' - '+formatTime(new Date(meetingEndMs));
   updateExtendButtons();
   renderOccMeetings();
-  showToast('Meeting extended by '+minutes+' minutes until '+formatTime(new Date(meetingEndMs)));
+  // Brief timer reset flash
+  const dot=document.getElementById('timerDot');
+  dot.classList.remove('urgent');
+  dot.style.transition='none';
+  dot.style.boxShadow='0 0 24px rgba(255,215,0,0.9),0 0 48px rgba(255,165,0,0.5)';
+  requestAnimationFrame(()=>{
+    dot.style.transition='box-shadow 0.8s ease-out,left 1s linear';
+    dot.style.boxShadow='';
+  });
+  showToast('Extended +'+minutes+'min — until '+formatTime(new Date(meetingEndMs)));
 }
 
 function updateExtendButtons(){
@@ -1149,7 +1237,9 @@ function updateOccupiedState(){
   const trackWidth=document.getElementById('timerTrack').offsetWidth;
   const fillWidth=progress*trackWidth;
   document.getElementById('timerFill').style.width=fillWidth+'px';
-  document.getElementById('timerDot').style.left=Math.max(0,fillWidth-11)+'px';
+  const dot=document.getElementById('timerDot');
+  dot.style.left=Math.max(0,fillWidth-11)+'px';
+  dot.classList.toggle('urgent',remainMs<5*60*1000);
   renderOccMeetings();
 }
 
