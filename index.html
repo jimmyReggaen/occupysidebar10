@@ -1712,11 +1712,11 @@ function buildRecOverlayHTML(){
   }
   html+='</div>';
 
-  // Remove all button
-  const removeAllIcon='<svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-  html+='<div class="rec-share-all" role="button" tabindex="0" onclick="handleRemoveAll(this,event)">';
-  html+=removeAllIcon;
-  html+='<span class="rec-share-all-text">Remove All ('+visiblePeople.length+')</span>';
+  // Delete recording button
+  const deleteRecIcon='<svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+  html+='<div class="rec-share-all" role="button" tabindex="0" onclick="handleDeleteRecording(this,event)">';
+  html+=deleteRecIcon;
+  html+='<span class="rec-share-all-text">Delete recording</span>';
   html+='</div>';
 
   return html;
@@ -1822,18 +1822,22 @@ function handlePersonRemove(btn,e){
   recOverlayAutoClose=setTimeout(()=>closeRecOverlay(),15000);
 }
 
-function handleRemoveAll(btn,e){
+function handleDeleteRecording(btn,e){
   e.stopPropagation();
-  const overlay=getActiveRecOverlay();
-  const elapsed=(Date.now()-recStartTime)/1000;
-  const present=roomPeople.filter(p=>p.joinedOffset<=elapsed);
-  present.forEach(p=>removedPeople.add(p.name));
-  if(overlay){
-    overlay.querySelector('.recOverlayContent').innerHTML=buildRecOverlayHTML();
-    restoreSharedState(overlay);
-  }
-  clearTimeout(recOverlayAutoClose);
-  recOverlayAutoClose=setTimeout(()=>closeRecOverlay(),15000);
+  const card=document.querySelector('.rec-card');
+  clearInterval(recInterval);
+  recActive=false;
+  recMuted=false;
+  recHasRecorded=false;
+  recSeconds=0;
+  updateRecTime();
+  card.classList.remove('active','muted','detail-open');
+  document.getElementById('recInfoBtn').classList.remove('enabled');
+  removedPeople.clear();
+  sharedAll=false;
+  recEventLog.push({type:'deleted',time:Date.now()});
+  closeRecOverlay();
+  showToast('Recording deleted');
 }
 
 // Hidden refresh — tap clock to reload
