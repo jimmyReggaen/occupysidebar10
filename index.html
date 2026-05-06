@@ -930,6 +930,176 @@ body{
 .wthr-day-desc{font-size:14px;font-weight:500;color:#94A3B8;}
 .wthr-day-temps{font-size:16px;font-weight:700;color:#22D3EE;white-space:nowrap;}
 
+/* ── Services section (HTML/CSS) ── */
+.services-section{position:relative;width:720px;padding-bottom:18px;}
+.services-header{
+  display:flex;align-items:center;
+  height:20px;padding:0 24px;gap:6px;
+}
+.services-header::before,.services-header::after{
+  content:'';flex:1;height:1px;background:#ffffffcc;
+}
+.services-header .label-wrap{
+  display:flex;align-items:center;gap:6px;flex-shrink:0;
+}
+.services-header .bracket{font-size:14px;color:#ffffffcc;font-weight:300;}
+.services-header .txt{
+  font-size:12px;font-weight:600;color:#ffffffcc;
+  letter-spacing:2px;text-transform:uppercase;
+}
+.services-grid{
+  margin:14px 24px 0;
+  display:flex;gap:12px;
+}
+.service-card{
+  flex:1;height:174px;
+  position:relative;
+  border-radius:20px;
+  background:linear-gradient(160deg,#1a2138 0%,#0d1019 100%);
+  border:1px solid #ffffff10;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  cursor:pointer;overflow:hidden;
+}
+.service-card::before{
+  content:'';position:absolute;inset:1px;border-radius:19px;
+  background:linear-gradient(212deg,rgba(255,255,255,0.10) 0%,transparent 55%);
+  pointer-events:none;
+}
+.service-card .service-icon{
+  width:74px;height:74px;
+  color:#ffffff;
+}
+.service-card .service-icon svg{
+  width:100%;height:100%;display:block;
+  fill:none;stroke:currentColor;stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.service-card .service-label{
+  font-size:18px;font-weight:500;color:#4590FF;
+  letter-spacing:0.3px;
+}
+.service-card:active{transform:scale(0.97);transition:transform 0.08s ease-out;}
+.service-card.flash{
+  background:linear-gradient(160deg,rgba(27,0,226,0.65) 0%,rgba(14,0,113,0.65) 100%);
+  box-shadow:0 0 20px rgba(27,0,226,0.3);
+  animation:tile-pulse 0.35s ease-out;
+}
+
+/* ── Environment dashboard card ── */
+.env-section{position:relative;width:720px;padding-bottom:6px;}
+.env-card{
+  margin:14px 24px 0;
+  background:linear-gradient(160deg,#1a2138 0%,#0d1019 100%);
+  border:1px solid #ffffff10;
+  border-radius:24px;
+  padding:28px;
+  position:relative;overflow:hidden;
+}
+.env-card::before{
+  content:'';position:absolute;inset:1px;border-radius:23px;
+  background:linear-gradient(212deg,rgba(255,255,255,0.10) 0%,transparent 55%);
+  pointer-events:none;
+}
+.env-card > *{position:relative;z-index:1;}
+
+.env-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+.env-title{font-size:22px;font-weight:700;color:#fff;letter-spacing:-0.3px;line-height:1.1;}
+.env-subtitle{font-size:14px;font-weight:400;color:#94A3B8;margin-top:8px;}
+.env-logo{
+  position:relative;display:inline-flex;flex-direction:column;
+  align-items:flex-start;justify-content:space-between;
+  width:172px;height:56px;padding:4px 14px 4px 0;
+  box-sizing:border-box;
+}
+.env-logo-word{
+  font-family:'Montserrat',sans-serif;font-weight:900;
+  font-size:28px;color:#fff;line-height:1;letter-spacing:-0.4px;
+}
+.env-logo-num{
+  font-family:'Montserrat',sans-serif;font-weight:700;
+  font-size:9px;color:#fff;line-height:1;letter-spacing:0.8px;
+}
+.env-logo-dot{position:absolute;border-radius:50%;background:#fff;}
+.env-logo-dot--top{top:8px;right:8px;width:5px;height:5px;}
+.env-logo-dot--ring{
+  bottom:10px;right:22px;width:8px;height:8px;
+  background:transparent;border:1.2px solid #fff;
+}
+.env-logo-dot--corner{bottom:9px;right:8px;width:5px;height:5px;}
+.env-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 14px;border-radius:18px;
+  background:rgba(251,191,36,0.06);
+  border:1px solid rgba(251,191,36,0.30);
+  font-size:13px;font-weight:500;color:#FBBF24;
+  flex-shrink:0;white-space:nowrap;
+}
+.env-pill-dot{
+  width:6px;height:6px;border-radius:50%;background:#FBBF24;
+  box-shadow:0 0 6px rgba(251,191,36,0.7);
+}
+
+.env-main-row{display:flex;align-items:center;margin-top:24px;gap:24px;}
+.env-score-block{flex:0 0 auto;min-width:0;}
+.env-gauge-wrap{flex:1;display:flex;align-items:center;justify-content:center;}
+.env-score{display:flex;align-items:flex-end;gap:8px;}
+.env-score-num{
+  font-size:80px;font-weight:700;color:#4590FF;line-height:0.85;
+  font-variant-numeric:tabular-nums;letter-spacing:-1.5px;
+}
+.env-score-denom{font-size:18px;font-weight:400;color:#94A3B8;margin-bottom:12px;}
+.env-score-caption{font-size:13px;font-weight:400;color:#94A3B8;margin-top:12px;letter-spacing:0.1px;}
+.env-quick{display:flex;align-items:center;gap:24px;margin-top:28px;}
+.env-quick-item{display:flex;flex-direction:column;gap:0;}
+.env-quick-row{display:flex;align-items:baseline;gap:4px;}
+.env-quick-num{font-size:32px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-0.5px;}
+.env-quick-unit{font-size:13px;font-weight:500;color:#94A3B8;}
+.env-quick-label{
+  font-size:10px;font-weight:600;color:#94A3B8;
+  letter-spacing:1.6px;text-transform:uppercase;margin-top:8px;
+}
+.env-divider-v{width:1px;align-self:stretch;background:#ffffff15;}
+
+.env-gauge{position:relative;width:231px;height:231px;flex-shrink:0;}
+.env-gauge-svg{width:100%;height:100%;display:block;}
+.env-gauge-text{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+}
+.env-gauge-label{font-size:16px;font-weight:600;color:#94A3B8;letter-spacing:2.4px;}
+.env-gauge-val{font-size:34px;font-weight:700;color:#4590FF;letter-spacing:-0.5px;}
+
+.env-chart{margin-top:32px;}
+.env-chart-legend{display:flex;gap:20px;margin-bottom:12px;}
+.env-legend-item{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:#94A3B8;font-weight:500;}
+.env-legend-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
+.env-legend-dot--temp{background:#FBBF24;}
+.env-legend-dot--hum{background:#A8C0DD;}
+.env-chart-svg{width:100%;height:78px;display:block;}
+
+.env-divider-h{height:1px;background:#ffffff10;margin:18px 0 16px;}
+
+.env-metrics-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:16px;}
+.env-metrics-row--two{grid-template-columns:repeat(2,1fr);margin-bottom:0;}
+.env-metric{display:flex;flex-direction:column;gap:6px;}
+.env-metric-head{display:flex;justify-content:space-between;align-items:baseline;}
+.env-metric-label{font-size:13px;font-weight:600;color:#94A3B8;letter-spacing:0.3px;}
+.env-metric-status{font-size:10px;font-weight:700;letter-spacing:1.6px;}
+.env-metric-status--good{color:#22D3EE;}
+.env-metric-status--mod{color:#FBBF24;}
+.env-metric-status--high{color:#FA003F;}
+.env-metric-val{
+  font-size:24px;font-weight:700;color:#fff;
+  font-variant-numeric:tabular-nums;letter-spacing:-0.3px;
+  display:flex;align-items:baseline;gap:5px;
+}
+.env-metric-unit{font-size:11px;font-weight:400;color:#94A3B8;letter-spacing:0.2px;}
+.env-metric-bar{height:3px;background:#ffffff10;border-radius:2px;overflow:hidden;}
+.env-metric-bar-fill{height:100%;border-radius:2px;}
+.env-bar--good{background:#22D3EE;box-shadow:0 0 6px rgba(34,211,238,0.4);}
+.env-bar--mod{background:#FBBF24;box-shadow:0 0 6px rgba(251,191,36,0.4);}
+.env-bar--high{background:#FA003F;box-shadow:0 0 6px rgba(250,0,63,0.4);}
+
 /* ── Focus visible (keyboard nav) ── */
 .info-btn:focus-visible,.rec-btn:focus-visible,.rec-ctrl:focus-visible,
 .free-btn:focus-visible,.occ-ext-btn:focus-visible,.pill-hotspot:focus-visible,
@@ -1129,25 +1299,112 @@ body{
   </div>
 
   <!-- ═══ SERVICES ═══ -->
-  <div class="section draggable" draggable="true" data-name="services">
+  <div class="section draggable services-section" draggable="true" data-name="services">
     <div class="drag-handle"></div>
-    <img src="occupy-assets/PIqES.png" alt="">
-    <div class="tile-flash" data-group="services" data-idx="0" style="left:24px;top:35px;width:159px;height:146px;"></div>
-    <div class="tile-flash" data-group="services" data-idx="1" style="left:195px;top:35px;width:159px;height:146px;"></div>
-    <div class="tile-flash" data-group="services" data-idx="2" style="left:365px;top:35px;width:159px;height:146px;"></div>
-    <div class="tile-flash" data-group="services" data-idx="3" style="left:536px;top:35px;width:159px;height:146px;"></div>
+    <div class="services-header">
+      <div class="label-wrap"><span class="bracket">(</span><span class="txt">Services</span><span class="bracket">)</span></div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card tile-flash" data-group="services" data-idx="0" role="button" tabindex="0">
+        <div class="service-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="24" cy="24" r="18"/>
+            <line x1="36.5" y1="36.5" x2="56" y2="56"/>
+          </svg>
+        </div>
+        <div class="service-label">ITO support</div>
+      </div>
+      <div class="service-card tile-flash" data-group="services" data-idx="1" role="button" tabindex="0">
+        <div class="service-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M58.7 45.1v8a5.3 5.3 0 0 1-5.8 5.3 52.8 52.8 0 0 1-23-8.2 52 52 0 0 1-16-16 52.8 52.8 0 0 1-8.2-23 5.3 5.3 0 0 1 5.3-5.9h8a5.3 5.3 0 0 1 5.3 4.6 34 34 0 0 0 1.9 7.5 5.3 5.3 0 0 1-1.2 5.6l-3.4 3.4a42.7 42.7 0 0 0 16 16l3.4-3.4a5.3 5.3 0 0 1 5.6-1.2 34 34 0 0 0 7.5 1.9 5.3 5.3 0 0 1 4.6 5.4z"/>
+          </svg>
+        </div>
+        <div class="service-label">Reception call</div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══ ENVIRONMENT ═══ -->
-  <div class="section draggable" draggable="true" data-name="environment">
+  <div class="section draggable env-section" draggable="true" data-name="environment">
     <div class="drag-handle"></div>
-    <img src="occupy-assets/r9Zk9.png" alt="">
-  </div>
+    <div class="services-header">
+      <div class="label-wrap"><span class="bracket">(</span><span class="txt">Environment</span><span class="bracket">)</span></div>
+    </div>
+    <div class="env-card">
+      <div class="env-card-top">
+        <div class="env-title-block">
+          <div class="env-logo" role="img" aria-label="Portrait 2M08">
+            <span class="env-logo-word">PORTRAIT</span>
+            <span class="env-logo-num">2M08</span>
+            <span class="env-logo-dot env-logo-dot--top"></span>
+            <span class="env-logo-dot env-logo-dot--ring"></span>
+            <span class="env-logo-dot env-logo-dot--corner"></span>
+          </div>
+          <div class="env-subtitle">Climate · Air Quality</div>
+        </div>
+      </div>
 
-  <!-- ═══ WEATHER ═══ -->
-  <div class="section draggable" draggable="true" data-name="weather">
-    <div class="drag-handle"></div>
-    <img src="occupy-assets/ETRs6.png" alt="">
+      <div class="env-main-row">
+        <div class="env-score-block">
+          <div class="env-score">
+            <span class="env-score-num">72</span>
+            <span class="env-score-denom">/ 100</span>
+          </div>
+          <div class="env-score-caption">CO2 high — open a window</div>
+          <div class="env-quick">
+            <div class="env-quick-item">
+              <div class="env-quick-row"><span class="env-quick-num">21.4</span><span class="env-quick-unit">°C</span></div>
+              <div class="env-quick-label">TEMPERATURE</div>
+            </div>
+            <div class="env-divider-v"></div>
+            <div class="env-quick-item">
+              <div class="env-quick-row"><span class="env-quick-num">52</span><span class="env-quick-unit">%</span></div>
+              <div class="env-quick-label">HUMIDITY</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="env-gauge-wrap">
+          <div class="env-gauge">
+            <svg class="env-gauge-svg" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="48" stroke="#1a2540" stroke-width="7" fill="none"/>
+              <circle cx="60" cy="60" r="48" stroke="#4590FF" stroke-width="7" fill="none"
+                      stroke-dasharray="217.15 301.59" stroke-dashoffset="-30"
+                      stroke-linecap="round" transform="rotate(-90 60 60)"/>
+            </svg>
+            <div class="env-gauge-text">
+              <div class="env-gauge-label">SCORE</div>
+              <div class="env-gauge-val">72%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="env-chart">
+        <div class="env-chart-legend">
+          <span class="env-legend-item"><span class="env-legend-dot env-legend-dot--temp"></span>Temp</span>
+          <span class="env-legend-item"><span class="env-legend-dot env-legend-dot--hum"></span>Humidity</span>
+        </div>
+        <svg class="env-chart-svg" viewBox="0 0 600 100" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="envTempGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#FBBF24" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="envHumGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#A8C0DD" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#A8C0DD" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,62 C60,55 130,82 220,75 C310,68 380,42 460,46 C540,50 600,62 600,60 L600,100 L0,100 Z" fill="url(#envHumGrad)"/>
+          <path d="M0,62 C60,55 130,82 220,75 C310,68 380,42 460,46 C540,50 600,62 600,60" stroke="#A8C0DD" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M0,55 C70,38 140,28 220,28 C300,28 380,32 460,42 C540,52 600,58 600,55 L600,100 L0,100 Z" fill="url(#envTempGrad)"/>
+          <path d="M0,55 C70,38 140,28 220,28 C300,28 380,32 460,42 C540,52 600,58 600,55" stroke="#FBBF24" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+    </div>
   </div>
 
   <!-- Footer -->
@@ -1484,7 +1741,7 @@ document.querySelectorAll('.tile-flash').forEach(el=>{
       lights:['Off','Dim Light','Full Light'],
       blinds:['Blinds closed'],
       shades:['Closed Shades','Half way','Open Shades'],
-      services:['ITO support','Reception call','Ordering','Cleaning needed']
+      services:['ITO support','Reception call']
     };
     if(names[group]&&names[group][idx])showToast(names[group][idx]);
   });
