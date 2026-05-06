@@ -1449,7 +1449,7 @@ updateDate();
 // Simulated schedule: next meeting is 90 min from now
 const NOW_BOOT=Date.now();
 const SCHEDULE=[
-  {start:NOW_BOOT+60*60*1000, end:NOW_BOOT+120*60*1000, title:'Java Engineering INNOVA..', sub:'julia.sustakova',
+  {start:NOW_BOOT+60*60*1000, end:NOW_BOOT+120*60*1000, title:'Java Engineering INNOVA..', fullTitle:'Java Engineering INNOVATRICS', sub:'julia.sustakova',
    description:'Sprint review a plánovanie ďalšieho sprintu. Demo nových API endpointov pre integráciu s mobilnou aplikáciou.',
    attendees:[
      {name:'Júlia Šustáková', rsvp:'yes'},
@@ -1934,7 +1934,7 @@ function buildRecOverlayHTML(){
   if(lastStart&&recActive&&!recMuted) totalSec+=(Date.now()-lastStart)/1000;
   const statusLabel=(recMuted?'Paused':recActive?'Recording':'Stopped')+' · '+recTimeStr;
   html+='<div class="rec-top-row">';
-  html+='<span class="rec-top-title">'+meeting.title+'</span>';
+  html+='<span class="rec-top-title">'+(meeting.fullTitle||meeting.title)+'</span>';
   html+='<span class="rec-top-status"><span class="'+dotClass+'"></span><span class="rec-top-label">'+statusLabel+'</span></span>';
   html+='</div>';
 
@@ -2119,7 +2119,7 @@ function buildOverlayHTML(meeting){
   const endStr=formatTime(new Date(meeting.end));
   let html='';
   html+='<div class="mo-header">';
-  html+='<div class="mo-title">'+meeting.title+'</div>';
+  html+='<div class="mo-title">'+(meeting.fullTitle||meeting.title)+'</div>';
   html+='<div class="mo-time">'+startStr+' – '+endStr+'</div>';
   html+='</div>';
   html+='<div class="mo-organizer">Organized by '+meeting.sub+'</div>';
