@@ -227,9 +227,9 @@ body{
 }
 .rec-ctrl:active{background:rgba(255,255,255,0.22);}
 .rec-ctrl svg{width:18px;height:18px;fill:rgba(255,255,255,0.7);color:rgba(255,255,255,0.7)}
-/* Mute mic icon: slash visible only when muted */
-.rec-mute-slash{display:none;}
-.rec-card.muted .rec-mute-slash{display:inline;}
+/* Mute mic icon: slash visible by default, hidden when muted */
+.rec-mute-slash{display:inline;}
+.rec-card.muted .rec-mute-slash{display:none;}
 
 /* ── Recording Info Button ── */
 .rec-info-btn{margin-left:4px;opacity:0.2;pointer-events:none;transition:opacity 0.3s ease-out;}
