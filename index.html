@@ -1060,14 +1060,31 @@ body{
 }
 .env-divider-v{width:1px;align-self:stretch;background:#ffffff15;}
 
-.env-gauge{position:relative;width:231px;height:231px;flex-shrink:0;}
-.env-gauge-svg{width:100%;height:100%;display:block;}
+.env-gauge{
+  position:relative;width:231px;height:231px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.env-gauge::before{
+  content:'';position:absolute;inset:-14%;border-radius:50%;
+  background:radial-gradient(circle,rgba(69,144,255,0.30) 0%,rgba(69,144,255,0.10) 36%,transparent 65%);
+  pointer-events:none;z-index:0;
+}
+.env-gauge-svg{position:relative;width:100%;height:100%;display:block;z-index:1;}
 .env-gauge-text{
   position:absolute;inset:0;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  z-index:2;pointer-events:none;
 }
-.env-gauge-label{font-size:16px;font-weight:600;color:#94A3B8;letter-spacing:2.4px;}
-.env-gauge-val{font-size:34px;font-weight:700;color:#4590FF;letter-spacing:-0.5px;}
+.env-gauge-label{
+  font-size:10px;font-weight:700;color:#9bbdf0;
+  letter-spacing:2.4px;text-transform:uppercase;
+  text-shadow:0 0 8px rgba(69,144,255,0.45);
+}
+.env-gauge-val{
+  font-size:40px;font-weight:700;color:#ffffff;
+  letter-spacing:-0.8px;line-height:1;
+  text-shadow:0 0 18px rgba(69,144,255,0.75),0 0 4px rgba(140,180,255,0.6);
+}
 
 .env-chart{margin-top:32px;}
 .env-chart-legend{display:flex;gap:20px;margin-bottom:12px;}
@@ -1347,11 +1364,6 @@ body{
 
       <div class="env-main-row">
         <div class="env-score-block">
-          <div class="env-score">
-            <span class="env-score-num">72</span>
-            <span class="env-score-denom">/ 100</span>
-          </div>
-          <div class="env-score-caption">CO2 high — open a window</div>
           <div class="env-quick">
             <div class="env-quick-item">
               <div class="env-quick-row"><span class="env-quick-num">21.4</span><span class="env-quick-unit">°C</span></div>
@@ -1367,14 +1379,49 @@ body{
 
         <div class="env-gauge-wrap">
           <div class="env-gauge">
-            <svg class="env-gauge-svg" viewBox="0 0 120 120">
-              <circle cx="60" cy="60" r="48" stroke="#1a2540" stroke-width="7" fill="none"/>
-              <circle cx="60" cy="60" r="48" stroke="#4590FF" stroke-width="7" fill="none"
-                      stroke-dasharray="217.15 301.59" stroke-dashoffset="-30"
+            <svg class="env-gauge-svg" viewBox="0 0 120 120" aria-hidden="true">
+              <defs>
+                <radialGradient id="envOrbFill" cx="50%" cy="38%" r="58%">
+                  <stop offset="0%" stop-color="#2a52b8"/>
+                  <stop offset="55%" stop-color="#0e2055"/>
+                  <stop offset="100%" stop-color="#06102a"/>
+                </radialGradient>
+                <radialGradient id="envOrbSheen" cx="50%" cy="20%" r="50%">
+                  <stop offset="0%" stop-color="rgba(180,210,255,0.35)"/>
+                  <stop offset="60%" stop-color="rgba(180,210,255,0)"/>
+                </radialGradient>
+                <filter id="envArcGlow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="1.8"/>
+                </filter>
+                <filter id="envOuterGlow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="3"/>
+                </filter>
+              </defs>
+              <!-- ambient outer ring glow -->
+              <circle cx="60" cy="60" r="56" stroke="#4590FF" stroke-width="1" fill="none"
+                      opacity="0.35" filter="url(#envOuterGlow)"/>
+              <!-- background track -->
+              <circle cx="60" cy="60" r="52" stroke="rgba(120,170,255,0.10)" stroke-width="2" fill="none"/>
+              <!-- progress arc glow underlay -->
+              <circle cx="60" cy="60" r="52" stroke="#4590FF" stroke-width="3.5" fill="none"
+                      stroke-dasharray="235.2 326.7" stroke-dashoffset="-32"
+                      stroke-linecap="round" transform="rotate(-90 60 60)"
+                      filter="url(#envArcGlow)" opacity="0.9"/>
+              <!-- progress arc sharp -->
+              <circle cx="60" cy="60" r="52" stroke="#9ec7ff" stroke-width="2" fill="none"
+                      stroke-dasharray="235.2 326.7" stroke-dashoffset="-32"
                       stroke-linecap="round" transform="rotate(-90 60 60)"/>
+              <!-- inner orb -->
+              <circle cx="60" cy="60" r="42" fill="url(#envOrbFill)"/>
+              <!-- orb top sheen -->
+              <circle cx="60" cy="60" r="42" fill="url(#envOrbSheen)"/>
+              <!-- orb rim highlight -->
+              <circle cx="60" cy="60" r="42" stroke="rgba(140,180,255,0.55)" stroke-width="0.8" fill="none"/>
+              <!-- inner accent ring -->
+              <circle cx="60" cy="60" r="36" stroke="rgba(120,170,255,0.18)" stroke-width="0.5" fill="none"/>
             </svg>
             <div class="env-gauge-text">
-              <div class="env-gauge-label">SCORE</div>
+              <div class="env-gauge-label">AIR QUALITY</div>
               <div class="env-gauge-val">72%</div>
             </div>
           </div>
