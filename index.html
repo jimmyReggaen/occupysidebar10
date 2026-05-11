@@ -992,7 +992,7 @@ body{
   background:linear-gradient(160deg,#1a2138 0%,#0d1019 100%);
   border:1px solid #ffffff10;
   border-radius:24px;
-  padding:28px;
+  padding:20px 22px;
   position:relative;overflow:hidden;
 }
 .env-card::before{
@@ -1002,7 +1002,8 @@ body{
 }
 .env-card > *{position:relative;z-index:1;}
 
-.env-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+.env-card-top{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:24px;}
+.env-info{display:flex;flex-direction:column;gap:24px;min-width:0;}
 .env-title{font-size:22px;font-weight:700;color:#fff;letter-spacing:-0.3px;line-height:1.1;}
 .env-subtitle{font-size:14px;font-weight:400;color:#94A3B8;margin-top:8px;}
 .env-logo{
@@ -1039,9 +1040,7 @@ body{
   box-shadow:0 0 6px rgba(251,191,36,0.7);
 }
 
-.env-main-row{display:flex;align-items:center;margin-top:24px;gap:24px;}
-.env-score-block{flex:0 0 auto;min-width:0;}
-.env-gauge-wrap{flex:1;display:flex;align-items:center;justify-content:center;}
+.env-gauge-wrap{display:flex;align-items:center;justify-content:center;}
 .env-score{display:flex;align-items:flex-end;gap:8px;}
 .env-score-num{
   font-size:80px;font-weight:700;color:#4590FF;line-height:0.85;
@@ -1049,7 +1048,7 @@ body{
 }
 .env-score-denom{font-size:18px;font-weight:400;color:#94A3B8;margin-bottom:12px;}
 .env-score-caption{font-size:13px;font-weight:400;color:#94A3B8;margin-top:12px;letter-spacing:0.1px;}
-.env-quick{display:flex;align-items:center;gap:24px;margin-top:28px;}
+.env-quick{display:flex;align-items:center;gap:20px;margin-top:0;}
 .env-quick-item{display:flex;flex-direction:column;gap:0;}
 .env-quick-row{display:flex;align-items:baseline;gap:4px;}
 .env-quick-num{font-size:32px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-0.5px;}
@@ -1061,7 +1060,7 @@ body{
 .env-divider-v{width:1px;align-self:stretch;background:#ffffff15;}
 
 .env-gauge{
-  position:relative;width:231px;height:231px;flex-shrink:0;
+  position:relative;width:242px;height:242px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
 }
 .env-gauge::before{
@@ -1081,12 +1080,12 @@ body{
   text-shadow:0 0 8px rgba(69,144,255,0.45);
 }
 .env-gauge-val{
-  font-size:40px;font-weight:700;color:#ffffff;
-  letter-spacing:-0.8px;line-height:1;
+  font-size:44px;font-weight:700;color:#ffffff;
+  letter-spacing:-0.9px;line-height:1;
   text-shadow:0 0 18px rgba(69,144,255,0.75),0 0 4px rgba(140,180,255,0.6);
 }
 
-.env-chart{margin-top:32px;}
+.env-chart{margin-top:20px;}
 .env-chart-legend{display:flex;gap:20px;margin-bottom:12px;}
 .env-legend-item{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:#94A3B8;font-weight:500;}
 .env-legend-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
@@ -1350,20 +1349,17 @@ body{
     </div>
     <div class="env-card">
       <div class="env-card-top">
-        <div class="env-title-block">
-          <div class="env-logo" role="img" aria-label="Portrait 2M08">
-            <span class="env-logo-word">PORTRAIT</span>
-            <span class="env-logo-num">2M08</span>
-            <span class="env-logo-dot env-logo-dot--top"></span>
-            <span class="env-logo-dot env-logo-dot--ring"></span>
-            <span class="env-logo-dot env-logo-dot--corner"></span>
+        <div class="env-info">
+          <div class="env-title-block">
+            <div class="env-logo" role="img" aria-label="Portrait 2M08">
+              <span class="env-logo-word">PORTRAIT</span>
+              <span class="env-logo-num">2M08</span>
+              <span class="env-logo-dot env-logo-dot--top"></span>
+              <span class="env-logo-dot env-logo-dot--ring"></span>
+              <span class="env-logo-dot env-logo-dot--corner"></span>
+            </div>
+            <div class="env-subtitle">Climate · Air Quality</div>
           </div>
-          <div class="env-subtitle">Climate · Air Quality</div>
-        </div>
-      </div>
-
-      <div class="env-main-row">
-        <div class="env-score-block">
           <div class="env-quick">
             <div class="env-quick-item">
               <div class="env-quick-row"><span class="env-quick-num">21.4</span><span class="env-quick-unit">°C</span></div>
