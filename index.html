@@ -1117,6 +1117,7 @@ body{
 .env-legend-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
 .env-legend-dot--temp{background:#FBBF24;}
 .env-legend-dot--hum{background:#A8C0DD;}
+.env-legend-dot--co2{background:#22D3EE;}
 .env-chart-svg{width:100%;height:78px;display:block;}
 
 .env-divider-h{height:1px;background:#ffffff10;margin:18px 0 16px;}
@@ -1397,6 +1398,11 @@ body{
               <div class="env-quick-row"><span class="env-quick-num">52</span><span class="env-quick-unit">%</span></div>
               <div class="env-quick-label">HUMIDITY</div>
             </div>
+            <div class="env-divider-v"></div>
+            <div class="env-quick-item">
+              <div class="env-quick-row"><span class="env-quick-num">612</span><span class="env-quick-unit">PPM</span></div>
+              <div class="env-quick-label">CO<sub>2</sub></div>
+            </div>
           </div>
         </div>
 
@@ -1455,6 +1461,7 @@ body{
         <div class="env-chart-legend">
           <span class="env-legend-item"><span class="env-legend-dot env-legend-dot--temp"></span>Temp</span>
           <span class="env-legend-item"><span class="env-legend-dot env-legend-dot--hum"></span>Humidity</span>
+          <span class="env-legend-item"><span class="env-legend-dot env-legend-dot--co2"></span>CO<sub>2</sub></span>
         </div>
         <svg class="env-chart-svg" viewBox="0 0 600 100" preserveAspectRatio="none" aria-hidden="true">
           <defs>
@@ -1466,9 +1473,15 @@ body{
               <stop offset="0%" stop-color="#A8C0DD" stop-opacity="0.25"/>
               <stop offset="100%" stop-color="#A8C0DD" stop-opacity="0"/>
             </linearGradient>
+            <linearGradient id="envCo2Grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.28"/>
+              <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+            </linearGradient>
           </defs>
           <path d="M0,62 C60,55 130,82 220,75 C310,68 380,42 460,46 C540,50 600,62 600,60 L600,100 L0,100 Z" fill="url(#envHumGrad)"/>
           <path d="M0,62 C60,55 130,82 220,75 C310,68 380,42 460,46 C540,50 600,62 600,60" stroke="#A8C0DD" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M0,70 C80,72 160,60 240,58 C320,56 400,68 480,72 C540,75 600,68 600,70 L600,100 L0,100 Z" fill="url(#envCo2Grad)"/>
+          <path d="M0,70 C80,72 160,60 240,58 C320,56 400,68 480,72 C540,75 600,68 600,70" stroke="#22D3EE" stroke-width="2" fill="none" stroke-linecap="round"/>
           <path d="M0,55 C70,38 140,28 220,28 C300,28 380,32 460,42 C540,52 600,58 600,55 L600,100 L0,100 Z" fill="url(#envTempGrad)"/>
           <path d="M0,55 C70,38 140,28 220,28 C300,28 380,32 460,42 C540,52 600,58 600,55" stroke="#FBBF24" stroke-width="2" fill="none" stroke-linecap="round"/>
         </svg>
