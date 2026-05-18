@@ -1065,6 +1065,29 @@ body{
 .env-gauge{
   position:relative;width:242px;height:242px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
+  transform:translateY(10%);
+  animation:envBreath 3.6s ease-in-out infinite;
+}
+@keyframes envBreath{
+  0%,100%{transform:translateY(10%) scale(1);}
+  50%{transform:translateY(10%) scale(1.04);}
+}
+[data-name="lights"]{margin-top:14px;}
+.tricsy-mic-pulse{
+  position:absolute;left:48px;top:75px;width:56px;height:56px;
+  border-radius:50%;overflow:hidden;
+  background-image:url('occupy-assets/yZm7M.png');
+  background-size:720px 210px;
+  background-position:-48px -75px;
+  background-repeat:no-repeat;
+  pointer-events:none;z-index:2;
+  animation:tricsyBreath 3.6s ease-in-out infinite;
+  transform-origin:center;
+  will-change:transform;
+}
+@keyframes tricsyBreath{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.04);}
 }
 .env-gauge::before{
   content:'';position:absolute;inset:-14%;border-radius:50%;
@@ -1315,6 +1338,7 @@ body{
     <div class="drag-handle"></div>
     <img src="occupy-assets/yZm7M.png" alt="">
     <div class="hotspot" data-action="tricsy" style="left:48px;top:75px;width:56px;height:56px;border-radius:28px;"></div>
+    <div class="tricsy-mic-pulse" aria-hidden="true"></div>
   </div>
 
   <!-- ═══ SERVICES ═══ -->
