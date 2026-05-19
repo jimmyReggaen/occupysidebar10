@@ -1358,17 +1358,109 @@ body{
 .env-legend-dot--hum{background:#A8C0DD;}
 .env-legend-dot--co2{background:#22D3EE;}
 .env-legend-info{
-  margin-left:6px;
+  margin-left:8px;
   display:inline-flex;align-items:center;justify-content:center;
-  width:27px;height:27px;border-radius:50%;
+  width:36px;height:36px;border-radius:50%;
   background:rgba(255,255,255,0.06);
   border:1px solid rgba(255,255,255,0.22);
   color:rgba(255,255,255,0.82);
-  font-family:inherit;font-size:16px;font-weight:600;font-style:italic;
-  line-height:1;padding:0;cursor:pointer;
+  font-family:'Georgia','Times New Roman',serif;font-size:20px;font-weight:400;font-style:italic;
+  line-height:1;padding:0 0 1px 0;cursor:pointer;
+  text-indent:-1px;
   transition:background 0.15s,border-color 0.15s;
 }
 .env-legend-info:active{transform:scale(0.92);background:rgba(255,255,255,0.12);}
+
+/* ── Env detail overlay (i button → 3-tab card) ── */
+.env-card{position:relative;}
+.env-detail-overlay{
+  position:absolute;inset:0;
+  z-index:30;border-radius:24px;
+  background:linear-gradient(160deg,#1a2138 0%,#0d1019 100%);
+  border:1px solid #ffffff10;
+  opacity:0;pointer-events:none;
+  transform:translateY(6px);
+  transition:opacity 0.22s ease-out,transform 0.22s ease-out;
+  overflow:hidden;
+  font-family:'Montserrat',sans-serif;
+}
+.env-detail-overlay::before{
+  content:'';position:absolute;inset:1px;border-radius:23px;
+  background:linear-gradient(212deg,rgba(255,255,255,0.08) 0%,transparent 55%);
+  pointer-events:none;
+}
+.env-detail-overlay.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}
+.env-detail-card{position:relative;width:100%;height:100%;z-index:1;}
+.env-detail-toggle{
+  position:absolute;left:50%;top:20px;transform:translateX(-50%);
+  display:flex;gap:6px;padding:4px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:14px;
+}
+.env-seg{
+  flex:1;min-width:130px;height:36px;padding:0 16px;
+  border:1px solid transparent;border-radius:11px;
+  background:transparent;color:rgba(255,255,255,0.55);
+  font-family:inherit;font-size:13px;font-weight:500;letter-spacing:0.2px;
+  cursor:pointer;
+  transition:background 0.15s,color 0.15s,border-color 0.15s;
+}
+.env-seg sub{font-size:0.7em;vertical-align:sub;}
+.env-seg.is-active[data-metric="temp"]{
+  background:linear-gradient(160deg,#26314f 0%,#10182d 100%);
+  border-color:rgba(251,191,36,0.4);color:#FBBF24;font-weight:700;
+}
+.env-seg.is-active[data-metric="hum"]{
+  background:linear-gradient(160deg,#26314f 0%,#10182d 100%);
+  border-color:rgba(168,192,221,0.4);color:#A8C0DD;font-weight:700;
+}
+.env-seg.is-active[data-metric="co2"]{
+  background:linear-gradient(160deg,#26314f 0%,#10182d 100%);
+  border-color:rgba(34,211,238,0.4);color:#22D3EE;font-weight:700;
+}
+.env-seg:active{transform:scale(0.97);}
+.env-detail-close{
+  position:absolute;top:22px;right:22px;
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.7);font-size:22px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  font-family:inherit;padding:0;cursor:pointer;
+}
+.env-detail-close:active{transform:scale(0.92);background:rgba(255,255,255,0.12);}
+.env-detail-header{
+  position:absolute;left:24px;top:82px;
+}
+.env-detail-label{
+  font-size:14px;font-weight:600;letter-spacing:2px;
+  color:rgba(255,255,255,0.55);text-transform:uppercase;
+}
+.env-detail-value{
+  font-size:36px;font-weight:700;color:#ffffff;
+  margin-top:4px;font-variant-numeric:tabular-nums;
+}
+.env-detail-sub{
+  font-size:12px;font-weight:500;color:rgba(255,255,255,0.45);
+  margin-top:8px;
+}
+.env-detail-chart{
+  position:absolute;left:64px;right:24px;top:200px;height:170px;
+}
+.env-detail-yaxis{
+  position:absolute;left:-46px;top:-6px;height:158px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  font-size:11px;font-weight:500;color:rgba(255,255,255,0.40);
+  text-align:right;width:38px;
+  font-variant-numeric:tabular-nums;
+}
+.env-detail-svg{width:100%;height:150px;display:block;overflow:visible;}
+.env-detail-xaxis{
+  display:flex;justify-content:space-between;
+  margin-top:6px;padding:0 4px;
+  font-size:11px;font-weight:500;color:rgba(255,255,255,0.45);
+  font-variant-numeric:tabular-nums;
+}
 .env-chart-svg{width:100%;height:78px;display:block;}
 
 .env-divider-h{height:1px;background:#ffffff10;margin:18px 0 16px;}
@@ -1854,6 +1946,45 @@ body{
           <path d="M0,55 C70,38 140,28 220,28 C300,28 380,32 460,42 C540,52 600,58 600,55 L600,100 L0,100 Z" fill="url(#envTempGrad)"/>
           <path d="M0,55 C70,38 140,28 220,28 C300,28 380,32 460,42 C540,52 600,58 600,55" stroke="#FBBF24" stroke-width="2" fill="none" stroke-linecap="round"/>
         </svg>
+      </div>
+
+      <!-- Detail overlay (opens on legend "i" tap) -->
+      <div class="env-detail-overlay" id="envDetailOverlay" aria-hidden="true">
+        <div class="env-detail-card">
+          <div class="env-detail-toggle">
+            <button type="button" class="env-seg is-active" data-metric="temp">Temperature</button>
+            <button type="button" class="env-seg" data-metric="hum">Humidity</button>
+            <button type="button" class="env-seg" data-metric="co2">CO<sub>2</sub></button>
+          </div>
+          <button type="button" class="env-detail-close" id="envDetailClose" aria-label="Close">×</button>
+          <div class="env-detail-header">
+            <div class="env-detail-label" id="envDetailLabel">TEMPERATURE</div>
+            <div class="env-detail-value" id="envDetailValue">21.4 °C</div>
+            <div class="env-detail-sub" id="envDetailSub">Last 3 hours · Avg 20.9 °C · Δ +0.8 °C</div>
+          </div>
+          <div class="env-detail-chart">
+            <div class="env-detail-yaxis" id="envDetailYaxis">
+              <span>24°</span><span>22°</span><span>20°</span><span>18°</span>
+            </div>
+            <svg class="env-detail-svg" viewBox="0 0 580 150" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="envDetailGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop id="envDetailGradTop" offset="0%" stop-color="#FBBF24" stop-opacity="0.35"/>
+                  <stop id="envDetailGradBot" offset="100%" stop-color="#FBBF24" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <line x1="0" y1="0.5" x2="580" y2="0.5" stroke="rgba(255,255,255,0.06)"/>
+              <line x1="0" y1="50" x2="580" y2="50" stroke="rgba(255,255,255,0.06)"/>
+              <line x1="0" y1="100" x2="580" y2="100" stroke="rgba(255,255,255,0.06)"/>
+              <line x1="0" y1="149.5" x2="580" y2="149.5" stroke="rgba(255,255,255,0.06)"/>
+              <path id="envDetailFill" d="" fill="url(#envDetailGrad)"/>
+              <path id="envDetailLine" d="" stroke="#FBBF24" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="env-detail-xaxis">
+              <span>−3h</span><span>−2h</span><span>−1h</span><span>Now</span>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -2963,6 +3094,70 @@ function renderWeather(data){
 
 fetchWeather();
 
+// ── Env detail overlay (Temperature / Humidity / CO2) ──
+(function(){
+  const overlay=document.getElementById('envDetailOverlay');
+  const btn=document.getElementById('envCo2Info');
+  const closeBtn=document.getElementById('envDetailClose');
+  if(!overlay||!btn)return;
+  const label=document.getElementById('envDetailLabel');
+  const val=document.getElementById('envDetailValue');
+  const sub=document.getElementById('envDetailSub');
+  const yax=document.getElementById('envDetailYaxis');
+  const fill=document.getElementById('envDetailFill');
+  const line=document.getElementById('envDetailLine');
+  const gradTop=document.getElementById('envDetailGradTop');
+  const gradBot=document.getElementById('envDetailGradBot');
+  const linePath={
+    temp:'M0 90 C20 80 100 45 160 50 C220 55 280 95 340 80 C400 65 460 75 520 60 C540 55 560 58 580 60',
+    hum: 'M0 110 C20 95 80 65 140 70 C200 75 260 100 320 88 C380 76 440 90 500 72 C530 65 555 68 580 70',
+    co2: 'M0 100 C20 90 100 70 160 76 C220 82 280 105 340 95 C400 85 460 95 520 80 C540 75 560 82 580 85'
+  };
+  const fillPath={
+    temp:'M0 150 L0 90 C20 80 100 45 160 50 C220 55 280 95 340 80 C400 65 460 75 520 60 C540 55 560 58 580 60 L580 150 Z',
+    hum: 'M0 150 L0 110 C20 95 80 65 140 70 C200 75 260 100 320 88 C380 76 440 90 500 72 C530 65 555 68 580 70 L580 150 Z',
+    co2: 'M0 150 L0 100 C20 90 100 70 160 76 C220 82 280 105 340 95 C400 85 460 95 520 80 C540 75 560 82 580 85 L580 150 Z'
+  };
+  const meta={
+    temp:{label:'TEMPERATURE',value:'21.4 °C',sub:'Last 3 hours · Avg 20.9 °C · Δ +0.8 °C',color:'#FBBF24',yaxis:['24°','22°','20°','18°']},
+    hum: {label:'HUMIDITY',   value:'52 %',  sub:'Last 3 hours · Avg 48 % · Δ +4 %',         color:'#A8C0DD',yaxis:['70 %','60 %','50 %','40 %']},
+    co2: {label:'CO₂',   value:'612 PPM',sub:'Last 3 hours · Avg 540 PPM · Δ +72 PPM', color:'#22D3EE',yaxis:['1200','900','600','400']}
+  };
+  function applyMetric(m){
+    const d=meta[m];
+    label.textContent=d.label;
+    val.textContent=d.value;
+    sub.textContent=d.sub;
+    yax.innerHTML=d.yaxis.map(t=>`<span>${t}</span>`).join('');
+    line.setAttribute('d',linePath[m]);
+    line.setAttribute('stroke',d.color);
+    fill.setAttribute('d',fillPath[m]);
+    gradTop.setAttribute('stop-color',d.color);
+    gradBot.setAttribute('stop-color',d.color);
+    document.querySelectorAll('.env-seg').forEach(s=>{
+      s.classList.toggle('is-active',s.dataset.metric===m);
+    });
+  }
+  function openOverlay(metric){
+    applyMetric(metric||'co2');
+    overlay.classList.add('is-visible');
+    overlay.setAttribute('aria-hidden','false');
+  }
+  function closeOverlay(){
+    overlay.classList.remove('is-visible');
+    overlay.setAttribute('aria-hidden','true');
+  }
+  btn.addEventListener('click',e=>{e.stopPropagation();openOverlay('co2');});
+  closeBtn.addEventListener('click',e=>{e.stopPropagation();closeOverlay();});
+  overlay.addEventListener('click',e=>{
+    if(e.target===overlay) closeOverlay();
+  });
+  document.querySelectorAll('.env-seg').forEach(s=>{
+    s.addEventListener('click',e=>{e.stopPropagation();applyMetric(s.dataset.metric);});
+  });
+  applyMetric('temp');
+})();
+
 // ── Air Quality gauge animation ──
 (function(){
   const RADIUS_OUTER=56, RADIUS_ARC=52;
@@ -2978,9 +3173,9 @@ fetchWeather();
   const elOrb2=document.getElementById('envOrbStop2');
   const elVal=document.getElementById('envGaugeVal');
   if(!elOuter||!elVal)return;
-  const RED=[255,28,56],ORANGE=[255,158,69],BLUE=[69,144,255];
+  const RED=[255,28,56],ORANGE=[255,128,28],BLUE=[69,144,255];
   const ORB_RED=[[170,20,35],[90,10,18],[36,4,8]];
-  const ORB_ORANGE=[[140,80,40],[70,40,18],[30,18,8]];
+  const ORB_ORANGE=[[180,80,25],[95,40,10],[38,16,4]];
   const ORB_BLUE=[[42,82,184],[14,32,85],[6,16,42]];
   const lerp=(a,b,t)=>a+(b-a)*t;
   const lerpRgb=(c1,c2,t)=>[Math.round(lerp(c1[0],c2[0],t)),Math.round(lerp(c1[1],c2[1],t)),Math.round(lerp(c1[2],c2[2],t))];
