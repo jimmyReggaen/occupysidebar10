@@ -988,6 +988,107 @@ body{
   animation:tile-pulse 0.35s ease-out;
 }
 
+/* ── Blinds tiles (CSS-rendered, no Auto) ── */
+.blinds-section{position:relative;width:720px;padding-bottom:18px;}
+.blinds-grid{
+  margin:14px 24px 0;
+  display:flex;gap:12px;
+}
+.blinds-tile{
+  flex:1;height:174px;
+  position:relative;
+  border-radius:20px;
+  background:linear-gradient(160deg,#1a2138 0%,#0d1019 100%);
+  border:1px solid #ffffff10;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  cursor:pointer;overflow:hidden;
+  font-family:inherit;color:inherit;padding:0;
+  transition:transform 0.08s ease-out,box-shadow 0.2s ease-out;
+}
+.blinds-tile::before{
+  content:'';position:absolute;inset:1px;border-radius:19px;
+  background:linear-gradient(212deg,rgba(255,255,255,0.10) 0%,transparent 55%);
+  pointer-events:none;
+}
+.blinds-tile .blinds-icon{width:74px;height:74px;color:#ffffff;position:relative;z-index:1;}
+.blinds-tile .blinds-icon svg{
+  width:100%;height:100%;display:block;
+  fill:none;stroke:currentColor;stroke-width:2.4;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.blinds-tile .blinds-label{
+  font-size:18px;font-weight:500;color:#ffffffcc;
+  letter-spacing:0.3px;position:relative;z-index:1;
+}
+.blinds-tile.is-active .blinds-label{color:#4590FF;}
+.blinds-tile.is-active{
+  box-shadow:0 0 24px rgba(69,144,255,0.18),inset 0 0 0 1px rgba(69,144,255,0.35);
+}
+.blinds-tile:active{transform:scale(0.97);}
+.blinds-tile.flash{
+  background:linear-gradient(160deg,rgba(27,0,226,0.65) 0%,rgba(14,0,113,0.65) 100%);
+  animation:tile-pulse 0.35s ease-out;
+}
+
+/* ── Blinds warning overlay (energy efficiency block, Pencil-matched) ── */
+.blinds-grid{position:relative;}
+.blinds-warning{
+  position:absolute;inset:0;
+  z-index:20;
+  opacity:0;pointer-events:none;
+  transform:translateY(6px);
+  transition:opacity 0.22s ease-out,transform 0.22s ease-out;
+  font-family:'Montserrat',sans-serif;
+}
+.blinds-warning.is-visible{
+  opacity:1;pointer-events:auto;transform:translateY(0);
+}
+.blinds-warning-card{
+  position:relative;
+  width:100%;height:100%;
+  border-radius:20px;
+  background:linear-gradient(160deg,rgba(255,255,255,0.06) 0%,rgba(255,255,255,0.02) 100%);
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+  border:1px solid rgba(255,255,255,0.12);
+  box-shadow:0 8px 32px rgba(0,0,0,0.35);
+  overflow:hidden;
+}
+.blinds-warning-card::before{
+  content:'';
+  position:absolute;inset:0;
+  border-radius:inherit;
+  background:linear-gradient(160deg,#721100 0%,#330202 100%);
+  pointer-events:none;
+  animation:blindsRedPulse 2.6s ease-in-out infinite;
+}
+@keyframes blindsRedPulse{
+  0%,100%{opacity:0.25;}
+  50%{opacity:0.85;}
+}
+@media (prefers-reduced-motion:reduce){
+  .blinds-warning-card::before{animation:none;opacity:0.6;}
+}
+.blinds-section .blinds-warning-tricsy{
+  position:absolute !important;left:24px;top:auto;bottom:0;
+  width:172px !important;height:174px !important;
+  object-fit:contain;object-position:left bottom;
+  user-select:none;-webkit-user-drag:none;
+  pointer-events:none;
+}
+.blinds-warning-title{
+  position:absolute;left:240px;top:34px;
+  width:400px;
+  font-size:22px;font-weight:700;
+  color:#ffffffcc;line-height:1;letter-spacing:-0.2px;
+}
+.blinds-warning-msg{
+  position:absolute;left:240px;top:68px;
+  width:400px;
+  font-size:15px;font-weight:500;
+  color:#ffffffcc;line-height:1.45;
+}
+
 /* ── Environment dashboard card ── */
 .env-section{position:relative;width:720px;padding-bottom:6px;}
 .env-card{
@@ -1321,11 +1422,44 @@ body{
   </div>
 
   <!-- ═══ BLINDS ═══ -->
-  <div class="section draggable" draggable="true" data-name="blinds">
+  <div class="section draggable blinds-section" draggable="true" data-name="blinds">
     <div class="drag-handle"></div>
-    <img src="occupy-assets/HRZBU.png" alt="" data-off="occupy-assets/HRZBU.png" data-on="occupy-assets/HRZBU-on.png">
-    <div class="tile-flash" data-group="blinds" data-idx="0" style="left:195px;top:44px;width:155px;height:117px;border-radius:16px;"></div>
-    <div class="auto-toggle-area" data-section="blinds" style="left:377px;top:44px;width:140px;height:117px;"></div>
+    <div class="services-header">
+      <div class="label-wrap"><span class="bracket">(</span><span class="txt">Blinds</span><span class="bracket">)</span></div>
+    </div>
+    <div class="blinds-grid">
+      <div class="blinds-warning" id="blindsWarning" aria-hidden="true">
+        <div class="blinds-warning-card">
+          <img class="blinds-warning-tricsy" src="occupy-assets/tricsy3.png" alt="">
+          <div class="blinds-warning-title">Keeping the blinds closed.</div>
+          <div class="blinds-warning-msg">Current solar intensity would disproportionately increase cooling demand. To keep the building<br>in its eco mode, I can't open them right now.</div>
+        </div>
+      </div>
+      <button type="button" class="blinds-tile is-active" data-blinds="closed" aria-pressed="true">
+        <span class="blinds-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="14" y="18" width="36" height="28" rx="1.5"/>
+            <line x1="14" y1="25" x2="50" y2="25"/>
+            <line x1="14" y1="32" x2="50" y2="32"/>
+            <line x1="14" y1="39" x2="50" y2="39"/>
+            <line x1="11" y1="18" x2="53" y2="18"/>
+          </svg>
+        </span>
+        <span class="blinds-label">Blinds closed</span>
+      </button>
+      <button type="button" class="blinds-tile" data-blinds="open" aria-pressed="false">
+        <span class="blinds-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="14" y="18" width="36" height="28" rx="1.5"/>
+            <line x1="11" y1="18" x2="53" y2="18"/>
+            <line x1="17" y1="22" x2="47" y2="22"/>
+            <line x1="17" y1="24.5" x2="47" y2="24.5"/>
+            <line x1="17" y1="27" x2="47" y2="27"/>
+          </svg>
+        </span>
+        <span class="blinds-label">Blinds open</span>
+      </button>
+    </div>
   </div>
 
   <!-- ═══ SHADES ═══ -->
@@ -1801,6 +1935,49 @@ document.querySelectorAll('.occ-ext-btn').forEach(btn=>{
     if(btn.classList.contains('disabled'))return;
     const min=parseInt(btn.dataset.ext);
     extendMeeting(min);
+  });
+});
+
+// ── Blinds tiles (Closed ↔ Open, with energy-efficiency block on Open) ──
+let blindsOpenBlocked=true; // building energy logic: high solar gain → blocked
+let blindsWarningTimer=null;
+const blindsWarning=document.getElementById('blindsWarning');
+function showBlindsWarning(){
+  if(!blindsWarning)return;
+  blindsWarning.classList.add('is-visible');
+  blindsWarning.setAttribute('aria-hidden','false');
+  clearTimeout(blindsWarningTimer);
+  blindsWarningTimer=setTimeout(hideBlindsWarning,6000);
+}
+function hideBlindsWarning(){
+  if(!blindsWarning)return;
+  blindsWarning.classList.remove('is-visible');
+  blindsWarning.setAttribute('aria-hidden','true');
+  clearTimeout(blindsWarningTimer);
+}
+blindsWarning?.addEventListener('click',e=>{
+  e.stopPropagation();
+  hideBlindsWarning();
+});
+document.querySelectorAll('.blinds-tile').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const state=el.dataset.blinds;
+    if(state==='open'&&blindsOpenBlocked){
+      el.classList.add('flash');
+      setTimeout(()=>el.classList.remove('flash'),350);
+      showBlindsWarning();
+      return;
+    }
+    document.querySelectorAll('.blinds-tile').forEach(t=>{
+      t.classList.remove('flash');
+      const active=t===el;
+      t.classList.toggle('is-active',active);
+      t.setAttribute('aria-pressed',active?'true':'false');
+    });
+    el.classList.add('flash');
+    setTimeout(()=>el.classList.remove('flash'),350);
+    hideBlindsWarning();
+    showToast(state==='closed'?'Blinds closed':'Blinds open');
   });
 });
 
