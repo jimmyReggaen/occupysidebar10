@@ -1017,15 +1017,149 @@ body{
   stroke-linecap:round;stroke-linejoin:round;
 }
 .blinds-tile .blinds-label{
-  font-size:18px;font-weight:500;color:#ffffffcc;
+  font-size:18px;font-weight:500;color:#4590FF;
   letter-spacing:0.3px;position:relative;z-index:1;
 }
-.blinds-tile.is-active .blinds-label{color:#4590FF;}
 .blinds-tile.is-active{
   box-shadow:0 0 24px rgba(69,144,255,0.18),inset 0 0 0 1px rgba(69,144,255,0.35);
 }
 .blinds-tile:active{transform:scale(0.97);}
 .blinds-tile.flash{
+  background:linear-gradient(160deg,rgba(27,0,226,0.65) 0%,rgba(14,0,113,0.65) 100%);
+  animation:tile-pulse 0.35s ease-out;
+}
+
+/* ── Lights tiles (3 states + Auto toggle) ── */
+.lights-section{position:relative;width:720px;padding-bottom:18px;}
+.lights-grid{
+  margin:14px 24px 0;
+  display:flex;gap:12px;
+  align-items:center;
+}
+.lights-tile{
+  flex:1;height:174px;
+  position:relative;
+  border-radius:20px;
+  background:linear-gradient(160deg,#1a2138 0%,#0d1019 100%);
+  border:1px solid #ffffff10;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  cursor:pointer;overflow:hidden;
+  font-family:inherit;color:inherit;padding:0;
+  transition:transform 0.08s ease-out,box-shadow 0.2s ease-out;
+}
+.lights-tile::before{
+  content:'';position:absolute;inset:1px;border-radius:19px;
+  background:linear-gradient(212deg,rgba(255,255,255,0.10) 0%,transparent 55%);
+  pointer-events:none;
+}
+.lights-tile .lights-icon{width:74px;height:74px;color:#ffffff;position:relative;z-index:1;}
+.lights-tile .lights-icon svg{
+  width:100%;height:100%;display:block;
+  fill:none;stroke:currentColor;stroke-width:2.4;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.lights-tile .lights-icon svg circle[fill^="url"]{
+  fill:url(#dimGlow2);stroke:currentColor;
+}
+.lights-tile .lights-label{
+  font-size:18px;font-weight:500;color:#4590FF;
+  letter-spacing:0.3px;position:relative;z-index:1;
+}
+.lights-tile.is-active{
+  box-shadow:0 0 24px rgba(69,144,255,0.18),inset 0 0 0 1px rgba(69,144,255,0.35);
+}
+.lights-tile:active{transform:scale(0.97);}
+.lights-tile.flash{
+  background:linear-gradient(160deg,rgba(27,0,226,0.65) 0%,rgba(14,0,113,0.65) 100%);
+  animation:tile-pulse 0.35s ease-out;
+}
+
+/* Auto pill toggle — fixed width so tiles get more horizontal space */
+.lights-auto{
+  width:128px;flex-shrink:0;height:174px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+}
+.lights-section.auto-on .lights-tile{
+  pointer-events:none;
+  background:linear-gradient(160deg,rgba(10,15,30,0.85) 0%,rgba(6,8,18,0.85) 100%);
+  box-shadow:none;
+}
+.lights-section.auto-on .lights-tile .lights-icon,
+.lights-section.auto-on .lights-tile .lights-label{
+  opacity:0.35;
+}
+.lights-section.auto-on .lights-tile.is-active{
+  box-shadow:none;
+}
+.auto-toggle{
+  width:88px;height:40px;
+  border-radius:20px;
+  background:linear-gradient(160deg,#1a2138 0%,#0d1019 100%);
+  border:1px solid #ffffff10;
+  position:relative;
+  cursor:pointer;padding:0;
+  transition:background 0.25s ease-out;
+  font-family:inherit;
+}
+.auto-toggle-thumb{
+  position:absolute;top:4px;left:4px;
+  width:30px;height:30px;
+  border-radius:50%;
+  background:linear-gradient(160deg,#777 0%,#3a3a3a 100%);
+  transition:left 0.25s cubic-bezier(0.4,0,0.2,1),background 0.25s ease-out;
+}
+.auto-toggle[data-state="on"]{
+  background:linear-gradient(160deg,#4590FF 0%,#1a4ec2 100%);
+  border-color:rgba(69,144,255,0.4);
+}
+.auto-toggle[data-state="on"] .auto-toggle-thumb{
+  left:54px;
+  background:linear-gradient(160deg,#fff 0%,#cfd6df 100%);
+}
+.auto-toggle:active{transform:scale(0.97);}
+.auto-toggle-label{
+  font-size:18px;font-weight:500;color:#4590FF;
+  letter-spacing:0.3px;
+}
+
+/* ── Shades tiles (3 states, no Auto) ── */
+.shades-section{position:relative;width:720px;padding-bottom:18px;}
+.shades-grid{
+  margin:14px 24px 0;
+  display:flex;gap:12px;
+  justify-content:center;
+}
+.shades-tile{
+  flex:1;height:174px;
+  position:relative;
+  border-radius:20px;
+  background:linear-gradient(160deg,#1a2138 0%,#0d1019 100%);
+  border:1px solid #ffffff10;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  cursor:pointer;overflow:hidden;
+  font-family:inherit;color:inherit;padding:0;
+  transition:transform 0.08s ease-out,box-shadow 0.2s ease-out;
+}
+.shades-tile::before{
+  content:'';position:absolute;inset:1px;border-radius:19px;
+  background:linear-gradient(212deg,rgba(255,255,255,0.10) 0%,transparent 55%);
+  pointer-events:none;
+}
+.shades-tile .shades-icon{width:74px;height:74px;color:#ffffff;position:relative;z-index:1;}
+.shades-tile .shades-icon svg{
+  width:100%;height:100%;display:block;
+  fill:none;stroke:currentColor;stroke-width:2.4;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.shades-tile .shades-label{
+  font-size:18px;font-weight:500;color:#4590FF;
+  letter-spacing:0.3px;position:relative;z-index:1;
+}
+.shades-tile.is-active{
+  box-shadow:0 0 24px rgba(69,144,255,0.18),inset 0 0 0 1px rgba(69,144,255,0.35);
+}
+.shades-tile:active{transform:scale(0.97);}
+.shades-tile.flash{
   background:linear-gradient(160deg,rgba(27,0,226,0.65) 0%,rgba(14,0,113,0.65) 100%);
   animation:tile-pulse 0.35s ease-out;
 }
@@ -1223,6 +1357,18 @@ body{
 .env-legend-dot--temp{background:#FBBF24;}
 .env-legend-dot--hum{background:#A8C0DD;}
 .env-legend-dot--co2{background:#22D3EE;}
+.env-legend-info{
+  margin-left:6px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:27px;height:27px;border-radius:50%;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.22);
+  color:rgba(255,255,255,0.82);
+  font-family:inherit;font-size:16px;font-weight:600;font-style:italic;
+  line-height:1;padding:0;cursor:pointer;
+  transition:background 0.15s,border-color 0.15s;
+}
+.env-legend-info:active{transform:scale(0.92);background:rgba(255,255,255,0.12);}
 .env-chart-svg{width:100%;height:78px;display:block;}
 
 .env-divider-h{height:1px;background:#ffffff10;margin:18px 0 16px;}
@@ -1412,13 +1558,67 @@ body{
   </div>
 
   <!-- ═══ LIGHTS ═══ -->
-  <div class="section draggable" draggable="true" data-name="lights">
+  <div class="section draggable lights-section" draggable="true" data-name="lights">
     <div class="drag-handle"></div>
-    <img src="occupy-assets/5ZVwo.png" alt="" data-off="occupy-assets/5ZVwo.png" data-on="occupy-assets/5ZVwo-on.png">
-    <div class="tile-flash" data-group="lights" data-idx="0" style="left:20px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
-    <div class="tile-flash" data-group="lights" data-idx="1" style="left:195px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
-    <div class="tile-flash" data-group="lights" data-idx="2" style="left:370px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
-    <div class="auto-toggle-area" data-section="lights" style="left:552px;top:47px;width:140px;height:117px;"></div>
+    <div class="services-header">
+      <div class="label-wrap"><span class="bracket">(</span><span class="txt">Lights</span><span class="bracket">)</span></div>
+    </div>
+    <div class="lights-grid">
+      <button type="button" class="lights-tile" data-lights="off" aria-pressed="false">
+        <span class="lights-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M22 22 A14 14 0 1 0 42 22"/>
+            <line x1="32" y1="14" x2="32" y2="32"/>
+          </svg>
+        </span>
+        <span class="lights-label">Off</span>
+      </button>
+      <button type="button" class="lights-tile" data-lights="dim" aria-pressed="false">
+        <span class="lights-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <radialGradient id="dimGlow2" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+                <stop offset="60%" stop-color="#ffffff" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <circle cx="32" cy="32" r="9" fill="url(#dimGlow2)"/>
+            <line x1="32" y1="10" x2="32" y2="16"/>
+            <line x1="32" y1="48" x2="32" y2="54"/>
+            <line x1="10" y1="32" x2="16" y2="32"/>
+            <line x1="48" y1="32" x2="54" y2="32"/>
+            <line x1="16.5" y1="16.5" x2="20.5" y2="20.5"/>
+            <line x1="43.5" y1="43.5" x2="47.5" y2="47.5"/>
+            <line x1="47.5" y1="16.5" x2="43.5" y2="20.5"/>
+            <line x1="20.5" y1="43.5" x2="16.5" y2="47.5"/>
+          </svg>
+        </span>
+        <span class="lights-label">Dim Light</span>
+      </button>
+      <button type="button" class="lights-tile is-active" data-lights="full" aria-pressed="true">
+        <span class="lights-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="9"/>
+            <line x1="32" y1="10" x2="32" y2="16"/>
+            <line x1="32" y1="48" x2="32" y2="54"/>
+            <line x1="10" y1="32" x2="16" y2="32"/>
+            <line x1="48" y1="32" x2="54" y2="32"/>
+            <line x1="16.5" y1="16.5" x2="20.5" y2="20.5"/>
+            <line x1="43.5" y1="43.5" x2="47.5" y2="47.5"/>
+            <line x1="47.5" y1="16.5" x2="43.5" y2="20.5"/>
+            <line x1="20.5" y1="43.5" x2="16.5" y2="47.5"/>
+          </svg>
+        </span>
+        <span class="lights-label">Full Light</span>
+      </button>
+      <div class="lights-auto">
+        <button type="button" class="auto-toggle" id="lightsAutoToggle" data-state="off" aria-pressed="false" aria-label="Toggle auto lights">
+          <span class="auto-toggle-thumb"></span>
+        </button>
+        <div class="auto-toggle-label" id="lightsAutoLabel">Auto OFF</div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══ BLINDS ═══ -->
@@ -1463,13 +1663,50 @@ body{
   </div>
 
   <!-- ═══ SHADES ═══ -->
-  <div class="section draggable" draggable="true" data-name="shades">
+  <div class="section draggable shades-section" draggable="true" data-name="shades">
     <div class="drag-handle"></div>
-    <img src="occupy-assets/Z4lIp.png" alt="" data-off="occupy-assets/Z4lIp.png" data-on="occupy-assets/Z4lIp-on.png">
-    <div class="tile-flash" data-group="shades" data-idx="0" style="left:20px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
-    <div class="tile-flash" data-group="shades" data-idx="1" style="left:195px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
-    <div class="tile-flash" data-group="shades" data-idx="2" style="left:370px;top:47px;width:155px;height:117px;border-radius:16px;"></div>
-    <div class="auto-toggle-area" data-section="shades" style="left:552px;top:47px;width:140px;height:117px;"></div>
+    <div class="services-header">
+      <div class="label-wrap"><span class="bracket">(</span><span class="txt">Shades</span><span class="bracket">)</span></div>
+    </div>
+    <div class="shades-grid">
+      <button type="button" class="shades-tile is-active" data-shades="closed" aria-pressed="true">
+        <span class="shades-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="14" y="14" width="36" height="36" rx="1.5"/>
+            <line x1="14" y1="46" x2="50" y2="46"/>
+            <path d="M28 50 L32 55 L36 50"/>
+          </svg>
+        </span>
+        <span class="shades-label">Closed Shades</span>
+      </button>
+      <button type="button" class="shades-tile" data-shades="half" aria-pressed="false">
+        <span class="shades-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="14" y="14" width="36" height="36" rx="1.5"/>
+            <line x1="14" y1="30" x2="50" y2="30"/>
+            <line x1="32" y1="30" x2="32" y2="38"/>
+            <circle cx="32" cy="41" r="3"/>
+          </svg>
+        </span>
+        <span class="shades-label">Half way</span>
+      </button>
+      <button type="button" class="shades-tile" data-shades="open" aria-pressed="false">
+        <span class="shades-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="9"/>
+            <line x1="32" y1="10" x2="32" y2="16"/>
+            <line x1="32" y1="48" x2="32" y2="54"/>
+            <line x1="10" y1="32" x2="16" y2="32"/>
+            <line x1="48" y1="32" x2="54" y2="32"/>
+            <line x1="16.5" y1="16.5" x2="20.5" y2="20.5"/>
+            <line x1="43.5" y1="43.5" x2="47.5" y2="47.5"/>
+            <line x1="47.5" y1="16.5" x2="43.5" y2="20.5"/>
+            <line x1="20.5" y1="43.5" x2="16.5" y2="47.5"/>
+          </svg>
+        </span>
+        <span class="shades-label">Open Shades</span>
+      </button>
+    </div>
   </div>
 
   <!-- ═══ HEY TRICSY ═══ -->
@@ -1544,9 +1781,9 @@ body{
             <svg class="env-gauge-svg" viewBox="0 0 120 120" aria-hidden="true">
               <defs>
                 <radialGradient id="envOrbFill" cx="50%" cy="38%" r="58%">
-                  <stop offset="0%" stop-color="#2a52b8"/>
-                  <stop offset="55%" stop-color="#0e2055"/>
-                  <stop offset="100%" stop-color="#06102a"/>
+                  <stop id="envOrbStop0" offset="0%" stop-color="#2a52b8"/>
+                  <stop id="envOrbStop1" offset="55%" stop-color="#0e2055"/>
+                  <stop id="envOrbStop2" offset="100%" stop-color="#06102a"/>
                 </radialGradient>
                 <radialGradient id="envOrbSheen" cx="50%" cy="20%" r="50%">
                   <stop offset="0%" stop-color="rgba(180,210,255,0.35)"/>
@@ -1555,36 +1792,35 @@ body{
                 <filter id="envArcGlow" x="-50%" y="-50%" width="200%" height="200%">
                   <feGaussianBlur stdDeviation="1.8"/>
                 </filter>
-                <filter id="envOuterGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <filter id="envOuterGlowFx" x="-50%" y="-50%" width="200%" height="200%">
                   <feGaussianBlur stdDeviation="3"/>
                 </filter>
               </defs>
-              <!-- ambient outer ring glow -->
-              <circle cx="60" cy="60" r="56" stroke="#4590FF" stroke-width="1" fill="none"
-                      opacity="0.35" filter="url(#envOuterGlow)"/>
+              <!-- ambient outer ring (AQI indicator, thin) -->
+              <circle id="envGaugeOuter" cx="60" cy="60" r="56" stroke="#4590FF" stroke-width="1" fill="none"
+                      opacity="0.55" filter="url(#envOuterGlowFx)"
+                      stroke-linecap="round" transform="rotate(-90 60 60)"/>
               <!-- background track -->
-              <circle cx="60" cy="60" r="52" stroke="rgba(120,170,255,0.10)" stroke-width="2" fill="none"/>
+              <circle cx="60" cy="60" r="52" stroke="rgba(255,255,255,0.06)" stroke-width="2" fill="none"/>
               <!-- progress arc glow underlay -->
-              <circle cx="60" cy="60" r="52" stroke="#4590FF" stroke-width="3.5" fill="none"
-                      stroke-dasharray="235.2 326.7" stroke-dashoffset="-32"
+              <circle id="envGaugeUnder" cx="60" cy="60" r="52" stroke="#4590FF" stroke-width="3.5" fill="none"
                       stroke-linecap="round" transform="rotate(-90 60 60)"
                       filter="url(#envArcGlow)" opacity="0.9"/>
               <!-- progress arc sharp -->
-              <circle cx="60" cy="60" r="52" stroke="#9ec7ff" stroke-width="2" fill="none"
-                      stroke-dasharray="235.2 326.7" stroke-dashoffset="-32"
+              <circle id="envGaugeSharp" cx="60" cy="60" r="52" stroke="#9ec7ff" stroke-width="2" fill="none"
                       stroke-linecap="round" transform="rotate(-90 60 60)"/>
               <!-- inner orb -->
               <circle cx="60" cy="60" r="42" fill="url(#envOrbFill)"/>
               <!-- orb top sheen -->
               <circle cx="60" cy="60" r="42" fill="url(#envOrbSheen)"/>
               <!-- orb rim highlight -->
-              <circle cx="60" cy="60" r="42" stroke="rgba(140,180,255,0.55)" stroke-width="0.8" fill="none"/>
+              <circle id="envGaugeRim" cx="60" cy="60" r="42" stroke="rgba(140,180,255,0.55)" stroke-width="0.8" fill="none"/>
               <!-- inner accent ring -->
-              <circle cx="60" cy="60" r="36" stroke="rgba(120,170,255,0.18)" stroke-width="0.5" fill="none"/>
+              <circle id="envGaugeAccent" cx="60" cy="60" r="36" stroke="rgba(120,170,255,0.18)" stroke-width="0.5" fill="none"/>
             </svg>
             <div class="env-gauge-text">
               <div class="env-gauge-label">AIR QUALITY</div>
-              <div class="env-gauge-val">72%</div>
+              <div class="env-gauge-val" id="envGaugeVal">72%</div>
             </div>
           </div>
         </div>
@@ -1594,7 +1830,7 @@ body{
         <div class="env-chart-legend">
           <span class="env-legend-item"><span class="env-legend-dot env-legend-dot--temp"></span>Temp</span>
           <span class="env-legend-item"><span class="env-legend-dot env-legend-dot--hum"></span>Humidity</span>
-          <span class="env-legend-item"><span class="env-legend-dot env-legend-dot--co2"></span>CO<sub>2</sub></span>
+          <span class="env-legend-item"><span class="env-legend-dot env-legend-dot--co2"></span>CO<sub>2</sub><button type="button" class="env-legend-info" id="envCo2Info" aria-label="What is CO₂?">i</button></span>
         </div>
         <svg class="env-chart-svg" viewBox="0 0 600 100" preserveAspectRatio="none" aria-hidden="true">
           <defs>
@@ -1978,6 +2214,50 @@ document.querySelectorAll('.blinds-tile').forEach(el=>{
     setTimeout(()=>el.classList.remove('flash'),350);
     hideBlindsWarning();
     showToast(state==='closed'?'Blinds closed':'Blinds open');
+  });
+});
+
+// ── Lights tiles (Off / Dim / Full) + Auto toggle ──
+document.querySelectorAll('.lights-tile').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const state=el.dataset.lights;
+    document.querySelectorAll('.lights-tile').forEach(t=>{
+      t.classList.remove('flash');
+      const active=t===el;
+      t.classList.toggle('is-active',active);
+      t.setAttribute('aria-pressed',active?'true':'false');
+    });
+    el.classList.add('flash');
+    setTimeout(()=>el.classList.remove('flash'),350);
+    const labels={off:'Lights off',dim:'Dim light',full:'Full light'};
+    showToast(labels[state]||'Lights updated');
+  });
+});
+document.getElementById('lightsAutoToggle')?.addEventListener('click',e=>{
+  const btn=e.currentTarget;
+  const next=btn.dataset.state==='on'?'off':'on';
+  btn.dataset.state=next;
+  btn.setAttribute('aria-pressed',next==='on'?'true':'false');
+  const label=document.getElementById('lightsAutoLabel');
+  if(label) label.textContent=next==='on'?'Auto ON':'Auto OFF';
+  document.querySelector('.lights-section')?.classList.toggle('auto-on',next==='on');
+  showToast(next==='on'?'Auto lights on':'Auto lights off');
+});
+
+// ── Shades tiles (Closed / Half / Open) ──
+document.querySelectorAll('.shades-tile').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const state=el.dataset.shades;
+    document.querySelectorAll('.shades-tile').forEach(t=>{
+      t.classList.remove('flash');
+      const active=t===el;
+      t.classList.toggle('is-active',active);
+      t.setAttribute('aria-pressed',active?'true':'false');
+    });
+    el.classList.add('flash');
+    setTimeout(()=>el.classList.remove('flash'),350);
+    const labels={closed:'Shades closed',half:'Shades at half-way',open:'Shades open'};
+    showToast(labels[state]||'Shades updated');
   });
 });
 
@@ -2682,6 +2962,69 @@ function renderWeather(data){
 }
 
 fetchWeather();
+
+// ── Air Quality gauge animation ──
+(function(){
+  const RADIUS_OUTER=56, RADIUS_ARC=52;
+  const CIRC_OUTER=2*Math.PI*RADIUS_OUTER;
+  const CIRC_ARC=2*Math.PI*RADIUS_ARC;
+  const elOuter=document.getElementById('envGaugeOuter');
+  const elUnder=document.getElementById('envGaugeUnder');
+  const elSharp=document.getElementById('envGaugeSharp');
+  const elRim=document.getElementById('envGaugeRim');
+  const elAccent=document.getElementById('envGaugeAccent');
+  const elOrb0=document.getElementById('envOrbStop0');
+  const elOrb1=document.getElementById('envOrbStop1');
+  const elOrb2=document.getElementById('envOrbStop2');
+  const elVal=document.getElementById('envGaugeVal');
+  if(!elOuter||!elVal)return;
+  const RED=[255,28,56],ORANGE=[255,158,69],BLUE=[69,144,255];
+  const ORB_RED=[[170,20,35],[90,10,18],[36,4,8]];
+  const ORB_ORANGE=[[140,80,40],[70,40,18],[30,18,8]];
+  const ORB_BLUE=[[42,82,184],[14,32,85],[6,16,42]];
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  const lerpRgb=(c1,c2,t)=>[Math.round(lerp(c1[0],c2[0],t)),Math.round(lerp(c1[1],c2[1],t)),Math.round(lerp(c1[2],c2[2],t))];
+  const rgbCss=(c,a)=>a!=null?`rgba(${c[0]},${c[1]},${c[2]},${a})`:`rgb(${c[0]},${c[1]},${c[2]})`;
+  function colorFor(p){
+    if(p<=35)return{main:RED,orb:ORB_RED};
+    if(p<50){const t=(p-35)/15;return{main:lerpRgb(RED,ORANGE,t),orb:[lerpRgb(ORB_RED[0],ORB_ORANGE[0],t),lerpRgb(ORB_RED[1],ORB_ORANGE[1],t),lerpRgb(ORB_RED[2],ORB_ORANGE[2],t)]};}
+    if(p<=60)return{main:ORANGE,orb:ORB_ORANGE};
+    if(p<70){const t=(p-60)/10;return{main:lerpRgb(ORANGE,BLUE,t),orb:[lerpRgb(ORB_ORANGE[0],ORB_BLUE[0],t),lerpRgb(ORB_ORANGE[1],ORB_BLUE[1],t),lerpRgb(ORB_ORANGE[2],ORB_BLUE[2],t)]};}
+    return{main:BLUE,orb:ORB_BLUE};
+  }
+  function setAQI(pct){
+    const c=colorFor(pct);
+    const sharp=lerpRgb(c.main,[255,255,255],0.55);
+    const lenO=CIRC_OUTER*pct/100;
+    const lenA=CIRC_ARC*pct/100;
+    const mainCss=rgbCss(c.main);
+    const sharpCss=rgbCss(sharp);
+    elOuter.setAttribute('stroke',mainCss);
+    elOuter.setAttribute('stroke-dasharray',`${lenO} ${CIRC_OUTER}`);
+    elUnder.setAttribute('stroke',mainCss);
+    elUnder.setAttribute('stroke-dasharray',`${lenA} ${CIRC_ARC}`);
+    elSharp.setAttribute('stroke',sharpCss);
+    elSharp.setAttribute('stroke-dasharray',`${lenA} ${CIRC_ARC}`);
+    elRim.setAttribute('stroke',rgbCss(sharp,0.55));
+    elAccent.setAttribute('stroke',rgbCss(c.main,0.18));
+    elOrb0.setAttribute('stop-color',rgbCss(c.orb[0]));
+    elOrb1.setAttribute('stop-color',rgbCss(c.orb[1]));
+    elOrb2.setAttribute('stop-color',rgbCss(c.orb[2]));
+    elVal.textContent=Math.round(pct)+'%';
+  }
+  const START=20,END=82,HALF=15000;
+  let t0=null;
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduce){setAQI(72);return;}
+  function loop(t){
+    if(t0==null)t0=t;
+    const e=(t-t0)%(HALF*2);
+    const phase=e<HALF?e/HALF:1-(e-HALF)/HALF;
+    setAQI(START+(END-START)*phase);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
 </script>
 </body>
 </html>
