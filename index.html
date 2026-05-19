@@ -2183,7 +2183,7 @@ function showBlindsWarning(){
   blindsWarning.classList.add('is-visible');
   blindsWarning.setAttribute('aria-hidden','false');
   clearTimeout(blindsWarningTimer);
-  blindsWarningTimer=setTimeout(hideBlindsWarning,6000);
+  blindsWarningTimer=setTimeout(hideBlindsWarning,20000);
 }
 function hideBlindsWarning(){
   if(!blindsWarning)return;
