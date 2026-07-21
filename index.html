@@ -1088,27 +1088,33 @@ body{
   font-family:'Montserrat',sans-serif;
 }
 .blinds-fill-card.bf-flash{animation:tile-pulse 0.35s ease-out;}
-.bf-track{position:relative;height:104px;margin:0 32px;--auto:55%;--hold:75%;}
-.bf-bar{position:absolute;left:0;right:0;top:44px;height:24px;border-radius:7px;background:#ffffff14;overflow:hidden;}
-.bf-locked{position:absolute;left:0;top:0;bottom:0;width:var(--auto);background:#ffffff0d;}
-.bf-added{position:absolute;top:0;bottom:0;left:var(--auto);right:0;background:linear-gradient(90deg,#3a6dff 0%,#1b00e2 100%);}
-.bf-hold{position:absolute;top:4px;left:var(--hold);transform:translateX(-50%);white-space:nowrap;color:#4590FF;font-size:12px;font-weight:700;letter-spacing:0.5px;transition:left 0.18s ease-out;}
-.bf-lock{position:absolute;top:49px;left:calc(var(--auto) / 2);transform:translateX(-50%);display:flex;align-items:center;gap:6px;white-space:nowrap;color:#ffffff73;font-size:11px;font-weight:500;}
+.bf-track{position:relative;height:112px;margin:0 5%;--auto:55%;--hold:75%;}
+.bf-ends{position:absolute;top:78px;left:0;right:0;display:flex;justify-content:space-between;color:#ffffff73;font-size:11px;font-weight:600;letter-spacing:1px;}
+.bf-bar{position:absolute;left:0;right:0;top:44px;height:29px;border-radius:7px;background:#ffffff14;overflow:hidden;}
+.bf-locked{position:absolute;left:0;top:0;bottom:0;width:var(--auto);background:#ffffff0d;transition:width 1.4s cubic-bezier(0.45,0,0.2,1);}
+.bf-added{position:absolute;top:0;bottom:0;left:var(--auto);right:0;background:linear-gradient(90deg,#3a6dff 0%,#1b00e2 100%);transition:left 1.4s cubic-bezier(0.45,0,0.2,1);}
+.bf-hold{position:absolute;top:0;left:var(--hold);transform:translateX(-50%);white-space:nowrap;color:#4590FF;font-size:18px;font-weight:700;letter-spacing:0.5px;transition:left 1.4s cubic-bezier(0.45,0,0.2,1),opacity 0.35s ease;}
+.bf-lock{position:absolute;top:52px;left:calc(var(--auto) / 2);transform:translateX(-50%);display:flex;align-items:center;gap:6px;white-space:nowrap;color:#ffffff73;font-size:11px;font-weight:500;transition:left 1.4s cubic-bezier(0.45,0,0.2,1);}
 .bf-lock svg{width:13px;height:13px;stroke:#ffffff73;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.bf-sun{position:absolute;top:46px;left:var(--auto);transform:translateX(-50%);width:22px;height:22px;}
+.bf-sun{position:absolute;top:36px;left:var(--auto);transform:translateX(-50%);width:46px;height:46px;transition:left 1.4s cubic-bezier(0.45,0,0.2,1);}
 .bf-sun svg{width:100%;height:100%;stroke:#FFC24B;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.bf-handle{position:absolute;top:36px;left:var(--hold);transform:translateX(-50%);width:7px;height:40px;border-radius:3px;background:#ffffff;box-shadow:0 0 12px #4590ff80;transition:left 0.18s ease-out;}
-.bf-chev{position:absolute;top:71px;color:#ffffffcc;font-size:15px;line-height:1;transition:left 0.18s ease-out;}
-.bf-chev-l{left:var(--hold);transform:translateX(-22px);}
-.bf-chev-r{left:var(--hold);transform:translateX(9px);}
-.bf-min{position:absolute;top:86px;left:var(--auto);transform:translateX(-50%);white-space:nowrap;color:#ffffff73;font-size:10px;font-weight:700;letter-spacing:0.8px;transition:left 0.18s ease-out;}
-.bf-max{position:absolute;top:86px;right:0;white-space:nowrap;color:#ffffff73;font-size:10px;font-weight:700;letter-spacing:0.8px;}
-.bf-ends{display:flex;justify-content:space-between;margin:0 32px;color:#ffffff73;font-size:11px;font-weight:600;letter-spacing:1px;}
-.bf-caption{color:#ffffff73;font-size:12px;font-weight:500;white-space:nowrap;}
+.bf-handle{position:absolute;top:38px;left:var(--hold);transform:translateX(-50%);width:7px;height:52px;border-radius:3px;background:#ffffff;box-shadow:0 0 12px #4590ff80;transition:left 1.4s cubic-bezier(0.45,0,0.2,1),opacity 0.35s ease;}
+.bf-holdtag{position:absolute;top:96px;left:var(--hold);transform:translateX(-50%);display:flex;align-items:center;gap:9px;transition:left 1.4s cubic-bezier(0.45,0,0.2,1),opacity 0.35s ease;}
+.bf-chev{color:#ffffffcc;font-size:14px;line-height:1;}
+.bf-holdword{color:#ffffff73;font-size:11px;font-weight:600;letter-spacing:1px;line-height:1;}
+.bf-auto-mode .bf-holdtag{opacity:0;pointer-events:none;}
+.bf-min{position:absolute;top:22px;left:var(--auto);transform:translateX(-50%);white-space:nowrap;color:#ffffff73;font-size:10px;font-weight:700;letter-spacing:0.8px;transition:left 1.4s cubic-bezier(0.45,0,0.2,1),opacity 0.35s ease;}
+.bf-caption{text-align:center;white-space:nowrap;color:#ffffff73;font-size:12px;font-weight:500;}
 .bf-controls{display:flex;gap:10px;}
-.bf-btn{flex:1;padding:13px 10px;border-radius:16px;border:1px solid #ffffff2e;background:transparent;color:#ffffffcc;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:transform 0.08s ease-out,background 0.15s,border-color 0.15s,color 0.15s;}
+.bf-btn{flex:1;padding:13px 10px;border-radius:16px;border:1px solid #ffffff2e;background:transparent;color:#4590FF;font-family:inherit;font-size:18px;font-weight:500;letter-spacing:0.3px;cursor:pointer;transition:transform 0.08s ease-out,background 0.15s,border-color 0.15s,color 0.15s;}
+.bf-btn:hover{border-color:#4590ff80;background:#4590ff14;}
+.bf-btn:focus-visible{outline:2px solid #4590ff;outline-offset:2px;}
 .bf-btn:active{transform:scale(0.97);}
 .bf-btn-auto.is-active{border-color:#4590ffb3;background:#4590ff26;color:#4590FF;}
+.bf-btn-auto.is-active:hover{background:#4590ff33;border-color:#4590ffd9;}
+@media (prefers-reduced-motion:reduce){
+  .bf-added,.bf-locked,.bf-lock,.bf-sun,.bf-min,.bf-handle,.bf-hold,.bf-holdtag{transition:none;}
+}
 
 /* ── Lights tiles (3 states + Auto toggle) ── */
 .lights-section{position:relative;width:720px;padding-bottom:18px;}
@@ -1818,6 +1824,7 @@ body{
         </div>
       </div>
       <div class="blinds-fill-card" id="bfCard">
+        <div class="bf-caption">White line = your hold &middot; grey zone is AUTO-locked (won't re-open).</div>
         <div class="bf-track" id="bfTrack">
           <div class="bf-bar">
             <div class="bf-locked"></div>
@@ -1832,17 +1839,18 @@ body{
           </span>
           <div class="bf-hold"><span id="bfHoldVal">75</span>%</div>
           <div class="bf-handle"></div>
-          <span class="bf-chev bf-chev-l">&#8249;</span>
-          <span class="bf-chev bf-chev-r">&#8250;</span>
+          <div class="bf-holdtag">
+            <span class="bf-chev">&#8249;</span>
+            <span class="bf-holdword">HOLD</span>
+            <span class="bf-chev">&#8250;</span>
+          </div>
           <span class="bf-min">MIN &middot; AUTO</span>
-          <span class="bf-max">MAX &middot; CLOSED</span>
+          <div class="bf-ends"><span>OPEN</span><span>CLOSED</span></div>
         </div>
-        <div class="bf-ends"><span>OPEN</span><span>CLOSED</span></div>
-        <div class="bf-caption">White line = your hold &middot; grey zone is AUTO-locked (won't re-open).</div>
         <div class="bf-controls">
-          <button type="button" class="bf-btn" id="bfLess">&minus; Shade less</button>
-          <button type="button" class="bf-btn" id="bfMore">&plus; Shade more</button>
-          <button type="button" class="bf-btn bf-btn-auto is-active" id="bfAuto">&#8635; Auto</button>
+          <button type="button" class="bf-btn" id="bfLess">Open more</button>
+          <button type="button" class="bf-btn" id="bfMore">Close more</button>
+          <button type="button" class="bf-btn bf-btn-auto is-active" id="bfAuto">Auto</button>
         </div>
       </div>
     </div>
@@ -2434,35 +2442,45 @@ const bfCard=document.getElementById('bfCard');
 const bfTrack=document.getElementById('bfTrack');
 const bfHoldVal=document.getElementById('bfHoldVal');
 const bfAutoBtn=document.getElementById('bfAuto');
-const BF_AUTO=55, BF_STEP=5;
+let bfAuto=60; const BF_STEP=5;
 let bfHold=75;
+let bfManual=false;
 function bfRender(){
   if(!bfTrack)return;
-  bfTrack.style.setProperty('--auto',BF_AUTO+'%');
+  if(!bfManual) bfHold=bfAuto;
+  bfTrack.style.setProperty('--auto',bfAuto+'%');
   bfTrack.style.setProperty('--hold',bfHold+'%');
   if(bfHoldVal)bfHoldVal.textContent=bfHold;
+  bfCard?.classList.toggle('bf-auto-mode',!bfManual);
+  bfAutoBtn?.classList.toggle('is-active',!bfManual);
 }
 function bfFlash(){ if(!bfCard)return; bfCard.classList.add('bf-flash'); setTimeout(()=>bfCard.classList.remove('bf-flash'),350); }
 bfRender();
 document.getElementById('bfLess')?.addEventListener('click',()=>{
-  if(bfHold<=BF_AUTO){ bfFlash(); showBlindsWarning(); return; }
-  bfHold=Math.max(BF_AUTO,bfHold-BF_STEP);
-  bfAutoBtn?.classList.remove('is-active');
-  bfRender(); showToast('Blinds hold '+bfHold+'%');
+  if(!bfManual){ bfFlash(); showBlindsWarning(); return; }
+  const nh=bfHold-BF_STEP;
+  if(nh<=bfAuto){ bfManual=false; bfRender(); showToast('Blinds on Auto'); return; }
+  bfHold=nh; bfRender(); showToast('Blinds hold '+bfHold+'%');
 });
 document.getElementById('bfMore')?.addEventListener('click',()=>{
-  if(bfHold>=100){ bfFlash(); return; }
-  bfHold=Math.min(100,bfHold+BF_STEP);
-  bfAutoBtn?.classList.remove('is-active');
-  hideBlindsWarning();
+  const base=bfManual?bfHold:bfAuto;
+  if(base>=100){ bfFlash(); return; }
+  bfHold=Math.min(100,base+BF_STEP);
+  bfManual=true; hideBlindsWarning();
   bfRender(); showToast('Blinds hold '+bfHold+'%');
 });
 bfAutoBtn?.addEventListener('click',()=>{
-  bfHold=BF_AUTO;
-  bfAutoBtn.classList.add('is-active');
-  hideBlindsWarning();
+  bfManual=false; hideBlindsWarning();
   bfRender(); showToast('Blinds on Auto');
 });
+const BF_AUTO_STEPS=[60,75,90];
+function bfCycleAuto(){
+  let next; do{ next=BF_AUTO_STEPS[Math.floor(Math.random()*BF_AUTO_STEPS.length)]; }while(next===bfAuto);
+  bfAuto=next;
+  if(bfManual && bfHold<=bfAuto){ bfManual=false; showToast('Sun changed — back to Auto'); }
+  bfRender();
+}
+if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)) setInterval(bfCycleAuto,15000);
 
 // ── Recording transcript pills (Team / Open / Private) ──
 document.querySelectorAll('.rec-pill').forEach(el=>{
