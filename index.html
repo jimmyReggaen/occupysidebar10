@@ -1111,8 +1111,8 @@ body{
 .bf-btn:hover{border-color:#4590ff80;background:#4590ff14;}
 .bf-btn:focus-visible{outline:2px solid #4590ff;outline-offset:2px;}
 .bf-btn:active{transform:scale(0.97);}
-.bf-btn-auto.is-active{border-color:#4590ffb3;background:#4590ff26;color:#4590FF;}
-.bf-btn-auto.is-active:hover{background:#4590ff33;border-color:#4590ffd9;}
+.bf-btn-auto.is-active{background:linear-gradient(160deg,rgba(27,0,226,0.65) 0%,rgba(14,0,113,0.65) 100%);border-color:rgba(69,144,255,0.55);color:#ffffff;}
+.bf-btn-auto.is-active:hover{border-color:rgba(69,144,255,0.85);}
 @media (prefers-reduced-motion:reduce){
   .bf-added,.bf-locked,.bf-lock,.bf-sun,.bf-min,.bf-handle,.bf-hold,.bf-holdtag{transition:none;}
 }
@@ -1162,54 +1162,22 @@ body{
   animation:tile-pulse 0.35s ease-out;
 }
 
-/* Auto pill toggle — fixed width so tiles get more horizontal space */
-.lights-auto{
-  width:128px;flex-shrink:0;height:174px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
-}
-.lights-section.auto-on .lights-tile{
+.lights-section.auto-on .lights-tile:not([data-lights="auto"]){
   pointer-events:none;
   background:linear-gradient(160deg,rgba(10,15,30,0.85) 0%,rgba(6,8,18,0.85) 100%);
   box-shadow:none;
 }
-.lights-section.auto-on .lights-tile .lights-icon,
-.lights-section.auto-on .lights-tile .lights-label{
+.lights-section.auto-on .lights-tile:not([data-lights="auto"]) .lights-icon,
+.lights-section.auto-on .lights-tile:not([data-lights="auto"]) .lights-label{
   opacity:0.35;
 }
-.lights-section.auto-on .lights-tile.is-active{
-  box-shadow:none;
+#lightsAuto.is-active{
+  background:linear-gradient(160deg,rgba(27,0,226,0.65) 0%,rgba(14,0,113,0.65) 100%);
 }
-.auto-toggle{
-  width:88px;height:40px;
-  border-radius:20px;
-  background:linear-gradient(160deg,#1a2138 0%,#0d1019 100%);
-  border:1px solid #ffffff10;
-  position:relative;
-  cursor:pointer;padding:0;
-  transition:background 0.25s ease-out;
-  font-family:inherit;
+#lightsAuto.is-active .lights-icon,
+#lightsAuto.is-active .lights-label{
+  color:#ffffff;
 }
-.auto-toggle-thumb{
-  position:absolute;top:4px;left:4px;
-  width:30px;height:30px;
-  border-radius:50%;
-  background:linear-gradient(160deg,#777 0%,#3a3a3a 100%);
-  transition:left 0.25s cubic-bezier(0.4,0,0.2,1),background 0.25s ease-out;
-}
-.auto-toggle[data-state="on"]{
-  background:linear-gradient(160deg,#4590FF 0%,#1a4ec2 100%);
-  border-color:rgba(69,144,255,0.4);
-}
-.auto-toggle[data-state="on"] .auto-toggle-thumb{
-  left:54px;
-  background:linear-gradient(160deg,#fff 0%,#cfd6df 100%);
-}
-.auto-toggle:active{transform:scale(0.97);}
-.auto-toggle-label{
-  font-size:18px;font-weight:500;color:#4590FF;
-  letter-spacing:0.3px;
-}
-
 /* ── Shades tiles (3 states, no Auto) ── */
 .shades-section{position:relative;width:720px;padding-bottom:18px;}
 .shades-grid{
@@ -1754,13 +1722,31 @@ body{
       <button type="button" class="lights-tile" data-lights="off" aria-pressed="false">
         <span class="lights-icon">
           <svg viewBox="0 0 64 64" aria-hidden="true">
-            <path d="M22 22 A14 14 0 1 0 42 22"/>
-            <line x1="32" y1="14" x2="32" y2="32"/>
+            <g transform="translate(0,2)">
+              <path d="M22 22 A14 14 0 1 0 42 22"/>
+              <line x1="32" y1="14" x2="32" y2="32"/>
+            </g>
           </svg>
         </span>
         <span class="lights-label">Off</span>
       </button>
       <button type="button" class="lights-tile" data-lights="dim" aria-pressed="false">
+        <span class="lights-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="9"/>
+            <line x1="32" y1="10" x2="32" y2="16"/>
+            <line x1="32" y1="48" x2="32" y2="54"/>
+            <line x1="10" y1="32" x2="16" y2="32"/>
+            <line x1="48" y1="32" x2="54" y2="32"/>
+            <line x1="16.5" y1="16.5" x2="20.5" y2="20.5"/>
+            <line x1="43.5" y1="43.5" x2="47.5" y2="47.5"/>
+            <line x1="47.5" y1="16.5" x2="43.5" y2="20.5"/>
+            <line x1="20.5" y1="43.5" x2="16.5" y2="47.5"/>
+          </svg>
+        </span>
+        <span class="lights-label">Dim Light</span>
+      </button>
+      <button type="button" class="lights-tile is-active" data-lights="full" aria-pressed="true">
         <span class="lights-icon">
           <svg viewBox="0 0 64 64" aria-hidden="true">
             <defs>
@@ -1781,30 +1767,21 @@ body{
             <line x1="20.5" y1="43.5" x2="16.5" y2="47.5"/>
           </svg>
         </span>
-        <span class="lights-label">Dim Light</span>
-      </button>
-      <button type="button" class="lights-tile is-active" data-lights="full" aria-pressed="true">
-        <span class="lights-icon">
-          <svg viewBox="0 0 64 64" aria-hidden="true">
-            <circle cx="32" cy="32" r="9"/>
-            <line x1="32" y1="10" x2="32" y2="16"/>
-            <line x1="32" y1="48" x2="32" y2="54"/>
-            <line x1="10" y1="32" x2="16" y2="32"/>
-            <line x1="48" y1="32" x2="54" y2="32"/>
-            <line x1="16.5" y1="16.5" x2="20.5" y2="20.5"/>
-            <line x1="43.5" y1="43.5" x2="47.5" y2="47.5"/>
-            <line x1="47.5" y1="16.5" x2="43.5" y2="20.5"/>
-            <line x1="20.5" y1="43.5" x2="16.5" y2="47.5"/>
-          </svg>
-        </span>
         <span class="lights-label">Full Light</span>
       </button>
-      <div class="lights-auto">
-        <button type="button" class="auto-toggle" id="lightsAutoToggle" data-state="off" aria-pressed="false" aria-label="Toggle auto lights">
-          <span class="auto-toggle-thumb"></span>
-        </button>
-        <div class="auto-toggle-label" id="lightsAutoLabel">Auto OFF</div>
-      </div>
+      <button type="button" class="lights-tile" id="lightsAuto" data-lights="auto" aria-pressed="false">
+        <span class="lights-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <g transform="translate(0,2)">
+              <path d="M14.5 33 A17.5 17.5 0 1 0 49.5 33 A17.5 17.5 0 1 0 14.5 33 M32 15.5 L32 9 M22 31 A4.5 4.5 0 1 0 31 31 A4.5 4.5 0 1 0 22 31 M33 31 A4.5 4.5 0 1 0 42 31 A4.5 4.5 0 1 0 33 31 M31 31 L33 31 M27 42 L37 42 M15 33 L11 33 M53 33 L57 33"/>
+              <circle cx="32" cy="7" r="2.5" fill="currentColor" stroke="none"/>
+              <circle cx="26.5" cy="31" r="1.4" fill="currentColor" stroke="none"/>
+              <circle cx="37.5" cy="31" r="1.4" fill="currentColor" stroke="none"/>
+            </g>
+          </svg>
+        </span>
+        <span class="lights-label">Auto</span>
+      </button>
     </div>
   </div>
 
@@ -2498,11 +2475,11 @@ document.querySelectorAll('.rec-pill').forEach(el=>{
   });
 });
 
-// ── Lights tiles (Off / Dim / Full) + Auto toggle ──
-document.querySelectorAll('.lights-tile').forEach(el=>{
+// ── Lights tiles (Off / Dim / Full) + Auto mode ──
+document.querySelectorAll('.lights-tile:not([data-lights="auto"])').forEach(el=>{
   el.addEventListener('click',()=>{
     const state=el.dataset.lights;
-    document.querySelectorAll('.lights-tile').forEach(t=>{
+    document.querySelectorAll('.lights-tile:not([data-lights="auto"])').forEach(t=>{
       t.classList.remove('flash');
       const active=t===el;
       t.classList.toggle('is-active',active);
@@ -2514,15 +2491,14 @@ document.querySelectorAll('.lights-tile').forEach(el=>{
     showToast(labels[state]||'Lights updated');
   });
 });
-document.getElementById('lightsAutoToggle')?.addEventListener('click',e=>{
-  const btn=e.currentTarget;
-  const next=btn.dataset.state==='on'?'off':'on';
-  btn.dataset.state=next;
-  btn.setAttribute('aria-pressed',next==='on'?'true':'false');
-  const label=document.getElementById('lightsAutoLabel');
-  if(label) label.textContent=next==='on'?'Auto ON':'Auto OFF';
-  document.querySelector('.lights-section')?.classList.toggle('auto-on',next==='on');
-  showToast(next==='on'?'Auto lights on':'Auto lights off');
+document.getElementById('lightsAuto')?.addEventListener('click',function(){
+  const on=!this.classList.contains('is-active');
+  this.classList.toggle('is-active',on);
+  this.setAttribute('aria-pressed',on?'true':'false');
+  this.classList.add('flash');
+  setTimeout(()=>this.classList.remove('flash'),350);
+  document.querySelector('.lights-section')?.classList.toggle('auto-on',on);
+  showToast(on?'Auto lights on':'Auto lights off');
 });
 
 // ── Shades tiles (Closed / Half / Open) ──
