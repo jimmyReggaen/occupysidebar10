@@ -2631,8 +2631,8 @@ document.querySelectorAll('.tile-flash').forEach(el=>{
   });
 });
 
-// ── Services: "requested" state (no cancel; auto-resets after SVC_RESET_MS) ──
-const SVC_RESET_MS=3*60*1000;
+// ── Services: "requested" state (no cancel; auto-resets to idle after 10 s) ──
+const SVC_RESET_MS=10*1000;
 document.querySelectorAll('.svc-card').forEach(card=>{
   const label=card.querySelector('.service-label');
   let timer=null;
