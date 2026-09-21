@@ -1038,16 +1038,23 @@ body{
 
 /* ── Housekeeping confirmed state (S5: full blue + Cancel, twinkling sparkles) ── */
 .service-card .service-icon,.service-card .service-label{position:relative;z-index:1;}
-.hk-card{transition:gap 0.3s ease-out,border-color 0.3s ease-out;}
+.hk-card{transition:gap 0.35s cubic-bezier(.2,.8,.2,1),border-color 0.35s ease-out;}
 .hk-card::after{
   content:'';position:absolute;inset:0;border-radius:20px;
   background:linear-gradient(160deg,#3a6dff 0%,#1b00e2 100%);
-  opacity:0;transition:opacity 0.35s ease-out;pointer-events:none;
+  opacity:0;clip-path:circle(0% at 50% 58%);
+  transition:clip-path 0.3s ease-in,opacity 0.25s ease-in;
+  pointer-events:none;
 }
-.hk-card.hk-active{gap:10px;border-color:#ffffff33;}
-.hk-card.hk-active::after{opacity:1;}
+.hk-card.hk-active{gap:10px;border-color:#ffffff33;animation:hk-pop 0.45s cubic-bezier(.2,.8,.2,1);}
+.hk-card.hk-active::after{
+  opacity:1;clip-path:circle(125% at 50% 58%);
+  transition:clip-path 0.55s cubic-bezier(.2,.8,.2,1),opacity 0.2s ease-out;
+}
 .hk-card .service-label{transition:color 0.3s ease-out;}
-.hk-card.hk-active .service-label{color:#ffffff;font-weight:600;}
+.hk-card.hk-active .service-label{color:#ffffff;font-weight:600;animation:hk-rise 0.4s cubic-bezier(.2,.8,.2,1) both;}
+.hk-card.hk-leaving .service-label{animation:hk-rise 0.3s cubic-bezier(.2,.8,.2,1) both;}
+.hk-card.hk-active .service-icon{animation:hk-lift 0.55s cubic-bezier(.2,.8,.2,1);}
 .hk-cancel{
   display:none;position:relative;z-index:1;
   height:34px;padding:0 22px;border-radius:17px;
@@ -1055,7 +1062,10 @@ body{
   font-family:inherit;font-size:13px;font-weight:500;letter-spacing:0.3px;
   -webkit-tap-highlight-color:transparent;
 }
-.hk-card.hk-active .hk-cancel{display:inline-flex;align-items:center;justify-content:center;}
+.hk-card.hk-active .hk-cancel{
+  display:inline-flex;align-items:center;justify-content:center;
+  animation:hk-rise 0.4s cubic-bezier(.2,.8,.2,1) 0.15s both;
+}
 .hk-cancel:active{transform:scale(0.95);background:#ffffff1f;}
 .hk-card.hk-active:active{transform:none;}
 .hk-star{transform-box:fill-box;transform-origin:center;}
@@ -1067,9 +1077,26 @@ body{
   0%,100%{opacity:0;transform:scale(0.5);}
   50%{opacity:1;transform:scale(1);}
 }
+@keyframes hk-pop{
+  0%{transform:scale(1);}
+  30%{transform:scale(0.965);}
+  70%{transform:scale(1.015);}
+  100%{transform:scale(1);}
+}
+@keyframes hk-rise{
+  from{opacity:0;transform:translateY(8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes hk-lift{
+  0%{transform:translateY(0) scale(1);}
+  40%{transform:translateY(-4px) scale(1.06);}
+  100%{transform:translateY(0) scale(1);}
+}
 @media (prefers-reduced-motion:reduce){
   .hk-card.hk-active .hk-star{animation:none;opacity:1;transform:none;}
   .hk-card,.hk-card::after,.hk-card .service-label{transition:none;}
+  .hk-card.hk-active,.hk-card.hk-active .service-label,.hk-card.hk-leaving .service-label,
+  .hk-card.hk-active .service-icon,.hk-card.hk-active .hk-cancel{animation:none;}
 }
 
 /* ── Blinds tiles (CSS-rendered, no Auto) ── */
@@ -2605,6 +2632,10 @@ document.querySelectorAll('.tile-flash').forEach(el=>{
   cancel.addEventListener('click',e=>{
     e.stopPropagation();
     setActive(false);
+    card.classList.remove('hk-leaving');
+    void card.offsetWidth;
+    card.classList.add('hk-leaving');
+    setTimeout(()=>card.classList.remove('hk-leaving'),350);
     showToast('Housekeeping cancelled');
   });
 })();
