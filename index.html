@@ -1036,67 +1036,77 @@ body{
   animation:tile-pulse 0.35s ease-out;
 }
 
-/* ── Housekeeping confirmed state (S5: full blue + Cancel, twinkling sparkles) ── */
+/* ── Services: "requested" state (full blue, no cancel) + per-icon micro-animations ── */
 .service-card .service-icon,.service-card .service-label{position:relative;z-index:1;}
-.hk-card{transition:gap 0.35s cubic-bezier(.2,.8,.2,1),border-color 0.35s ease-out;}
-.hk-card::after{
+.service-card .service-label{text-align:center;padding:0 10px;line-height:1.2;}
+.svc-card{transition:border-color 0.35s ease-out;}
+.svc-card::after{
   content:'';position:absolute;inset:0;border-radius:20px;
   background:linear-gradient(160deg,#3a6dff 0%,#1b00e2 100%);
   opacity:0;clip-path:circle(0% at 50% 58%);
   transition:clip-path 0.3s ease-in,opacity 0.25s ease-in;
   pointer-events:none;
 }
-.hk-card.hk-active{gap:10px;border-color:#ffffff33;animation:hk-pop 0.45s cubic-bezier(.2,.8,.2,1);}
-.hk-card.hk-active::after{
+.svc-card.svc-active{border-color:#ffffff33;animation:svc-pop 0.45s cubic-bezier(.2,.8,.2,1);}
+.svc-card.svc-active::after{
   opacity:1;clip-path:circle(125% at 50% 58%);
   transition:clip-path 0.55s cubic-bezier(.2,.8,.2,1),opacity 0.2s ease-out;
 }
-.hk-card .service-label{transition:color 0.3s ease-out;}
-.hk-card.hk-active .service-label{color:#ffffff;font-weight:600;animation:hk-rise 0.4s cubic-bezier(.2,.8,.2,1) both;}
-.hk-card.hk-leaving .service-label{animation:hk-rise 0.3s cubic-bezier(.2,.8,.2,1) both;}
-.hk-card.hk-active .service-icon{animation:hk-lift 0.55s cubic-bezier(.2,.8,.2,1);}
-.hk-cancel{
-  display:none;position:relative;z-index:1;
-  height:34px;padding:0 22px;border-radius:17px;
-  background:transparent;border:1.2px solid #ffffff80;color:#ffffff;
-  font-family:inherit;font-size:13px;font-weight:500;letter-spacing:0.3px;
-  -webkit-tap-highlight-color:transparent;
-}
-.hk-card.hk-active .hk-cancel{
-  display:inline-flex;align-items:center;justify-content:center;
-  animation:hk-rise 0.4s cubic-bezier(.2,.8,.2,1) 0.15s both;
-}
-.hk-cancel:active{transform:scale(0.95);background:#ffffff1f;}
-.hk-card.hk-active:active{transform:none;}
-.hk-star{transform-box:fill-box;transform-origin:center;}
-.hk-card.hk-active .hk-star{animation:hk-twinkle 2s ease-in-out infinite;}
-.hk-card.hk-active .hk-star:nth-of-type(2){animation-delay:0.5s;}
-.hk-card.hk-active .hk-star:nth-of-type(3){animation-delay:1s;}
-.hk-card.hk-active .hk-star:nth-of-type(4){animation-delay:1.5s;}
+.svc-card .service-label{transition:color 0.3s ease-out;}
+.svc-card.svc-active .service-label{color:#ffffff;font-weight:600;animation:svc-rise 0.4s cubic-bezier(.2,.8,.2,1) both;}
+.svc-card.svc-leaving .service-label{animation:svc-rise 0.3s cubic-bezier(.2,.8,.2,1) both;}
+.svc-card.svc-active .service-icon{animation:svc-lift 0.55s cubic-bezier(.2,.8,.2,1);}
+.svc-card.svc-active:active{transform:none;}
+.hk-star,.svc-phone,.svc-lens{transform-box:fill-box;transform-origin:center;}
+/* Housekeeping: sparkles twinkle */
+.svc-card.svc-active .hk-star{animation:hk-twinkle 2s ease-in-out infinite;}
+.svc-card.svc-active .hk-star:nth-of-type(2){animation-delay:0.5s;}
+.svc-card.svc-active .hk-star:nth-of-type(3){animation-delay:1s;}
+.svc-card.svc-active .hk-star:nth-of-type(4){animation-delay:1.5s;}
+/* Reception: phone gently rings (shake burst, then pause) */
+.svc-card.svc-active .svc-phone{animation:svc-ring 2.2s ease-in-out infinite 0.5s;}
+/* ITO: magnifier drifts on a small circular path */
+.svc-card.svc-active .svc-lens{animation:svc-orbit 3.2s linear infinite 0.4s;}
 @keyframes hk-twinkle{
   0%,100%{opacity:0;transform:scale(0.5);}
   50%{opacity:1;transform:scale(1);}
 }
-@keyframes hk-pop{
+@keyframes svc-ring{
+  0%,40%,100%{transform:rotate(0);}
+  4%{transform:rotate(-9deg);}
+  8%{transform:rotate(9deg);}
+  12%{transform:rotate(-7deg);}
+  16%{transform:rotate(7deg);}
+  20%{transform:rotate(-4deg);}
+  24%{transform:rotate(4deg);}
+  28%{transform:rotate(-2deg);}
+  32%{transform:rotate(0);}
+}
+@keyframes svc-orbit{
+  from{transform:rotate(0deg) translateX(2.5px) rotate(0deg);}
+  to{transform:rotate(360deg) translateX(2.5px) rotate(-360deg);}
+}
+@keyframes svc-pop{
   0%{transform:scale(1);}
   30%{transform:scale(0.965);}
   70%{transform:scale(1.015);}
   100%{transform:scale(1);}
 }
-@keyframes hk-rise{
+@keyframes svc-rise{
   from{opacity:0;transform:translateY(8px);}
   to{opacity:1;transform:translateY(0);}
 }
-@keyframes hk-lift{
+@keyframes svc-lift{
   0%{transform:translateY(0) scale(1);}
   40%{transform:translateY(-4px) scale(1.06);}
   100%{transform:translateY(0) scale(1);}
 }
 @media (prefers-reduced-motion:reduce){
-  .hk-card.hk-active .hk-star{animation:none;opacity:1;transform:none;}
-  .hk-card,.hk-card::after,.hk-card .service-label{transition:none;}
-  .hk-card.hk-active,.hk-card.hk-active .service-label,.hk-card.hk-leaving .service-label,
-  .hk-card.hk-active .service-icon,.hk-card.hk-active .hk-cancel{animation:none;}
+  .svc-card,.svc-card::after,.svc-card .service-label{transition:none;}
+  .svc-card.svc-active,.svc-card.svc-active .service-label,.svc-card.svc-leaving .service-label,
+  .svc-card.svc-active .service-icon,.svc-card.svc-active .hk-star,
+  .svc-card.svc-active .svc-phone,.svc-card.svc-active .svc-lens{animation:none;}
+  .svc-card.svc-active .hk-star{opacity:1;transform:none;}
 }
 
 /* ── Blinds tiles (CSS-rendered, no Auto) ── */
@@ -1959,16 +1969,18 @@ body{
       <div class="label-wrap"><span class="bracket">(</span><span class="txt">Services</span><span class="bracket">)</span></div>
     </div>
     <div class="services-grid">
-      <div class="service-card tile-flash" data-group="services" data-idx="0" role="button" tabindex="0">
+      <div class="service-card svc-card" data-svc="ito" data-idle="ITO support" data-active="ITO requested" role="button" tabindex="0" aria-pressed="false">
         <div class="service-icon">
           <svg viewBox="0 0 64 64" aria-hidden="true">
-            <circle cx="24" cy="24" r="18"/>
-            <line x1="36.5" y1="36.5" x2="56" y2="56"/>
+            <g class="svc-lens">
+              <circle cx="24" cy="24" r="18"/>
+              <line x1="36.5" y1="36.5" x2="56" y2="56"/>
+            </g>
           </svg>
         </div>
         <div class="service-label">ITO support</div>
       </div>
-      <div class="service-card hk-card" id="hkCard" role="button" tabindex="0" aria-pressed="false">
+      <div class="service-card svc-card" data-svc="housekeeping" data-idle="Housekeeping" data-active="Housekeeping requested" role="button" tabindex="0" aria-pressed="false">
         <div class="service-icon">
           <svg viewBox="0 0 64 64" aria-hidden="true">
             <path d="M48.45 30.62L50.65 28.43Q53.4 25.68 50.65 22.92L36.35 8.62Q33.6 5.87 30.85 8.62L16.55 22.92Q13.8 25.68 16.55 28.43L17.65 29.52"/>
@@ -1980,8 +1992,15 @@ body{
             <path class="hk-star" d="M58.9 19.63Q58.9 22.38 61.65 22.38Q58.9 22.38 58.9 25.13Q58.9 22.38 56.15 22.38Q58.9 22.38 58.9 19.63Z"/>
           </svg>
         </div>
-        <div class="service-label" id="hkLabel">Housekeeping</div>
-        <button type="button" class="hk-cancel" id="hkCancel">Cancel</button>
+        <div class="service-label">Housekeeping</div>
+      </div>
+      <div class="service-card svc-card" data-svc="reception" data-idle="Reception call" data-active="Reception requested" role="button" tabindex="0" aria-pressed="false">
+        <div class="service-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path class="svc-phone" d="M58.7 45.1v8a5.3 5.3 0 0 1-5.8 5.3 52.8 52.8 0 0 1-23-8.2 52 52 0 0 1-16-16 52.8 52.8 0 0 1-8.2-23 5.3 5.3 0 0 1 5.3-5.9h8a5.3 5.3 0 0 1 5.3 4.6 34 34 0 0 0 1.9 7.5 5.3 5.3 0 0 1-1.2 5.6l-3.4 3.4a42.7 42.7 0 0 0 16 16l3.4-3.4a5.3 5.3 0 0 1 5.6-1.2 34 34 0 0 0 7.5 1.9 5.3 5.3 0 0 1 4.6 5.4z"/>
+          </svg>
+        </div>
+        <div class="service-label">Reception call</div>
       </div>
     </div>
   </div>
@@ -2606,39 +2625,36 @@ document.querySelectorAll('.tile-flash').forEach(el=>{
     const names={
       lights:['Off','Dim Light','Full Light'],
       blinds:['Blinds closed'],
-      shades:['Closed Shades','Half way','Open Shades'],
-      services:['ITO support','Housekeeping']
+      shades:['Closed Shades','Half way','Open Shades']
     };
     if(names[group]&&names[group][idx])showToast(names[group][idx]);
   });
 });
 
-// ── Housekeeping: confirmed state (S5) with Cancel ──
-(()=>{
-  const card=document.getElementById('hkCard');
-  const label=document.getElementById('hkLabel');
-  const cancel=document.getElementById('hkCancel');
-  if(!card)return;
+// ── Services: "requested" state (no cancel; auto-resets after SVC_RESET_MS) ──
+const SVC_RESET_MS=3*60*1000;
+document.querySelectorAll('.svc-card').forEach(card=>{
+  const label=card.querySelector('.service-label');
+  let timer=null;
   const setActive=on=>{
-    card.classList.toggle('hk-active',on);
+    card.classList.toggle('svc-active',on);
     card.setAttribute('aria-pressed',on?'true':'false');
-    label.textContent=on?'Housekeeping coming':'Housekeeping';
+    label.textContent=on?card.dataset.active:card.dataset.idle;
   };
   card.addEventListener('click',()=>{
-    if(card.classList.contains('hk-active'))return;
+    if(card.classList.contains('svc-active'))return;
     setActive(true);
-    showToast('Housekeeping requested');
+    showToast(card.dataset.active);
+    clearTimeout(timer);
+    timer=setTimeout(()=>{
+      setActive(false);
+      card.classList.remove('svc-leaving');
+      void card.offsetWidth;
+      card.classList.add('svc-leaving');
+      setTimeout(()=>card.classList.remove('svc-leaving'),350);
+    },SVC_RESET_MS);
   });
-  cancel.addEventListener('click',e=>{
-    e.stopPropagation();
-    setActive(false);
-    card.classList.remove('hk-leaving');
-    void card.offsetWidth;
-    card.classList.add('hk-leaving');
-    setTimeout(()=>card.classList.remove('hk-leaving'),350);
-    showToast('Housekeeping cancelled');
-  });
-})();
+});
 
 // ── Auto Toggle (swap entire section PNG between OFF↔ON) ──
 document.querySelectorAll('.auto-toggle-area').forEach(el=>{
