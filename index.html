@@ -1022,7 +1022,7 @@ body{
 }
 .service-card .service-icon svg{
   width:100%;height:100%;display:block;
-  fill:none;stroke:currentColor;stroke-width:1.5;
+  fill:none;stroke:currentColor;stroke-width:2.4;
   stroke-linecap:round;stroke-linejoin:round;
 }
 .service-card .service-label{
@@ -1908,10 +1908,13 @@ body{
       <div class="service-card tile-flash" data-group="services" data-idx="1" role="button" tabindex="0">
         <div class="service-icon">
           <svg viewBox="0 0 64 64" aria-hidden="true">
-            <path d="M58.7 45.1v8a5.3 5.3 0 0 1-5.8 5.3 52.8 52.8 0 0 1-23-8.2 52 52 0 0 1-16-16 52.8 52.8 0 0 1-8.2-23 5.3 5.3 0 0 1 5.3-5.9h8a5.3 5.3 0 0 1 5.3 4.6 34 34 0 0 0 1.9 7.5 5.3 5.3 0 0 1-1.2 5.6l-3.4 3.4a42.7 42.7 0 0 0 16 16l3.4-3.4a5.3 5.3 0 0 1 5.6-1.2 34 34 0 0 0 7.5 1.9 5.3 5.3 0 0 1 4.6 5.4z"/>
+            <path d="M49.5 31.5L51.5 29.5Q54 27 51.5 24.5L38.5 11.5Q36 9 33.5 11.5L20.5 24.5Q18 27 20.5 29.5L21.5 30.5"/>
+            <path d="M26 56L26 52L18 42A2.6 2.6 0 0 1 21 38.5L26 44L26 33A2.5 2.5 0 0 1 31 33L31 29A2.5 2.5 0 0 1 36 29L36 31A2.5 2.5 0 0 1 41 31L41 36A2.5 2.5 0 0 1 46 36L46 56A2 2 0 0 1 44 58L28 58A2 2 0 0 1 26 56Z"/>
+            <path d="M31 33L31 46M36 31L36 46M41 36L41 46"/>
+            <path d="M13 7.5Q13 12 17.5 12Q13 12 13 16.5Q13 12 8.5 12Q13 12 13 7.5ZM8 21.5Q8 24 10.5 24Q8 24 8 26.5Q8 24 5.5 24Q8 24 8 21.5ZM57 7.5Q57 12 61.5 12Q57 12 57 16.5Q57 12 52.5 12Q57 12 57 7.5ZM60 21.5Q60 24 62.5 24Q60 24 60 26.5Q60 24 57.5 24Q60 24 60 21.5Z"/>
           </svg>
         </div>
-        <div class="service-label">Reception call</div>
+        <div class="service-label">Housekeeping</div>
       </div>
     </div>
   </div>
@@ -2537,7 +2540,7 @@ document.querySelectorAll('.tile-flash').forEach(el=>{
       lights:['Off','Dim Light','Full Light'],
       blinds:['Blinds closed'],
       shades:['Closed Shades','Half way','Open Shades'],
-      services:['ITO support','Reception call']
+      services:['ITO support','Housekeeping']
     };
     if(names[group]&&names[group][idx])showToast(names[group][idx]);
   });
