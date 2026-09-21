@@ -1036,6 +1036,42 @@ body{
   animation:tile-pulse 0.35s ease-out;
 }
 
+/* ── Housekeeping confirmed state (S5: full blue + Cancel, twinkling sparkles) ── */
+.service-card .service-icon,.service-card .service-label{position:relative;z-index:1;}
+.hk-card{transition:gap 0.3s ease-out,border-color 0.3s ease-out;}
+.hk-card::after{
+  content:'';position:absolute;inset:0;border-radius:20px;
+  background:linear-gradient(160deg,#3a6dff 0%,#1b00e2 100%);
+  opacity:0;transition:opacity 0.35s ease-out;pointer-events:none;
+}
+.hk-card.hk-active{gap:10px;border-color:#ffffff33;}
+.hk-card.hk-active::after{opacity:1;}
+.hk-card .service-label{transition:color 0.3s ease-out;}
+.hk-card.hk-active .service-label{color:#ffffff;font-weight:600;}
+.hk-cancel{
+  display:none;position:relative;z-index:1;
+  height:34px;padding:0 22px;border-radius:17px;
+  background:transparent;border:1.2px solid #ffffff80;color:#ffffff;
+  font-family:inherit;font-size:13px;font-weight:500;letter-spacing:0.3px;
+  -webkit-tap-highlight-color:transparent;
+}
+.hk-card.hk-active .hk-cancel{display:inline-flex;align-items:center;justify-content:center;}
+.hk-cancel:active{transform:scale(0.95);background:#ffffff1f;}
+.hk-card.hk-active:active{transform:none;}
+.hk-star{transform-box:fill-box;transform-origin:center;}
+.hk-card.hk-active .hk-star{animation:hk-twinkle 2s ease-in-out infinite;}
+.hk-card.hk-active .hk-star:nth-of-type(2){animation-delay:0.5s;}
+.hk-card.hk-active .hk-star:nth-of-type(3){animation-delay:1s;}
+.hk-card.hk-active .hk-star:nth-of-type(4){animation-delay:1.5s;}
+@keyframes hk-twinkle{
+  0%,100%{opacity:0;transform:scale(0.5);}
+  50%{opacity:1;transform:scale(1);}
+}
+@media (prefers-reduced-motion:reduce){
+  .hk-card.hk-active .hk-star{animation:none;opacity:1;transform:none;}
+  .hk-card,.hk-card::after,.hk-card .service-label{transition:none;}
+}
+
 /* ── Blinds tiles (CSS-rendered, no Auto) ── */
 .blinds-section{position:relative;width:720px;padding-bottom:18px;}
 .blinds-grid{
@@ -1905,16 +1941,20 @@ body{
         </div>
         <div class="service-label">ITO support</div>
       </div>
-      <div class="service-card tile-flash" data-group="services" data-idx="1" role="button" tabindex="0">
+      <div class="service-card hk-card" id="hkCard" role="button" tabindex="0" aria-pressed="false">
         <div class="service-icon">
           <svg viewBox="0 0 64 64" aria-hidden="true">
             <path d="M48.45 30.62L50.65 28.43Q53.4 25.68 50.65 22.92L36.35 8.62Q33.6 5.87 30.85 8.62L16.55 22.92Q13.8 25.68 16.55 28.43L17.65 29.52"/>
             <path d="M22.6 57.58L22.6 53.17L13.8 42.17A2.86 2.86 0 0 1 17.1 38.33L22.6 44.38L22.6 32.27A2.75 2.75 0 0 1 28.1 32.27L28.1 27.88A2.75 2.75 0 0 1 33.6 27.88L33.6 30.07A2.75 2.75 0 0 1 39.1 30.07L39.1 35.58A2.75 2.75 0 0 1 44.6 35.58L44.6 57.58A2.2 2.2 0 0 1 42.4 59.78L24.8 59.78A2.2 2.2 0 0 1 22.6 57.58Z"/>
             <path d="M28.1 32.27L28.1 46.58M33.6 30.07L33.6 46.58M39.1 35.58L39.1 46.58"/>
-            <path d="M8.3 4.22Q8.3 9.17 13.25 9.17Q8.3 9.17 8.3 14.12Q8.3 9.17 3.35 9.17Q8.3 9.17 8.3 4.22ZM3.9 19.63Q3.9 22.38 6.65 22.38Q3.9 22.38 3.9 25.13Q3.9 22.38 1.15 22.38Q3.9 22.38 3.9 19.63ZM56.7 4.22Q56.7 9.17 61.65 9.17Q56.7 9.17 56.7 14.12Q56.7 9.17 51.75 9.17Q56.7 9.17 56.7 4.22ZM58.9 19.63Q58.9 22.38 61.65 22.38Q58.9 22.38 58.9 25.13Q58.9 22.38 56.15 22.38Q58.9 22.38 58.9 19.63Z"/>
+            <path class="hk-star" d="M8.3 4.22Q8.3 9.17 13.25 9.17Q8.3 9.17 8.3 14.12Q8.3 9.17 3.35 9.17Q8.3 9.17 8.3 4.22Z"/>
+            <path class="hk-star" d="M3.9 19.63Q3.9 22.38 6.65 22.38Q3.9 22.38 3.9 25.13Q3.9 22.38 1.15 22.38Q3.9 22.38 3.9 19.63Z"/>
+            <path class="hk-star" d="M56.7 4.22Q56.7 9.17 61.65 9.17Q56.7 9.17 56.7 14.12Q56.7 9.17 51.75 9.17Q56.7 9.17 56.7 4.22Z"/>
+            <path class="hk-star" d="M58.9 19.63Q58.9 22.38 61.65 22.38Q58.9 22.38 58.9 25.13Q58.9 22.38 56.15 22.38Q58.9 22.38 58.9 19.63Z"/>
           </svg>
         </div>
-        <div class="service-label">Housekeeping</div>
+        <div class="service-label" id="hkLabel">Housekeeping</div>
+        <button type="button" class="hk-cancel" id="hkCancel">Cancel</button>
       </div>
     </div>
   </div>
@@ -2545,6 +2585,29 @@ document.querySelectorAll('.tile-flash').forEach(el=>{
     if(names[group]&&names[group][idx])showToast(names[group][idx]);
   });
 });
+
+// ── Housekeeping: confirmed state (S5) with Cancel ──
+(()=>{
+  const card=document.getElementById('hkCard');
+  const label=document.getElementById('hkLabel');
+  const cancel=document.getElementById('hkCancel');
+  if(!card)return;
+  const setActive=on=>{
+    card.classList.toggle('hk-active',on);
+    card.setAttribute('aria-pressed',on?'true':'false');
+    label.textContent=on?'Housekeeping coming':'Housekeeping';
+  };
+  card.addEventListener('click',()=>{
+    if(card.classList.contains('hk-active'))return;
+    setActive(true);
+    showToast('Housekeeping requested');
+  });
+  cancel.addEventListener('click',e=>{
+    e.stopPropagation();
+    setActive(false);
+    showToast('Housekeeping cancelled');
+  });
+})();
 
 // ── Auto Toggle (swap entire section PNG between OFF↔ON) ──
 document.querySelectorAll('.auto-toggle-area').forEach(el=>{
