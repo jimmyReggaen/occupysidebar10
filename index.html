@@ -1053,7 +1053,7 @@ body{
   transition:clip-path 0.55s cubic-bezier(.2,.8,.2,1),opacity 0.2s ease-out;
 }
 .svc-card .service-label{transition:color 0.3s ease-out;}
-.svc-card.svc-active .service-label{color:#ffffff;font-weight:600;animation:svc-rise 0.4s cubic-bezier(.2,.8,.2,1) both;}
+.svc-card.svc-active .service-label{color:#ffffff;font-weight:600;white-space:pre-line;animation:svc-rise 0.4s cubic-bezier(.2,.8,.2,1) both;}
 .svc-card.svc-leaving .service-label{animation:svc-rise 0.3s cubic-bezier(.2,.8,.2,1) both;}
 .svc-card.svc-active .service-icon{animation:svc-lift 0.55s cubic-bezier(.2,.8,.2,1);}
 .svc-card.svc-active:active{transform:none;}
@@ -1969,7 +1969,7 @@ body{
       <div class="label-wrap"><span class="bracket">(</span><span class="txt">Services</span><span class="bracket">)</span></div>
     </div>
     <div class="services-grid">
-      <div class="service-card svc-card" data-svc="ito" data-idle="ITO support" data-active="ITO requested" role="button" tabindex="0" aria-pressed="false">
+      <div class="service-card svc-card" data-svc="ito" data-idle="ITO support" data-active="ITO&#10;requested" role="button" tabindex="0" aria-pressed="false">
         <div class="service-icon">
           <svg viewBox="0 0 64 64" aria-hidden="true">
             <g class="svc-lens">
@@ -1980,7 +1980,7 @@ body{
         </div>
         <div class="service-label">ITO support</div>
       </div>
-      <div class="service-card svc-card" data-svc="housekeeping" data-idle="Housekeeping" data-active="Housekeeping requested" role="button" tabindex="0" aria-pressed="false">
+      <div class="service-card svc-card" data-svc="housekeeping" data-idle="Housekeeping" data-active="Housekeeping&#10;requested" role="button" tabindex="0" aria-pressed="false">
         <div class="service-icon">
           <svg viewBox="0 0 64 64" aria-hidden="true">
             <path d="M48.45 30.62L50.65 28.43Q53.4 25.68 50.65 22.92L36.35 8.62Q33.6 5.87 30.85 8.62L16.55 22.92Q13.8 25.68 16.55 28.43L17.65 29.52"/>
@@ -1994,7 +1994,7 @@ body{
         </div>
         <div class="service-label">Housekeeping</div>
       </div>
-      <div class="service-card svc-card" data-svc="reception" data-idle="Reception call" data-active="Reception requested" role="button" tabindex="0" aria-pressed="false">
+      <div class="service-card svc-card" data-svc="reception" data-idle="Reception call" data-active="Reception&#10;requested" role="button" tabindex="0" aria-pressed="false">
         <div class="service-icon">
           <svg viewBox="0 0 64 64" aria-hidden="true">
             <path class="svc-phone" d="M58.7 45.1v8a5.3 5.3 0 0 1-5.8 5.3 52.8 52.8 0 0 1-23-8.2 52 52 0 0 1-16-16 52.8 52.8 0 0 1-8.2-23 5.3 5.3 0 0 1 5.3-5.9h8a5.3 5.3 0 0 1 5.3 4.6 34 34 0 0 0 1.9 7.5 5.3 5.3 0 0 1-1.2 5.6l-3.4 3.4a42.7 42.7 0 0 0 16 16l3.4-3.4a5.3 5.3 0 0 1 5.6-1.2 34 34 0 0 0 7.5 1.9 5.3 5.3 0 0 1 4.6 5.4z"/>
@@ -2644,7 +2644,7 @@ document.querySelectorAll('.svc-card').forEach(card=>{
   card.addEventListener('click',()=>{
     if(card.classList.contains('svc-active'))return;
     setActive(true);
-    showToast(card.dataset.active);
+    showToast(card.dataset.active.replace('\n',' '));
     clearTimeout(timer);
     timer=setTimeout(()=>{
       setActive(false);
